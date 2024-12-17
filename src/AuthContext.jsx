@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         fetchUser();
     }, [token]);
     // const getcsrftoken= async ()=>{
-    //     const csrfres = await axios.get('http://127.0.0.1:8000/getcsrf/', { }, {
+    //     const csrfres = await axios.get('http://backend.leadingconstruction.co.in/getcsrf/', { }, {
     //         headers: {
     //             'Authorization': `Bearer ${token}`
     //         },

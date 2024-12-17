@@ -184,7 +184,7 @@ function ImportFile({heading,closeModel,newItem, api}) {
                         <FileSpreadsheet className="mx-auto h-12 w-12 text-muted-foreground" />
                         <h3 className="mt-2 text-sm font-semibold text-muted-foreground">No Excel data</h3>
                         <p className="mt-1 text-sm text-muted-foreground">Upload an Excel file to see the data here</p>
-                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href="http://127.0.0.1:8000/media/sample_employee_master.xlsx"> click here</a> </p>
+                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href="http://backend.leadingconstruction.co.in/media/sample_employee_master.xlsx"> click here</a> </p>
                         
                         
                         </div>
