@@ -39,7 +39,9 @@ function usePost(url) {
           }
           if(response.status===200){
             console.log(response.data)
-
+            console.log("gautam", response.data);
+            
+      localStorage.setItem("INDAL",JSON.stringify(response.data.bonusregister));
           setData(response.data);
       
           return response
@@ -194,7 +196,6 @@ function usePost(url) {
             console.log(response.data)
 
           setData(response.data);
-      
           return response
           }
         } catch (err) {

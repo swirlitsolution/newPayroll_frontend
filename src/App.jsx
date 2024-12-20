@@ -32,19 +32,20 @@ import Payroll from './components/payroll/Payroll';
 import Nh from './components/master/Nh';
 import LeaveRegister from './components/report/LeaveRegister';
 import BonusRegister from './components/report/BonusRegister';
+import BonusTable from './components/custom/BonusTable'
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.baseURL = 'http://dev.leadingconstruction.co.in/';
 
 function App() {
- 
+
   return (
     <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route 
-            path="/*" 
+          <Route
+            path="/*"
             element={
               <ProtectedRoute>
                 <SideBar>
@@ -72,14 +73,18 @@ function App() {
                     <Route path="/createuser/:id" element={<CreateUser />} />
                     <Route path="/updateuser/:id" element={<UpdateUser />} />
                     <Route path="/rate/:id" element={<EmpRate heading="Update Rate" />} />
-                    
-                </Routes>
+                    <Route path="/bonusTable" element={<BonusTable />} />
+
+                  </Routes>
                 </SideBar>
+               
+
               </ProtectedRoute>
             }
-            />
-          </Routes>
+          />
+        </Routes>
       </Router>
+  
     </AuthProvider>
   );
 }

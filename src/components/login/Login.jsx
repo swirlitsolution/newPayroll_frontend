@@ -10,8 +10,7 @@ const Login = () => {
     
     if(user){
         navigate('/home')
-    }
-  
+    }  
    
     const handleSubmit = async (e) => {
         e.preventDefault();

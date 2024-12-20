@@ -36,36 +36,64 @@ function useImportExport(orientation) {
         setIsExporting(false);
       };
     
-      const exportToPDF = (columns, rows ) => {
-        console.log("exporting to pdf",columns,rows)
+      const exportToPDF = (columns, rows, isBonusPayRegister = false) => {
+        console.log("exporting to pdf", columns, rows);
         setIsExporting(true);
-        const doc = new jsPDF(
-          {
-            orientation: orientation,
-            unit: 'mm',
-            format: 'a4',
-            putOnlyUsedFonts:true
-           }
-        );
-        const headers = columns.map(col => col.headerName);
-
-        const data = rows.map(row => 
-          columns.map(col => {
-            if (col.renderCell) {
-              console.log(col.renderCell)
-              return col.renderCell(row);
-            }
-            return row[col.field];
-          })
-        );
-    
-        doc.autoTable({
-          head: [headers],
-          body: data,
+        
+        const doc = new jsPDF({
+          orientation: orientation,
+          unit: 'mm',
+          format: 'a4',
+          putOnlyUsedFonts: true,
         });
-        doc.save('export.pdf');
+      console.log("bonus register",isBonusPayRegister)
+        if (isBonusPayRegister) {
+          // Custom Bonus Pay Register formatting
+          const pageFormat = { orientation: 'landscape', unit: 'mm', format: [279.4, 215.9] };
+          doc.setFontSize(12);
+          doc.text("Bonus Pay Register", 14, 15);
+      
+          let y = 25;
+          rows.forEach((row, index) => {
+            doc.setFontSize(10);
+            doc.text(`Bonus for Employee ${index + 1}`, 14, y);
+            y += 10;
+      
+            columns.forEach((col) => {
+              const value = col.renderCell ? col.renderCell(row) : row[col.field];
+              doc.text(`${col.headerName}: ${value}`, 14, y);
+              y += 7;
+            });
+      
+            y += 5; // Add space between employees
+            if (y > 270) {
+              doc.addPage();
+              y = 25;
+            }
+          });
+        } else {
+          // Default table format
+          const headers = columns.map((col) => col.headerName);
+          const data = rows.map((row) =>
+            columns.map((col) => {
+              if (col.renderCell) {
+                return col.renderCell(row);
+              }
+              return row[col.field];
+            })
+          );
+      
+          doc.autoTable({
+            head: [headers],
+            body: data,
+            theme: "grid",
+          });
+        }
+      
+        doc.save("export.pdf");
         setIsExporting(false);
       };
+      
       const LeavePaySlip = (data)=>{
         if (data) {
       
