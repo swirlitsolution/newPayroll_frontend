@@ -25,7 +25,7 @@ function Employeelist() {
     const [rateImport,setRateImport] = useState(false)
     const { data, error, loading, getNextRequest} = useRequest("/master/employee/")
     const navigate = useNavigate();
-   
+    debugger
     const handleRowClicked = (params)=>{
         console.log(params)
         navigate(`/employee/${params.id}`,{id:params.id});
