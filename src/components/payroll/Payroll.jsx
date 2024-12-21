@@ -77,10 +77,10 @@ const slipcolumns = [
     {field:'deduction',headerName:'Deduction'},
     {field:'mrpnetamt',headerName:'Net Amt'},
     {field:'view',headerName:'View',renderCell:(params)=>{
-        return <a href={'http://backend.leadingconstruction.co.in/slip/'+params.id+'/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
+        return <a href={'https://global.swirlapps.in/slip/'+params.id+'/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
     }},
     {field:'download',headerName:'Download',renderCell:(params)=>{
-        return <a href={'http://backend.leadingconstruction.co.in/downloadslip/'+params.id+'/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
+        return <a href={'https://global.swirlapps.in/downloadslip/'+params.id+'/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
     }},
    
 ]
@@ -231,8 +231,8 @@ function Payroll() {
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
-                            <a href={'http://backend.leadingconstruction.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
-                            <a href={'http://backend.leadingconstruction.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
+                            <a href={'https://global.swirlapps.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
+                            <a href={'https://global.swirlapps.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
 
                         </div>
                
