@@ -33,9 +33,10 @@ import Nh from './components/master/Nh';
 import LeaveRegister from './components/report/LeaveRegister';
 import BonusRegister from './components/report/BonusRegister';
 import BonusTable from './components/custom/BonusTable'
+import SyncData from './components/employee/SyncData';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-axios.defaults.baseURL = 'http://dev.leadingconstruction.co.in/';
+axios.defaults.baseURL = 'https://global.swirlapps.in';
 
 function App() {
 
@@ -74,6 +75,9 @@ function App() {
                     <Route path="/updateuser/:id" element={<UpdateUser />} />
                     <Route path="/rate/:id" element={<EmpRate heading="Update Rate" />} />
                     <Route path="/bonusTable" element={<BonusTable />} />
+                    <Route path="/sync" element={<SyncData />} />
+
+
 
                   </Routes>
                 </SideBar>

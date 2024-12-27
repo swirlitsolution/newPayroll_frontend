@@ -193,20 +193,20 @@ const bonusCheckListcolumns = [
 
 export const bonusRegistercolumns = [
   { field: 'id', headerName: 'TrnId', width: '80px' },
-  { field: 'Name', headerName: 'Name', renderCell: (params) => params.employee.Name },
-  { field: 'Father', headerName: 'Father', width: '90px', renderCell: (params) => params.employee.Father },
+  { field: 'Name', headerName: 'Name', renderCell: (params) => params?.employee?.Name },
+  { field: 'Father', headerName: 'Father', width: '90px', renderCell: (params) => params?.employee?.Father },
   { field: "completed", headerName: 'Whther he has Completed 15 Year of Age at the beginning of the Accounting Year' },
-  { field: "Designation", headerName: 'Designation', width: "80px", renderCell: (params) => params.employee.DesignationDetails.name },
-  { field: "Total No. of Days", headerName: 'Total No. of Days Worked in the Year', renderCell: (params) => params.total },
-  { field: "Total Salary of Wages", headerName: 'Total Salary of Wages in respect of the Accounting Yaer', renderCell: (params) => params.TotalGross },
-  { field: "Amount of Bonus Payable", headerName: 'Amount of Bonus Payable under Sec. 10  or Sec. 11 as the case may be', renderCell: (params) => params.Bonus },
+  { field: "Designation", headerName: 'Designation', width: "80px", renderCell: (params) => params?.employee?.DesignationDetails?.name },
+  { field: "Total No. of Days", headerName: 'Total No. of Days Worked in the Year', renderCell: (params) => params?.total },
+  { field: "Total Salary of Wages", headerName: 'Total Salary of Wages in respect of the Accounting Yaer', renderCell: (params) => params?.TotalGross },
+  { field: "Amount of Bonus Payable", headerName: 'Amount of Bonus Payable under Sec. 10  or Sec. 11 as the case may be', renderCell: (params) => params?.Bonus },
   { field: "Puja Bonus or Other Customery", headerName: 'Puja Bonus or Other Customery Paid during the Acc. Year' },
   { field: "Interim Bonus", headerName: 'Interim Bonus or Bonus Paid in Advance' },
   { field: "Amount of Income Tax Deducted", headerName: 'Amount of Income Tax Deducted' },
   { field: "Deduction on A/C ", headerName: 'Deduction on A/C  of Financial Loss if any Caused by Misconduct of the Emp.' },
   { field: "Total Sum", headerName: 'Total Sum Deducted  Col. 9, 10 10A and 11' },
-  { field: "Net Payable Amount", headerName: 'Net Payable Amount Col 8 minus Col 12 ', renderCell: (params) => params.Bonus },
-  { field: "Amount Actually Paid", headerName: 'Amount Actually Paid', renderCell: (params) => params.Bonus },
+  { field: "Net Payable Amount", headerName: 'Net Payable Amount Col 8 minus Col 12 ', renderCell: (params) => params?.Bonus },
+  { field: "Amount Actually Paid", headerName: 'Amount Actually Paid', renderCell: (params) => params?.Bonus },
   { field: "Date", headerName: 'Date on which' },
   { field: "Signature Thumb", headerName: 'Signature Thumb Impression Of the Employee' },
 
@@ -273,8 +273,6 @@ function BonusRegister() {
               columns={bonusCheckListcolumns}
               row={data?.bonusregister}
 
-
-
             />) : (
               <div>No data available</div>
             )}
@@ -296,7 +294,7 @@ function BonusRegister() {
               <div>No data available</div>
             )}
           </TabsContent>
-          <TabsContent value="bonuspayregister">
+          {/* <TabsContent value="bonuspayregister">
             {loading ? (
               "Loading......"
             ) : data?.bonusregister?.length ? (
@@ -308,7 +306,7 @@ function BonusRegister() {
             ) : (
               <div>No data available</div>
             )}
-          </TabsContent>
+          </TabsContent> */}
 
           <TabsContent value="bonusledger">
             {loading ? "Loading......" : data?.attendance?.length ? (<DataGrid

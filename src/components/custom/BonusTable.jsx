@@ -1,9 +1,12 @@
 import React from 'react';
 import { bonusRegistercolumns } from "../report/BonusRegister"; // Assuming the column definition is imported here
 
-const BonusTable = ({ row, heading, pdfOrientation }) => {
+const BonusTable = ({ row = [], heading, pdfOrientation }) => {
+  console.log("row", row);  // For debugging purposes
+
+
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div id="bonus-table" style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h6 style={{ textAlign: 'center' }}><b>FORM C</b></h6>
       <p style={{ textAlign: 'center', fontSize: "13px" }}><b>See Rule 4(c)</b></p>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", textAlign: "center" }}>
