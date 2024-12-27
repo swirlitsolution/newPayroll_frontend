@@ -6,6 +6,8 @@ import MarkAttendance from '../custom/MarkAttendance';
 import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
 import { toast } from 'react-toastify';
+import { Upload } from 'lucide-react';
+import ImportAttendance from '../employee/ImportAttendance';
 
 
 const columns = [
@@ -21,6 +23,7 @@ function Attendance(props) {
   const {control, formState: { errors } } = useForm()
     const { data, error, loading, getRequest} = usePost("/getcurrentattendance/")
     const [mark,setMark] = useState(false)
+    const [importFile,setImportFile] = useState(false)
     const [permitno,setPermitNo] = useState(0)
     const [row,setRow] = useState(null)
     const [currentDate,setCurrentDate] = useState(null)
@@ -74,12 +77,22 @@ function Attendance(props) {
                   <Button onClick={SavePermitNo} >Save</Button>
               
             </div>
+            <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
+              onClick={()=>{
+                setImportFile(true)
+                }}><Upload /> Import</div>
             <span>{currentDate?.getDate() + "-"+ parseInt(currentDate?.getMonth()+1) +"-"+currentDate?.getFullYear()}</span>
       
           </div>
         </div>
        
         <div className='flex gap-2 w-full'>
+        {importFile?<ImportAttendance heading="import attendance"  
+                    closeModel={()=>{
+                      setImportFile(false)
+                      }} 
+                      newItem={true}
+                    api="/importattendance/" / >:<></>}
        <div className="  w-[100%] ">
        {loading?"Loading......": data?.length? 
                ( <DataGrid 
