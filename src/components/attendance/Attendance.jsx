@@ -77,10 +77,10 @@ function Attendance(props) {
                   <Button onClick={SavePermitNo} >Save</Button>
               
             </div>
-            <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
+            {/* <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
               onClick={()=>{
                 setImportFile(true)
-                }}><Upload /> Import</div>
+                }}><Upload /> Import</div> */}
             <span>{currentDate?.getDate() + "-"+ parseInt(currentDate?.getMonth()+1) +"-"+currentDate?.getFullYear()}</span>
       
           </div>

@@ -94,7 +94,7 @@ const summarycolumns = [
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
     {field:'rate',headerName:'Rate',renderCell:(params)=>params.arate},
     {field:'aamt',headerName:'Actual Amt'},
-    {field:'hraamt',headerName:'HRA'},
+    {field:'hra',headerName:'HRA'},
     {field:'madical',headerName:'Medical'},
     {field:'exgratiaretention',headerName:'ExGratia Retention'},
     {field:'lta',headerName:'LTA'},
@@ -206,7 +206,7 @@ function Payroll() {
   
         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
-                <Label>Applicable NH </Label><span className='rounded-md bg-slate-300 px-4 py-2'>{nh}</span>
+                {/* <Label>Applicable NH </Label><span className='rounded-md bg-slate-300 px-4 py-2'>{nh}</span>
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here
@@ -222,7 +222,7 @@ function Payroll() {
                             value={value} name='site' />
                         );
                         }}
-                    />
+                    /> */}
                     <Label htmlFor="month">Month</Label>
                     <input type="month"  id="month" {...register("month")} className="bg-gray-50 border w-52 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     <Button type="submit" className=''>Submit</Button>
