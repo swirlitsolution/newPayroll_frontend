@@ -39,7 +39,7 @@ function usePost(url) {
           }
           if(response.status===200){
             console.log(response.data)
-
+            
           setData(response.data);
       
           return response

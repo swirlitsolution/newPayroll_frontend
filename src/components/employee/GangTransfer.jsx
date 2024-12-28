@@ -23,7 +23,7 @@ function GangTransfer() {
         console.log("employee data is ",data)
         setValue("EmpId",data?.EmpId)
         setValue("Name",data?.Name)
-        setValue("Gang",data?.GangDetails?.name)
+        setValue("Site",data?.SiteDetails?.name)
         
     },[data])
     return (
@@ -48,16 +48,16 @@ function GangTransfer() {
                             <Input disabled={true} type='text' {...register("Name")} className='bg-white'  id='name' />
                             <div className='col-span-2'>
                                 <Controller
-                                    name="Gang"
+                                    name="Site"
                                     defaultValue="" // Initial value can be set here
                                     control={control}
                                     render={({ field, fieldState: { error } }) => {
                                         const { onChange, value, ref } = field;
                                 return (
                                         <Master
-                                        api = "/master/gang/"
+                                        api = "/master/site/"
                                         onValueChange={(newValue) => onChange(newValue || null)} 
-                                        value={value} name='gang' add={false} />
+                                        value={value} name='Site' add={false} />
                                 );
                                     }}
                                 />

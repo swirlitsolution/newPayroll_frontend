@@ -32,6 +32,7 @@ import Payroll from './components/payroll/Payroll';
 import Nh from './components/master/Nh';
 import LeaveRegister from './components/report/LeaveRegister';
 import BonusRegister from './components/report/BonusRegister';
+import Recalculate from './components/attendance/Recalculate';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 axios.defaults.baseURL = 'https://global.swirlapps.in';
@@ -66,6 +67,7 @@ function App() {
                     <Route path="/transferlog" element={<TransferLogs heading="Transfer Logs" />} />
                     <Route path="/selectemployee" element={<Employees />} />
                     <Route path="/payroll" element={<Payroll />} />
+                    <Route path="/recal" element={<Recalculate />} />
                     <Route path="/leave" element={<LeaveRegister />} />
                     <Route path="/bonus" element={<BonusRegister />} />
                     <Route path="/selectgang/:id" element={<GangTransfer />} />

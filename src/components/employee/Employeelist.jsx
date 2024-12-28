@@ -127,9 +127,9 @@ function Employeelist() {
                 setapiImport(false)
                 setRateImport(true)
               }}><Upload />Rate Import</div>
-            <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
+            {/* <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
               onClick={()=>getemplist()}>
-              <Upload /> Sync</div>
+              <Upload /> Sync</div> */}
              
           </span>
       </div>

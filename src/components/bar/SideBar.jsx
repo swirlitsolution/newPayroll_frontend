@@ -47,6 +47,11 @@ const adminroutes = [
           name: "Process Attend",
           icon: <FileSymlink />,
         },
+        {
+          path: "/recal",
+          name: "Recal Payroll",
+          icon: <FileSymlink />,
+        },
       ],
   },
   {
@@ -175,6 +180,11 @@ const users = [
         {
           path: "/processattendance",
           name: "Process Attend",
+          icon: <FileSymlink />,
+        },
+        {
+          path: "/recal",
+          name: "Recal Payroll",
           icon: <FileSymlink />,
         },
       ],
