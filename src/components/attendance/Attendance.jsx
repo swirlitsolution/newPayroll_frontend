@@ -13,6 +13,7 @@ import ImportAttendance from '../employee/ImportAttendance';
 const columns = [
     {field:'id',headerName:'ID',width:'50px', renderCell:(param)=>param.employee.EmpId},
     {field:'Name',headerName:"Employee", renderCell:(param)=>param.employee.Name},
+    {field:'Site',headerName:"Site", renderCell:(param)=>param.employee.SiteDetails.name},
     {field:'Status',headerName:'Status', renderCell:(param)=>param.attendance_status.status},
     {field:'Ot',headerName:'OT', renderCell:(param)=>param.attendance_status.ot},
     {field:'extrahour',headerName:'Extra', renderCell:(param)=>param.attendance_status.extrahour},
@@ -77,10 +78,10 @@ function Attendance(props) {
                   <Button onClick={SavePermitNo} >Save</Button>
               
             </div>
-            {/* <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
+            <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
               onClick={()=>{
                 setImportFile(true)
-                }}><Upload /> Import</div> */}
+                }}><Upload /> Import</div>
             <span>{currentDate?.getDate() + "-"+ parseInt(currentDate?.getMonth()+1) +"-"+currentDate?.getFullYear()}</span>
       
           </div>
@@ -100,6 +101,8 @@ function Attendance(props) {
                 columns={columns} 
                 row={data} 
                 rowClicked={handleRowClicked}
+                pageInfo={true}
+                totalCounts={data?.count || 0}
                 />  ):(
               <div>No data available</div>)}
             </div>

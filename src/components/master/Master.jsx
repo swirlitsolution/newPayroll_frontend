@@ -32,22 +32,29 @@ function Master(props) {
         <Label className='text-left'>{props.name.toUpperCase()}</Label>
         <div className='flex gap-2 items-center justify-center'>
             <Select className=" w-10"
-            onValueChange={props.onValueChange} // Use onChange directly
-            value={props.value} // Set the value prop to the selected value
-            >
-            <SelectTrigger className="w-full bg-white">
-                <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-                {data?data.map((element)=>(<SelectItem key={element.id} value={element.name}>{element.name}</SelectItem>)):""}
-            </SelectContent>
-        </Select>
+                onValueChange={props.onValueChange} // Use onChange directly
+                value={props.value} // Set the value prop to the selected value
+                >
+                <SelectTrigger className="w-full bg-white">
+                    <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                    {data?data.map((element)=>(<SelectItem key={element.id} value={element.name}>{element.name}</SelectItem>)):""}
+                </SelectContent>
+            </Select>
                     
         
-        {add? <NewItem heading={props.name} handNewItem={createNew} loading={loading} showMaster={showMaster}  />:""}
-        {props.add?<div onClick={()=>showMaster(true)} className='hover:text-green-600 text-xs'>    
-        <Plus className='cursor-pointer text-xs' />
-        </div>:""}
+            {
+                add?
+                    <NewItem heading={props.name} handNewItem={createNew} loading={loading} showMaster={showMaster}  />
+                :""
+            }
+            {
+                props.add?
+                    <div onClick={()=>showMaster(true)} className='hover:text-green-600 text-xs'>    
+                        <Plus className='cursor-pointer text-xs' />
+                    </div>:""
+            }
         </div>
     </div>
   )

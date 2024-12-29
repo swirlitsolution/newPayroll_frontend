@@ -1,0 +1,8 @@
+.landscape-view {
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+  }
+  

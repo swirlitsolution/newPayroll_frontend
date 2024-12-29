@@ -156,16 +156,17 @@ function Employeelist() {
                       }} 
                       newItem={false}
                     api="/master/rate/" / >:<></>}
-        {loading?"Loading......": data?.results?.length?(<DataGrid 
-              heading="Employees"
-              columns={columns} 
-              row={data?.results} 
-      
-              rowClicked={handleRowClicked}
-              Increament={pageState}
-              Decreament={pageState}
-
-              />):(
+        {loading?"Loading......": data?.results?.length?(
+          <DataGrid
+          heading="Employees"
+          columns={columns}
+          row={data?.results} // Pass all the data to the DataGrid
+          rowClicked={handleRowClicked}
+          pageInfo={true} // Enable pagination controls
+          totalCounts={data?.count || 0}
+          apiUrl="/master/employee/" // Pass the API URL for dynamic fetching
+        />
+        ):(
                 <div>No data available</div>
               )}
     </div>
