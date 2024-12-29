@@ -481,7 +481,9 @@ function DataGrid({
      
      })
      if(data.length>0){
-      setPaginatedData(data)
+      setTableData(data)
+      setTotalPages(Math.ceil(data?.length / itemsPerPage));
+      setPaginatedData(tableData.slice(0, 10));
      }
      else{
       try {
@@ -520,12 +522,14 @@ function DataGrid({
   const fetchData = async (page) => {
     setLoading(true);
     const originalFilterBy = filterBy ? filterBy.toLowerCase() : "";
+
     const originalSearchValue = searchValue.trim();
     if(row.length>10){
+      console.log("fetching offline data",paginatedData)
       
       var pagefrom = (page - 1) * 10;
       var pageto = (page - 1) * 10 + 10;
-      setPaginatedData(paginatedData.slice(pagefrom, pageto));
+      setPaginatedData(tableData.slice(pagefrom, pageto));
       setCurrentPage(page);
       setLoading(false);
     }
@@ -549,9 +553,28 @@ function DataGrid({
     }
    
   };
-
+  const flattenObject = (obj, parentKey = '') => {
+    let result = {};
+  
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const newKey = parentKey ? `${parentKey}_${key}` : key;
+  
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          // If the value is an object, recurse to flatten it
+          Object.assign(result, flattenObject(obj[key], newKey));
+        } else {
+          // Otherwise, just assign the value
+          result[newKey] = obj[key];
+        }
+      }
+    }
+  
+    return result;
+  };
   const handleGenerateExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(paginatedData);
+    const transformedArray = paginatedData.map(item => flattenObject(item));
+    const ws = XLSX.utils.json_to_sheet(transformedArray);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data");
     XLSX.writeFile(wb, `${heading}.xlsx`);
@@ -633,6 +656,7 @@ function DataGrid({
         <table className="w-full text-sm text-left text-gray-500" ref={tableRef}>
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
+            <th className="px-3 border-2 py-3">Sl</th>
               {checkBoxSelection && <th><Input type="checkbox" /></th>}
               {columns.map((col, index) => (
                 <th key={col.field || index} className="px-3 border-2 py-3">{col.headerName}</th>
@@ -655,6 +679,8 @@ function DataGrid({
             ) : (
               paginatedData.map((item, index) => (
                 <tr key={index} onClick={rowClicked ? () => rowClicked(item) : undefined}>
+                  <td className="border-2 p-1 text-nowrap">{index + 1}</td>
+
                   {checkBoxSelection && <td><Input type="checkbox" /></td>}
                   {columns.map((col, colIndex) => (
                     <td key={colIndex} className="border-2 p-1 text-nowrap">{col.renderCell ? col.renderCell(item) : getValue(item, col.field)}</td>
