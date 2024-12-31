@@ -3,8 +3,6 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import DataGrid from './components/custom/DataGrid'
-import Autocomplete from './components/custom/Autocomplete'
 import Employeelist from './components/employee/Employeelist'
 import NewEmployee from './components/employee/NewEmployee'
 import EditEmployee from './components/employee/EditEmployee';
@@ -33,6 +31,7 @@ import Nh from './components/master/Nh';
 import LeaveRegister from './components/report/LeaveRegister';
 import BonusRegister from './components/report/BonusRegister';
 import Recalculate from './components/attendance/Recalculate';
+import SyncData from './components/employee/SyncData';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 axios.defaults.baseURL = 'https://global.swirlapps.in';
@@ -74,7 +73,7 @@ function App() {
                     <Route path="/createuser/:id" element={<CreateUser />} />
                     <Route path="/updateuser/:id" element={<UpdateUser />} />
                     <Route path="/rate/:id" element={<EmpRate heading="Update Rate" />} />
-                    
+                    <Route path="/sync" element={<SyncData />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>

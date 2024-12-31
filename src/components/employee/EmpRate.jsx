@@ -11,7 +11,7 @@ function EmpRate(props) {
     const {control,register, handleSubmit,setValue,reset, watch, formState: { errors } } = useForm()
 
     const {id} = useParams()
-    const { data, error, loading, onlypatchRequest} = useRequest(`/master/rate/${id}/`)
+    const { data, error, loading, onlypatchRequest} = useRequest(`/master/rate/?pk=${id}`)
 
     const onSubmit = (empdata)=>{
         console.log(data)
@@ -21,9 +21,9 @@ function EmpRate(props) {
     }
 
     useEffect(()=>{
-        console.log("data is ",data)
+        console.log("Rate is ",data)
         if(data){
-        const rate = data
+        const rate = data[0]
         setValue('basic',rate?.basic)
         setValue('da',rate?.da)
         setValue('arate',rate?.arate)

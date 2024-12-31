@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import DataGrid from '../custom/DataGrid'
+import MyDataGrid from '../custom/MyDataGrid'
 import { useForm  } from "react-hook-form";
   
 import MarkAttendance from '../custom/MarkAttendance';
@@ -11,7 +11,7 @@ import ImportAttendance from '../employee/ImportAttendance';
 
 
 const columns = [
-    {field:'id',headerName:'ID',width:'50px', renderCell:(param)=>param.employee.EmpId},
+    {field:'id',headerName:'EmpID',width:'50px', renderCell:(param)=>param.employee.EmpId},
     {field:'Name',headerName:"Employee", renderCell:(param)=>param.employee.Name},
     {field:'Site',headerName:"Site", renderCell:(param)=>param.employee.SiteDetails.name},
     {field:'Status',headerName:'Status', renderCell:(param)=>param.attendance_status.status},
@@ -96,12 +96,13 @@ function Attendance(props) {
                     api="/importattendance/" / >:<></>}
        <div className="  w-[100%] ">
        {loading?"Loading......": data?.length? 
-               ( <DataGrid 
+               ( <MyDataGrid 
                 heading="Employees"
                 columns={columns} 
                 row={data} 
                 rowClicked={handleRowClicked}
                 pageInfo={true}
+                checkBoxSelection={true}
                 totalCounts={data?.count || 0}
                 />  ):(
               <div>No data available</div>)}

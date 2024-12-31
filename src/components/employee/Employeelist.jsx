@@ -1,176 +1,193 @@
-import React, { useEffect, useState } from 'react'
-import DataGrid from '../custom/DataGrid'
-import { Pen, Plus, Upload } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
-import useRequest from '../../hooks/useRequest'
-import { useNavigate } from 'react-router-dom'
-import ImportFile from './ImportFile'
-import axios from 'axios'
-import Cookies from 'universal-cookie'
-import ApiImport from './ApiImport'
-
-const columns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px'},
-    {field:'Name',headerName:'Name'},
-    {field:'Father',headerName:'Father'},
-    {field:'Site',headerName:'Site',renderCell:(params)=>params.SiteDetails.name},
-    {field:'Department',headerName:'Department',renderCell:(params)=>params.DepartmentDetails.name},
-    {field:'Designation',headerName:'Designation',renderCell:(params)=>params.DesignationDetails.name},
-    {field:'Gang',headerName:'Gang',renderCell:(params)=>params.GangDetails.name},
-    {field:'Email',headerName:'Email'},
-    {field:'Aadhar',headerName:'Aadhar'}
-   ] 
-
+import React, { useEffect, useState } from "react";
+import { Pen, Plus, Upload } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ImportFile from "./ImportFile";
+import useRequest from "../../hooks/useRequest";
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function Employeelist() {
-    const [importFile,setImportFile] = useState(false)
-    const [apiimport,setapiImport] = useState(false)
-    const [rateImport,setRateImport] = useState(false)
-    const { data, error, loading, getNextRequest,onlypatchRequest, getRequest} = useRequest("/master/employee/")
-    const navigate = useNavigate();
-    const [employeedata,setemployeedata] = useState(null)
-    const cookies = new Cookies()
-    const [employee,setEmployee] = useState("")
-    const token = cookies.get('access')
-    const handleRowClicked = (params)=>{
-        console.log(params)
-        navigate(`/employee/${params.id}`,{id:params.id});
-      }
-        const pageState = (direction) => {
-          console.log("fetching page",direction)
-        if (direction > 0 && data?.next) {
-            getNextRequest(data.next);
-        } else if (direction < 0 && data?.previous) {
-            getNextRequest(data.previous);
+  const [importFile, setImportFile] = useState(false);
+  const [rateImport, setRateImport] = useState(false);
+  const { data, error, loading } = useRequest("/master/employee/");
+  const navigate = useNavigate();
+
+  const [rows, setRows] = useState([]);
+
+  // Define the columns you want to show on the UI
+  const columns = [
+    {  field: 'Sl',
+      headerName: 'Sl',
+      renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1},
+    { field: "EmpId", headerName: "EmpId" },
+    { field: "Name", headerName: "Name"},
+    { field: "Father", headerName: "Father" },
+    {
+      field: "SiteDetails_name",
+      headerName: "Site",
+    },
+    {
+      field: "DepartmentDetails_name",
+      headerName: "Department"
+    },
+    {
+      field: "DesignationDetails_name",
+      headerName: "Designation"
+    },
+    {
+      field: "GangDetails_name",
+      headerName: "Gang"
+    },
+    { field: "Email", headerName: "Email" },
+  ];
+
+  const flattenObject = (obj, parentKey = '') => {
+    let result = {};
+
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const newKey = parentKey ? `${parentKey}_${key}` : key;
+
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          // If the value is an object, recurse to flatten it
+          Object.assign(result, flattenObject(obj[key], newKey));
+        } else {
+          // Otherwise, just assign the value
+          result[newKey] = obj[key];
         }
-    };
-    const postRequest = async (payload) => {
-    
-      console.log("data to save",payload)
-      try {
-        const response = await axios.post("/master/employee/", payload,
-          {
-              headers: {
-                  'Authorization': `Bearer ${token}`
-              },
-              withCredentials: false
-          }
-        );
-        console.log("post response",response)
-        if(response.status === 201){
-        
-          console.log("created")
-    
-        
-        
-        }
-      } catch (err) {
-        console.error(err)
-       
-      
-      } finally {
-    console.log("employee created")
-      }
-    };
-    const getemplist = async ()=>{
-      const empurl = "http://127.0.0.1:8080/api/payroll/master/employee/"
-      try {
-        const response = await axios.get(empurl,
-          {
-              auth: {
-              username: "global",
-              password: "Kumar@123"
-            },
-              withCredentials: false
-          }
-        );
-        console.log("get response",response)
-        if(response?.data){
-          console.log(response.data)
-          const rate = []
-          response.data.map((item)=>{
-            onlypatchRequest(`/importrate/${item.Aadhar}/`,item.rate)
-            setTimeout(()=>{
-              console.log("waiting for response")
-            },1000)
-            rate.push(item.rate)
-          })
-          console.log(rate)
-          setemployeedata(rate)
-        }
-      } catch (err) {
-        console.error(err)
-        
-      } finally {
-        console.log("fetched successed")
       }
     }
+
+    return result;
+  };
+  const getemplist = async ()=>{
+    const empurl = "http://127.0.0.1:8080/api/payroll/master/employee/"
+    try {
+      const response = await axios.get(empurl,
+        {
+            auth: {
+            username: "global",
+            password: "Kumar@123"
+          },
+            withCredentials: false
+        }
+      );
+      console.log("get response",response)
+      if(response?.data){
+        console.log(response.data)
+        const rate = []
+        response.data.map((item)=>{
+          onlypatchRequest(`/importrate/${item.Aadhar}/`,item.rate)
+          setTimeout(()=>{
+            console.log("waiting for response")
+          },1000)
+          rate.push(item.rate)
+        })
+        console.log(rate)
+        setemployeedata(rate)
+      }
+    } catch (err) {
+      console.error(err)
+      
+    } finally {
+      console.log("fetched successed")
+    }
+  }
+  useEffect(() => {
+    if (data?.length > 0) {
+      // Filter rows to match the required fields
+      const filteredRows = data.map((row) => flattenObject(row));
+
+      setRows(filteredRows); // Update the rows state with the filtered data
+    }
+  }, [data]);
+
+  const handleRowClicked = (params) => {
+    navigate(`/employee/${params.id}`, { id: params.id });
+  };
+
   return (
-    <div className='flex flex-col gap-2 p-1'>
-      <div className='mt-4 mr-2'>
-          <span className='flex gap-2 float-right'>
-            <NavLink to="/newemployee" className=" bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200">
-              <div className='flex gap-2'><Plus /> Add</div>
-            </NavLink>
-      
-              <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
-              onClick={()=>{
-                setImportFile(true)
-                setRateImport(false)
-                setapiImport(false)
-                }}><Upload /> Import</div>
-              <div 
-              className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
-              onClick={()=>{
-                setImportFile(false)
-                setapiImport(false)
-                setRateImport(true)
-              }}><Upload />Rate Import</div>
-            {/* <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
-              onClick={()=>getemplist()}>
-              <Upload /> Sync</div> */}
-             
-          </span>
+    <div className="flex flex-col gap-2 p-1">
+      <div className="mt-4 mr-2">
+        <span className="flex gap-2 float-right">
+          <NavLink to="/newemployee" className="bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200">
+            <div className="flex gap-2">
+              <Plus /> Add
+            </div>
+          </NavLink>
+
+          <div
+            className="flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer"
+            onClick={() => {
+              setImportFile(true);
+              setRateImport(false);
+            }}
+          >
+            <Upload /> Import
+          </div>
+          <div
+            className="flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer"
+            onClick={() => {
+              setImportFile(false);
+              setRateImport(true);
+            }}
+          >
+            <Upload /> Rate Import
+          </div>
+
+          <div
+            className="flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer"
+            onClick={() => {
+              navigate("/sync");
+            }}
+          >
+            Sync
+          </div>
+        </span>
       </div>
-      
-      {apiimport?<ApiImport heading="import employee"  
-                    closeModel={()=>{
-                      setImportFile(false)
-                      setapiImport(false)
-                      }} 
-                      newItem={true} />:
-                      <></>
-                      }
-      {importFile?<ImportFile heading="import employee"  
-                    closeModel={()=>{
-                      setImportFile(false)
-                      setRateImport(false)
-                      }} 
-                      newItem={true}
-                    api="/master/employee/" / >:<></>}
-      {rateImport?<ImportFile heading="import rate"  
-                    closeModel={()=>{
-                      setImportFile(false)
-                      setRateImport(false)
-                      }} 
-                      newItem={false}
-                    api="/master/rate/" / >:<></>}
-        {loading?"Loading......": data?.results?.length?(
-          <DataGrid
-          heading="Employees"
-          columns={columns}
-          row={data?.results} // Pass all the data to the DataGrid
-          rowClicked={handleRowClicked}
-          pageInfo={true} // Enable pagination controls
-          totalCounts={data?.count || 0}
-          apiUrl="/master/employee/" // Pass the API URL for dynamic fetching
+
+      {importFile && (
+        <ImportFile
+          heading="import employee"
+          closeModel={() => {
+            setImportFile(false);
+            setRateImport(false);
+          }}
+          newItem={true}
+          api="/master/employee/"
         />
-        ):(
-                <div>No data available</div>
-              )}
+      )}
+      {rateImport && (
+        <ImportFile
+          heading="import rate"
+          closeModel={() => {
+            setImportFile(false);
+            setRateImport(false);
+          }}
+          newItem={false}
+          api="/master/rate/"
+        />
+      )}
+
+      {loading ? (
+        "Loading......"
+      ) : rows.length ? (
+        <div style={{ height: 600, width: '100%' }}>          
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          components={{ Toolbar: GridToolbar }}
+          disableSelectionOnClick
+          onRowClick={handleRowClicked}
+        />
+        </div>
+      ) : (
+        <div>No data available</div>
+      )}
     </div>
-  )
+  );
 }
 
-export default Employeelist
+export default Employeelist;

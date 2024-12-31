@@ -9,12 +9,13 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mui/lab": "^5.0.0-alpha.173",
-    "@mui/material": "^5.16.6",
+    "@mui/material": "^5.16.13",
+    "@mui/styled-engine-sc": "^6.3.0",
+    "@mui/x-data-grid": "^7.23.5",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -41,6 +42,7 @@
     "react-hook-form": "^7.53.1",
     "react-router-dom": "^6.25.1",
     "react-toastify": "^10.0.5",
+    "styled-components": "^6.1.13",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "universal-cookie": "^7.2.0",

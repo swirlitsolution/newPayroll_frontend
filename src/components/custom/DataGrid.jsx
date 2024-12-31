@@ -421,14 +421,14 @@ function DataGrid({
  
     if(row?.length>10){
       setTotalPages(Math.ceil(row?.length / itemsPerPage));
-      setPaginatedData(row.slice(0, itemsPerPage));
-      setTableData(row);
+ 
     }
     else{
       setTotalPages(Math.ceil(totalCounts / itemsPerPage));
-      setPaginatedData(row.slice(0, itemsPerPage));
-      setTableData(row);
+      
     }
+    setPaginatedData(row.slice(0, itemsPerPage));
+    setTableData(row);
 
   }, [row, totalCounts]);
 
@@ -656,8 +656,9 @@ function DataGrid({
         <table className="w-full text-sm text-left text-gray-500" ref={tableRef}>
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
-            <th className="px-3 border-2 py-3">Sl</th>
+           
               {checkBoxSelection && <th><Input type="checkbox" /></th>}
+              <th className="px-3 border-2 py-3">Sl</th>
               {columns.map((col, index) => (
                 <th key={col.field || index} className="px-3 border-2 py-3">{col.headerName}</th>
               ))}
@@ -679,9 +680,10 @@ function DataGrid({
             ) : (
               paginatedData.map((item, index) => (
                 <tr key={index} onClick={rowClicked ? () => rowClicked(item) : undefined}>
+                  
+                  {checkBoxSelection && <td><Input type="checkbox" /></td>}
                   <td className="border-2 p-1 text-nowrap">{index + 1}</td>
 
-                  {checkBoxSelection && <td><Input type="checkbox" /></td>}
                   {columns.map((col, colIndex) => (
                     <td key={colIndex} className="border-2 p-1 text-nowrap">{col.renderCell ? col.renderCell(item) : getValue(item, col.field)}</td>
                   ))}
