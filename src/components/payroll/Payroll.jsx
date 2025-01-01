@@ -104,7 +104,7 @@ const summarycolumns = [
     {field:'miscamt',headerName:'MISc'},
     {field:'cea',headerName:'CEA'},
     {field:'washingallowance',headerName:'Washing'},
-    {field:'SpecialAllowance',headerName:'SPL Allow'},
+    {field:'specialallowance',headerName:'SPL Allow'},
     {field:'professinalpursuites',headerName:'PRF Pursuits'},
     {field:'incometax',headerName:'Income Tax'},
     {field:'personalpay',headerName:'Personal Pay'},

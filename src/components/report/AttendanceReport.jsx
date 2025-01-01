@@ -78,7 +78,7 @@ const columns = [
         return <span>{params.day31}{params.otday31?("/"+params.otday31):""}</span>}},
 ]
 function AttendanceReport(props) {
-    const {register,handleSubmit, formState: { errors } } = useForm()
+    const {register,handleSubmit,control, formState: { errors } } = useForm()
     const { data, loading,getRequest} = usePost("/markattendance/")
 
     
@@ -104,14 +104,16 @@ function AttendanceReport(props) {
                 <h3 className="font-bold">{props?.heading.toUpperCase()}</h3>
               </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
+                
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here
                         control={control}
+                        
                         render={({ field, fieldState: { error } }) => {
                             const { onChange, value, ref } = field;
                         return (
-                            <Master
+                            <Master 
                             api = "/master/site/"
                             onValueChange={(newValue) => {onChange(newValue || null)
                       
@@ -120,7 +122,7 @@ function AttendanceReport(props) {
                         );
                         }}
                     />
-                <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         
                 <Button type='submit' >Ok</Button>
                 </form>
