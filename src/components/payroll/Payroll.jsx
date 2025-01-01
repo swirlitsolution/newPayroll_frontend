@@ -104,6 +104,7 @@ const summarycolumns = [
     {field:'miscamt',headerName:'MISc'},
     {field:'cea',headerName:'CEA'},
     {field:'washingallowance',headerName:'Washing'},
+    {field:'SpecialAllowance',headerName:'SPL Allow'},
     {field:'professinalpursuites',headerName:'PRF Pursuits'},
     {field:'incometax',headerName:'Income Tax'},
     {field:'personalpay',headerName:'Personal Pay'},
@@ -116,7 +117,6 @@ const summarycolumns = [
     {field:'fixedamt',headerName:'Fixed Amt'},
     {field:'pf',headerName:'PF'},
     {field:'esic',headerName:'ESIC'},
-    {field:'fixedamt',headerName:'Fixed Amt'},
     {field:'advance',headerName:'Advance'},
     {field:'othergrosstotal',headerName:'Total'},
     {field:'mrpgross',headerName:'MRP'},
@@ -219,7 +219,7 @@ function Payroll() {
                             <Master
                             api = "/master/site/"
                             onValueChange={(newValue) => {onChange(newValue || null)
-                            getNhDays(newValue)
+                   
                             }} 
                             value={value} name='Site' />
                         );

@@ -417,20 +417,20 @@ function DataGrid({
   }, []);
 
   // Initialize table data and pagination
-  useEffect(() => {
+  // useEffect(() => {
  
-    if(row?.length>10){
-      setTotalPages(Math.ceil(row?.length / itemsPerPage));
+  //   if(row?.length>10){
+  //     setTotalPages(Math.ceil(row?.length / itemsPerPage));
  
-    }
-    else{
-      setTotalPages(Math.ceil(totalCounts / itemsPerPage));
+  //   }
+  //   else{
+  //     setTotalPages(Math.ceil(totalCounts / itemsPerPage));
       
-    }
-    setPaginatedData(row.slice(0, itemsPerPage));
-    setTableData(row);
+  //   }
+  //   setPaginatedData(row.slice(0, itemsPerPage));
+  //   setTableData(row);
 
-  }, [row, totalCounts]);
+  // }, [row, totalCounts]);
 
   // Handle direct URL search
   useEffect(() => {
@@ -452,9 +452,10 @@ function DataGrid({
         .then((response) => {
           const { results, count } = response.data;
           setTableData(results);
-          setPaginatedData(results.slice(0, itemsPerPage));
-          setTotalPages(Math.ceil(count / itemsPerPage));
-          setCurrentPage(1);
+          setPaginatedData(results)
+          // setPaginatedData(results.slice(0, itemsPerPage));
+          // setTotalPages(Math.ceil(count / itemsPerPage));
+          // setCurrentPage(1);
         })
         .catch((error) => console.error("Error fetching data from URL:", error));
     }
@@ -482,8 +483,9 @@ function DataGrid({
      })
      if(data.length>0){
       setTableData(data)
-      setTotalPages(Math.ceil(data?.length / itemsPerPage));
-      setPaginatedData(tableData.slice(0, 10));
+      setPaginatedData(data)
+      // setTotalPages(Math.ceil(data?.length / itemsPerPage));
+      // setPaginatedData(tableData.slice(0, 10));
      }
      else{
       try {
