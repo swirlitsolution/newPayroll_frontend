@@ -13,7 +13,7 @@ function SyncData({ heading, closeModel }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [cancelled, setCancelled] = useState(false);
-
+    const [total,setTotal] = useState(0)
     const navigate = useNavigate();
     const cookies = new Cookies()
 
@@ -98,7 +98,7 @@ function SyncData({ heading, closeModel }) {
 
         // Maintain a set to track submitted EmpId values
         const submittedEmpIds = new Set();
-
+      
         for (let i = 0; i < data.length; i++) {
             if (cancelled) {
                 toast.info("Submission process cancelled.");
@@ -147,30 +147,30 @@ function SyncData({ heading, closeModel }) {
             // const formattedDepartment = row.DepartmentDetails?.name?.trim() || "";
 
             const payload = {
-                ctc: row?.ctc || "",
-                basic: row?.basic || "",
-                da: row?.da || "",
-                arate: row?.arate || "",
-                otrate: row?.otrate || "",
-                hra: row?.hra || "",
-                madical: row?.madical || "",
-                ExgratiaRetention: row?.ExgratiaRetention || "",
-                LTARetention: row?.LTARetention || "",
+                ctc: row?.ctc || 0,
+                basic: row?.basic || 0,
+                da: row?.da || 0,
+                arate: row?.arate || 0,
+                otrate: row?.otrate || 0,
+                hra: row?.hra || 0,
+                madical: row?.madical || 0,
+                ExgratiaRetention: row?.ExgratiaRetention || 0,
+                LTARetention: row?.LTARetention || 0,
                 LTA: row?.LTA, // Use the trimmed Designation value here
-                CA: row?.CA || "",
-                Fooding: row?.Fooding || "",
-                Misc: row?.Misc || "",
-                CEA: row?.CEA || "",
-                WashingAllowance: row?.WashingAllowance || "",
-                ProfessionalPursuits: row?.ProfessionalPursuits || "",
-                SpecialAllowance: row?.SpecialAllowance || "",
-                IncomeTax: row?.IncomeTax || "",
-                personalpay: row?.personalpay || "",
-                petrol: row?.petrol || "",
-                mobile: row?.mobile || "",
-                AttendAllow: row?.AttendAllow || "",
-                incentive: row?.incentive || "",
-                fixedamt: row?.MrOtAppl || "",
+                CA: row?.CA || 0,
+                Fooding: row?.Fooding || 0,
+                Misc: row?.Misc || 0,
+                CEA: row?.CEA || 0,
+                WashingAllowance: row?.WashingAllowance || 0,
+                ProfessionalPursuits: row?.ProfessionalPursuits || 0,
+                SpecialAllowance: row?.SpecialAllowance || 0,
+                IncomeTax: row?.IncomeTax || 0,
+                personalpay: row?.personalpay || 0,
+                petrol: row?.petrol || 0,
+                mobile: row?.mobile || 0,
+                AttendAllow: row?.AttendAllow || 0,
+                incentive: row?.incentive || 0,
+                fixedamt: row?.fixedamt || 0,
             };
 
             try {
@@ -185,7 +185,8 @@ function SyncData({ heading, closeModel }) {
                 );
 
                 if (res.status === 200 || res.status === 201) {
-                    toast.success(`Row ${i + 1} submitted successfully.`);
+                    setTotal(i+1)
+                    // toast.success(`Row ${i + 1} submitted successfully.`);
                 } else {
                     // Handle specific "EmpId already exists" error
                     if (res.data.message && res.data.message.includes("EmpId already exists")) {
@@ -198,7 +199,7 @@ function SyncData({ heading, closeModel }) {
             } catch (error) {
                 // Handle error without stopping the loop
                 if (error.response && error.response.data && error.response.data.message.includes("EmpId already exists")) {
-                    toast.info(`EmpId ${row.EmpId} already exists, moving to the next row.`);
+                    toast.info(`EmpId ${data[i].EmpId} already exists, moving to the next row.`);
                 } else {
                     console.error("Error submitting row:", error);
                     toast.error(`Error submitting row ${i + 1}: ${error.message}`);
@@ -252,6 +253,7 @@ function SyncData({ heading, closeModel }) {
                                 Cancel
                             </Button>
                         )}
+                        <div><label>{total} </label><p> updated</p></div>
                     </div>
 
                     {isLoading && <p className="text-muted-foreground">Loading...</p>}

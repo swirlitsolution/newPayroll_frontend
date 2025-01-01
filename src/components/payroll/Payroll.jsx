@@ -12,6 +12,7 @@ const payrollcolumns = [
     {field:'id',headerName:'TrnId',width:'80px'},
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
+    {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData.SiteDetails.name},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>{
         return (
             <tr>
@@ -177,7 +178,7 @@ function Payroll() {
         const year = splited_date[0]
         const month = splited_date[1]
         
-        getRequest(`/getattendancereport/${month}/${year}/`)
+        getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
         
         // postRequest(data)
     }
@@ -220,7 +221,7 @@ function Payroll() {
                             onValueChange={(newValue) => {onChange(newValue || null)
                             getNhDays(newValue)
                             }} 
-                            value={value} name='site' />
+                            value={value} name='Site' />
                         );
                         }}
                     />

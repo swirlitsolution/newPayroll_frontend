@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import MyDataGrid from '../custom/MyDataGrid'
+import DataGrid from '../custom/DataGrid'
 import { useForm  } from "react-hook-form";
   
 import MarkAttendance from '../custom/MarkAttendance';
@@ -96,7 +96,7 @@ function Attendance(props) {
                     api="/importattendance/" / >:<></>}
        <div className="  w-[100%] ">
        {loading?"Loading......": data?.length? 
-               ( <MyDataGrid 
+               ( <DataGrid 
                 heading="Employees"
                 columns={columns} 
                 row={data} 

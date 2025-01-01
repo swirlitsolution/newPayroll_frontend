@@ -122,6 +122,7 @@ function EditEmployee(props) {
         setValue("Pan",data?.Pan)
         setValue("Address",data?.Address)
         setValue("Bank",data?.Bank)
+        setValue("Branch", data?.Branch)
         setValue("Ifsc",data?.Ifsc)
         setValue("Ac",data?.Ac)
         setValue("Otslave",data?.Otslave)
@@ -129,7 +130,7 @@ function EditEmployee(props) {
         setValue("Paymentmode",data?.Paymentmode)
         setValue("Weekoff",data?.Weekoff)
         setValue("Skill",data?.Skill)
-        setValue("doj",data?.doj)
+        setValue("Doj",data?.Doj)
         setValue("Status",data?.Status)
         setValue("PfApplicable",data?.PfApplicable)
         setValue("EsicApplicable",data?.EsicApplicable)
@@ -515,7 +516,7 @@ function EditEmployee(props) {
                             }}
                         />
                         <Label className='text-left'>DOJ</Label>
-                        <Input type="date" {...register("doj")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Input type="date" {...register("Doj")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                           <Label className='text-left'>Status</Label>
                         <Controller
                             name="Status"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import MyDataGrid from '../custom/MyDataGrid'
+import DataGrid from '../custom/DataGrid'
 import { Pen, Plus, Upload } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import useRequest from '../../hooks/useRequest'
@@ -41,7 +41,7 @@ function EmployeeTransfer() {
     <div className='flex flex-col gap-2 p-1'>
       
      
-        {loading?"Loading......": data?.results?.length?(<MyDataGrid 
+        {loading?"Loading......": data?.results?.length?(<DataGrid 
               heading="Employees"
               columns={columns} 
               row={data?.results} 

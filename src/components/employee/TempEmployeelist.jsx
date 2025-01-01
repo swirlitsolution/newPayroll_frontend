@@ -5,36 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ImportFile from "./ImportFile";
 import useRequest from "../../hooks/useRequest";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress for the loader
-const columns = [
-  { field: "id", headerName: "TrnId", width: 80 },
-  { field: "EmpId", headerName: "EmpId", width: 80 },
-  { field: "Name", headerName: "Name", width: 180 },
-  { field: "Father", headerName: "Father", width: 180 },
-  {
-    field: "SiteDetails_name",
-    headerName: "Site",
-    width: 180,
-  },
-  {
-    field: "DepartmentDetails_name",
-    headerName: "Department",
-    width: 180
-  },
-  {
-    field: "DesignationDetails_name",
-    headerName: "Designation",
-    width: 180,
-  },
-  {
-    field: "GangDetails_name",
-    headerName: "Gang",
-    width: 180,
-  },
-  { field: "Email", headerName: "Email", width: 220 },
-  { field: "Gender", headerName: "Gender", width: 220 },
 
-];
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
@@ -42,43 +13,33 @@ function Employeelist() {
   const navigate = useNavigate();
 
   const [rows, setRows] = useState([]);
-  
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
-    Dob: false,
-    Imageurl: false,
-    Uan: false,
-    Esic: false,
-    Mobile: false,
-    EmpSafetyCard: false,
-    SafetyCardExpiry: false,
-    Aadhar: false,
-    Pan: false,
-    Address: false,
-    Bank: false,
-    Branch: false,
-    Ifsc: false,
-    Ac: false,
-    PfApplicable: false,
-    EsicApplicable: false,
-    PRFTax: false,
-    AttendAllow: false,
-    AllowAsPer: false,
-    ReversePF: false,
-    OtAppl: false,
-    MrOtAppl: false,
-    Gender: false,
-    MaritalStatus: false,
-    Doj: false,
-    Otslave: false,
-    Ottype: false,
-    Paymentmode: false,
-    Weekoff: false,
-    Skill: false,
-    Status: false,
-  })
 
   // Define the columns you want to show on the UI
-  
+  const columns = [
+    {  field: 'Sl',
+      headerName: 'Sl',
+      renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1},
+    { field: "EmpId", headerName: "EmpId" },
+    { field: "Name", headerName: "Name"},
+    { field: "Father", headerName: "Father" },
+    {
+      field: "SiteDetails_name",
+      headerName: "Site",
+    },
+    {
+      field: "DepartmentDetails_name",
+      headerName: "Department"
+    },
+    {
+      field: "DesignationDetails_name",
+      headerName: "Designation"
+    },
+    {
+      field: "GangDetails_name",
+      headerName: "Gang"
+    },
+    { field: "Email", headerName: "Email" },
+  ];
 
   const flattenObject = (obj, parentKey = '') => {
     let result = {};
@@ -99,14 +60,46 @@ function Employeelist() {
 
     return result;
   };
-
-  useEffect(() => {
-    console.log("Data request started");
-    if (data?.length > 0) {
-      const filteredRows = data.map((row) => flattenObject(row));
-      setRows(filteredRows);
+  const getemplist = async ()=>{
+    const empurl = "http://127.0.0.1:8080/api/payroll/master/employee/"
+    try {
+      const response = await axios.get(empurl,
+        {
+            auth: {
+            username: "global",
+            password: "Kumar@123"
+          },
+            withCredentials: false
+        }
+      );
+      console.log("get response",response)
+      if(response?.data){
+        console.log(response.data)
+        const rate = []
+        response.data.map((item)=>{
+          onlypatchRequest(`/importrate/${item.Aadhar}/`,item.rate)
+          setTimeout(()=>{
+            console.log("waiting for response")
+          },1000)
+          rate.push(item.rate)
+        })
+        console.log(rate)
+        setemployeedata(rate)
+      }
+    } catch (err) {
+      console.error(err)
+      
+    } finally {
+      console.log("fetched successed")
     }
-    console.log("Data fetched:", data);
+  }
+  useEffect(() => {
+    if (data?.length > 0) {
+      // Filter rows to match the required fields
+      const filteredRows = data.map((row) => flattenObject(row));
+
+      setRows(filteredRows); // Update the rows state with the filtered data
+    }
   }, [data]);
 
   const handleRowClicked = (params) => {
@@ -177,30 +170,20 @@ function Employeelist() {
       )}
 
       {loading ? (
-        // Show a loader while data is loading
-        <div className="flex justify-center items-center">
-          Loading...
-        </div>
+        "Loading......"
       ) : rows.length ? (
-        <div style={{ height: 600, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-      
-            columnVisibilityModel={columnVisibilityModel}
-            pageSizeOptions={[5, 10, 50]}
-            components={{ Toolbar: GridToolbar }}
-            disableSelectionOnClick
-            onRowClick={handleRowClicked}
-            slots={{ toolbar: GridToolbar }}
-           
-            onColumnVisibilityModelChange={(newModel) =>
-              setColumnVisibilityModel(newModel)
-            } 
-          />
+        <div style={{ height: 600, width: '100%' }}>          
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          components={{ Toolbar: GridToolbar }}
+          disableSelectionOnClick
+          onRowClick={handleRowClicked}
+        />
         </div>
       ) : (
-        // Display no data message if no rows are available
         <div>No data available</div>
       )}
     </div>
