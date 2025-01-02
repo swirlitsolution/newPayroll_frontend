@@ -39,11 +39,12 @@ function SyncData({ heading, closeModel }) {
                 }
             );
 
-            const apiData = Array.isArray(response.data)
-                ? response.data
-                : Array.isArray(response.data.employees)
-                    ? response.data.employees
-                    : [];
+            console.log("response.data", response?.data)
+
+            const apiData = response.data;
+            console.log(apiData)
+
+            console.log(apiData[0].Bank.Name)
 
             if (apiData.length === 0) {
                 toast.info("No data retrieved from API.");
@@ -86,13 +87,21 @@ function SyncData({ heading, closeModel }) {
             // Check if EmpId already exists in the set
             if (submittedEmpIds.has(row.EmpId)) {
                 toast.info(`EmpId ${row.EmpId} already exists, skipping this row.`);
-                continue; // Skip the current row if EmpId already exists
+                continue;
             }
 
             // Add EmpId to the set to track it as submitted
             submittedEmpIds.add(row.EmpId);
 
-            // Add the condition for Ottype conversion here
+            // Add or update Bank and IFSC details
+            const bankName = row?.Bank?.Name || "Default Bank Name"; // Replace with actual default or dynamic value
+            const ifscCode = row?.Bank?.Ifsc || "Default IFSC Code"; // Replace with actual default or dynamic value
+
+
+            console.log(bankName)
+            console.log(ifscCode)
+
+            // Format other fields if necessary
             let formattedOttype = row.ottype;
             if (row.ottype === "SINGLE-OT") {
                 formattedOttype = "SINGLE";
@@ -100,29 +109,35 @@ function SyncData({ heading, closeModel }) {
                 formattedOttype = "DOUBLE";
             }
 
-            // Format the 'Doe' field (Date of Exit) if it exists and is not null
             let formattedDoe = row.Doe;
             if (formattedDoe) {
                 const dateObj = new Date(formattedDoe);
-                formattedDoe = dateObj.toISOString().split('T')[0]; // This will give the format YYYY-MM-DD
-            } else {
-                formattedDoe = null; // Or you can omit it entirely by not including it in the payload if the API allows
+                formattedDoe = dateObj.toISOString().split('T')[0]; // Format YYYY-MM-DD
             }
 
             let formattedDob = row.Dob;
             if (formattedDob) {
                 const dateObj = new Date(formattedDob);
-                formattedDob = dateObj.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
-            } else {
-                formattedDob = null; // Set to null if not provided
+                formattedDob = dateObj.toISOString().split('T')[0]; // Format YYYY-MM-DD
             }
 
-            // Trim the Designation value to remove extra spaces
+            const formatDate = (date) => {
+                if (!date) return null;
+                const d = new Date(date);
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero to month
+                const day = String(d.getDate()).padStart(2, '0'); // Add leading zero to day
+                return `${year}-${month}-${day}`;
+            };
+
+            const formattedDoj = formatDate(row.Doj);
+
             const formattedSite = row.SiteDetails?.name?.trim() || "";
             const formattedDesignation = row.DesignationDetails?.name?.trim() || "";
             const formattedDepartment = row.DepartmentDetails?.name?.trim() || "";
 
             const payload = {
+                id: row.id,
                 Name: row.Name || "",
                 Site: formattedSite || "",
                 Imageurl: row.EmpImage || "",
@@ -132,7 +147,7 @@ function SyncData({ heading, closeModel }) {
                 Gender: row.Gender || "",
                 MaritalStatus: row.MaritalStatus || "",
                 Department: formattedDepartment || "",
-                Designation: formattedDesignation, // Use the trimmed Designation value here
+                Designation: formattedDesignation,
                 Gang: row.Gang || "DEFAULT",
                 PfApplicable: row.PfApplicable || false,
                 Uan: row.Uan || "",
@@ -149,28 +164,29 @@ function SyncData({ heading, closeModel }) {
                 MrOtAppl: row.MrOtAppl || false,
                 AllowAsPer: row.AllowAsPer || false,
                 ReversePF: row.ReversePF !== undefined ? row.ReversePF : false,
-                Bank: row.Bank || "",
-                Ifsc: row.Ifsc || "",
+                Bank: bankName, // Use updated or default Bank name
+                Ifsc: ifscCode, // Use updated or default IFSC code
                 Ac: row.Ac || "",
                 Aadhar: row.Aadhar || "",
                 Pan: row.Pan || "",
                 Otslave: row.otslave || "",
-                Ottype: formattedOttype, // Use the formatted Ottype value here
+                Ottype: formattedOttype,
                 Paymentmode: row.paymentmode || "",
                 Weekoff: row.weekoff || "",
                 Skill: row.skill || "",
-                Doj: row.Doj || null,
+                Doj: formattedDoj || null,
                 Status: row.Status || "",
-                Doe: formattedDoe, // Set the formatted Doe (Date of Exit) here
+                Doe: formattedDoe, // Set formatted Date of Exit
+                Branch: row?.Bank?.Branch
             };
 
             try {
                 const res = await axios.post(
-                    "https://global.swirlapps.in/master/employee/",
-                    payload, // The payload is the second parameter
+                    `https://global.swirlapps.in/updateemployee/`,
+                    payload,
                     {
                         headers: {
-                            Authorization: `Bearer ${accessToken}`, // Authorization header
+                            Authorization: `Bearer ${accessToken}`,
                         },
                     }
                 );
@@ -178,17 +194,10 @@ function SyncData({ heading, closeModel }) {
                 if (res.status === 200 || res.status === 201) {
                     toast.success(`Row ${i + 1} submitted successfully.`);
                 } else {
-                    // Handle specific "EmpId already exists" error
-                    if (res.data.message && res.data.message.includes("EmpId already exists")) {
-                        toast.info(`EmpId ${row.EmpId} already exists, moving to the next row.`);
-                    } else {
-                        toast.error(`Error submitting row ${i + 1}: ${res.data.message || "Unknown error"}`);
-                        continue;
-                    }
+                    toast.error(`Error submitting row ${i + 1}: ${res.data.message || "Unknown error"}`);
                 }
             } catch (error) {
-                // Handle error without stopping the loop
-                if (error.response && error.response.data && error.response.data.message.includes("EmpId already exists")) {
+                if (error.response?.data?.message.includes("EmpId already exists")) {
                     toast.info(`EmpId ${row.EmpId} already exists, moving to the next row.`);
                 } else {
                     console.error("Error submitting row:", error);
@@ -199,6 +208,8 @@ function SyncData({ heading, closeModel }) {
 
         setIsSubmitting(false);
     };
+
+
 
 
 

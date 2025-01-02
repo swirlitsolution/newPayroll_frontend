@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+// import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -36,6 +36,7 @@ import BonusTable from './components/custom/BonusTable'
 import SyncData from './components/employee/SyncData';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
+// axios.defaults.baseURL = 'http://dev.leadingconstruction.co.in/';
 axios.defaults.baseURL = 'https://global.swirlapps.in';
 
 function App() {

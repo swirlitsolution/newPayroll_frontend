@@ -390,7 +390,7 @@ export const getValue = (obj, field) => {
 function DataGrid({
   heading,
   columns,
-  checkBoxSelection,
+  checkBoxSelection,  
   rowClicked,
   pdfOrientation = "landscape",
   isBonusPayRegister,
@@ -418,9 +418,18 @@ function DataGrid({
 
   // Initialize table data and pagination
   useEffect(() => {
-    setTotalPages(Math.ceil(totalCounts / itemsPerPage));
-    setPaginatedData(row.slice(0, itemsPerPage));
-    setTableData(row);
+
+    if (row?.length > 10) {
+      setTotalPages(Math.ceil(row?.length / itemsPerPage));
+      setPaginatedData(row.slice(0, itemsPerPage));
+      setTableData(row);
+    }
+    else {
+      setTotalPages(Math.ceil(totalCounts / itemsPerPage));
+      setPaginatedData(row.slice(0, itemsPerPage));
+      setTableData(row);
+    }
+
   }, [row, totalCounts]);
 
   // Handle direct URL search
@@ -451,35 +460,59 @@ function DataGrid({
     }
   }, [apiUrl, accessToken]);
 
+  console.log("currentPage")
+
   // Handle search
   const handleSearch = async () => {
     const originalFilterBy = filterBy ? filterBy.toLowerCase() : "";
     const originalSearchValue = searchValue.trim();
 
     if (originalSearchValue.length > 0 || originalFilterBy) {
-      try {
-        setLoading(true);
-        const searchUrl = `${apiUrl}?${originalFilterBy}=${encodeURIComponent(originalSearchValue)}`;
-        const response = await axios.get(searchUrl, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+      const data = row.filter((element) => {
+        return columns.find((col) => {
 
-        const { results, count } = response.data;
-        setTableData(results);
-        setPaginatedData(results.slice(0, itemsPerPage));
-        setTotalPages(Math.ceil(count / itemsPerPage));
-        setCurrentPage(1);
+          if (col.field === filterBy) {
+            let cellValue = col.renderCell ? col.renderCell(element) : getValue(element, col.field);
+            if (`${cellValue}`.toLowerCase().includes(`${searchValue}`.toLowerCase())) {
+              return element
+            }
+          }
 
-        const newUrl = new URL(window.location.href);
-        newUrl.searchParams.set(originalFilterBy, originalSearchValue);
-        window.history.pushState({}, "", newUrl.toString());
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+        })
+        // element[filterBy].toLowerCase().includes(searchValue.toLowerCase()) 
+
+      })
+      if (data.length > 0) {
+        setTableData(data)
+        setTotalPages(Math.ceil(data?.length / itemsPerPage));
+        setPaginatedData(tableData.slice(0, 10));
       }
+      else {
+        try {
+          setLoading(true);
+          const searchUrl = `${apiUrl}?${originalFilterBy}=${encodeURIComponent(originalSearchValue)}`;
+          const response = await axios.get(searchUrl, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          const { results, count } = response.data;
+          setTableData(results);
+          setPaginatedData(results.slice(0, itemsPerPage));
+          setTotalPages(Math.ceil(count / itemsPerPage));
+          setCurrentPage(1);
+
+          const newUrl = new URL(window.location.href);
+          newUrl.searchParams.set(originalFilterBy, originalSearchValue);
+          window.history.pushState({}, "", newUrl.toString());
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+
     } else {
       setPaginatedData(tableData.slice(0, itemsPerPage));
       setTotalPages(Math.ceil(tableData.length / itemsPerPage));
@@ -490,26 +523,60 @@ function DataGrid({
   // Fetch paginated data
   const fetchData = async (page) => {
     setLoading(true);
-    try {
-      const response = await axios.get(`${apiUrl}?p=${page}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const { results, count } = response.data;
-      setTableData(results);
-      setPaginatedData(results.slice(0, itemsPerPage));
-      setTotalPages(Math.ceil(count / itemsPerPage));
+    const originalFilterBy = filterBy ? filterBy.toLowerCase() : "";
+
+    const originalSearchValue = searchValue.trim();
+    if (row.length > 10) {
+      console.log("fetching offline data", paginatedData)
+
+      var pagefrom = (page - 1) * 10;
+      var pageto = (page - 1) * 10 + 10;
+      setPaginatedData(tableData.slice(pagefrom, pageto));
       setCurrentPage(page);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
       setLoading(false);
     }
-  };
+    else {
+      try {
+        const response = await axios.get(`${apiUrl}?p=${page}&${originalFilterBy}=${encodeURIComponent(originalSearchValue)}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const { results, count } = response.data;
+        setTableData(results);
+        setPaginatedData(results.slice(0, itemsPerPage));
+        setTotalPages(Math.ceil(count / itemsPerPage));
+        setCurrentPage(page);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
+  };
+  const flattenObject = (obj, parentKey = '') => {
+    let result = {};
+
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const newKey = parentKey ? `${parentKey}_${key}` : key;
+
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          // If the value is an object, recurse to flatten it
+          Object.assign(result, flattenObject(obj[key], newKey));
+        } else {
+          // Otherwise, just assign the value
+          result[newKey] = obj[key];
+        }
+      }
+    }
+
+    return result;
+  };
   const handleGenerateExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(paginatedData);
+    const transformedArray = row.map(item => flattenObject(item));
+    const ws = XLSX.utils.json_to_sheet(transformedArray);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data");
     XLSX.writeFile(wb, `${heading}.xlsx`);
@@ -591,16 +658,17 @@ function DataGrid({
         <table className="w-full text-sm text-left text-gray-500" ref={tableRef}>
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
+              <th className="px-3 border-2 py-3">Sl</th>
               {checkBoxSelection && <th><Input type="checkbox" /></th>}
               {columns.map((col, index) => (
-                <th key={col.field || index} className="px-3 py-3">{col.headerName}</th>
+                <th key={col.field || index} className="px-3 border-2 py-3">{col.headerName}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length + 1} className="text-center py-3">
+                <td colSpan={columns.length + 1} className="text-center border-2 py-3">
                   Loading data...
                 </td>
               </tr>
@@ -612,15 +680,34 @@ function DataGrid({
               </tr>
             ) : (
               paginatedData.map((item, index) => (
-                <tr key={index} onClick={rowClicked ? () => rowClicked(item) : undefined}>
-                  {checkBoxSelection && <td><Input type="checkbox" /></td>}
+                <tr
+                  key={index}
+                  onClick={rowClicked ? () => rowClicked(item) : undefined}
+                >
+                  <td className="border-2 p-1 text-nowrap">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td>
+                  {checkBoxSelection && (
+                    <td>
+                      <Input type="checkbox" />
+                    </td>
+                  )}
                   {columns.map((col, colIndex) => (
-                    <td key={colIndex}>{col.renderCell ? col.renderCell(item) : getValue(item, col.field)}</td>
+                    <td
+                      key={colIndex}
+                      className="border-2 p-1 text-nowrap"
+                    >
+                      {col.renderCell
+                        ? col.renderCell(item)
+                        : getValue(item, col.field)}
+                    </td>
                   ))}
                 </tr>
               ))
             )}
           </tbody>
+
+
         </table>
       </div>
       <Stack spacing={2} direction="row" justifyContent="center">

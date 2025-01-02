@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
-import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check, FileSpreadsheet, Upload, X } from "lucide-react";
-import usePost from "../../hooks/usePost";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import * as XLSX from "xlsx";
+import usePost from "../../hooks/usePost";
 
 function ImportFile({ heading, closeModel, newItem, api }) {
     const [sheetData, setSheetData] = useState([]);
@@ -20,23 +20,7 @@ function ImportFile({ heading, closeModel, newItem, api }) {
     const mandatoryColumns = {
         Name: true,
         Site: true,
-        Imageurl: true,
-        EmpId: true,
-        Department: true,
-        Designation: true,
-        Gang: true,
-        PfApplicable: true,
-        EsicApplicable: true,
-        PRFTax: true,
-        AttendAllow: true,
-        OtAppl: true,
-        MrOtAppl: true,
-        AllowAsPer: true,
-        ReversePF: true,
-        Aadhar: true,
-        Weekoff: true,
-        Doj: true,
-        Status: true,
+     
     };
 
     const excelDateToJSDate = (excelValue) => {
