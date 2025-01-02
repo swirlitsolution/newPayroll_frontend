@@ -187,6 +187,9 @@ function usePost(url) {
             }
           );
           console.log("get response",response)
+          if(response.status === 404){
+            toast.warning("Requested source not found !")
+          }
           if(response.status === 226){
             toast.warning(response.data.exists)
           }

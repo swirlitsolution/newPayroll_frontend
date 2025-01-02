@@ -6,6 +6,7 @@ import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
 import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast } from 'react-toastify';
 
 
 const payrollcolumns = [
@@ -177,9 +178,13 @@ function Payroll() {
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
-        
-        getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
-        
+        if(data.Site && data.month !== ""){
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
+
+        }
+        else{
+            toast.warning("Select the site and month")
+        }
         // postRequest(data)
     }
     const getNhDays = (site)=>{

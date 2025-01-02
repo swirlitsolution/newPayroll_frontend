@@ -98,12 +98,12 @@ function NewEmployee(props) {
           }
     }
 
-    useEffect(()=>{
-        if(loading===false){
-            reset()
-            console.log("reseting")
-        }
-    },[loading])
+    // useEffect(()=>{
+    //     if(loading===false){
+    //         reset()
+    //         console.log("reseting")
+    //     }
+    // },[loading])
     useEffect(()=>{
         if(auto===true){
             getNextEmpId()
