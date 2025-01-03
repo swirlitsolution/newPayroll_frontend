@@ -4,6 +4,12 @@ import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, FileSpreadsheet, FileSpreadsheetIcon, Upload, X } from "lucide-react"
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 import usePost from '../../hooks/usePost'
 
 function ImportAttendance({heading,closeModel,newItem, api}) {
@@ -15,7 +21,7 @@ function ImportAttendance({heading,closeModel,newItem, api}) {
     const [submissionStatus, setSubmissionStatus] = useState({})
     const { data, error, loading,postRequest } = usePost(api)
     const [isSending, setIsSending] = useState(false)
-   
+    const [selectedType,setSelectedType] = useState('att')
     console.log("submition is ",submissionStatus)
     const excelDateToJSDate = (num) => {
         const utcDays = num - 25569; // Offset for Excel's epoch (Jan 1, 1900)
@@ -72,7 +78,7 @@ function ImportAttendance({heading,closeModel,newItem, api}) {
     setIsSending(true)
     for (let i = 0; i < sheetData.length; i++) {
         const attendance = sheetData[i]
-        var res =  await postRequest({attanDate,attendance})
+        var res =  await postRequest({attanDate,attendance,selectedType})
             console.log(" data is ",res)
             if (res.status === 400) {
                 setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: false }));
@@ -114,13 +120,30 @@ function ImportAttendance({heading,closeModel,newItem, api}) {
                         type="month" 
                         className='bg-white w-48' 
                         onChange={(e)=>setAttanDate(e.target.value)} />
-                        <Input
+                    <FormControl >
+                      
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            className=' w-96 items-center justify-around'
+                            value={selectedType}  // Step 3: Bind the value to the state
+                            onChange={(e)=>setSelectedType(e.target.value)}  // Step 4: Add the onChange handler
+                        >
+                          <FormLabel id="demo-row-radio-buttons-group-label">Type</FormLabel>
+                            <FormControlLabel value="att" control={<Radio />} label="Attendance" />
+                            <FormControlLabel value="ot" control={<Radio />} label="OT" />
+                          
+                        </RadioGroup>
+                    </FormControl>
+                    <Input
                         type="file"
                         accept=".xlsx, .xls"
                         onChange={handleFileUpload}
-                        className="file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        className=" w-96 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                         aria-label="Upload Excel file"
                         />
+                        
                          {isSending ? (
                             <Button onClick={handleCancelClick} variant="destructive">
                                 <X className="mr-2 h-4 w-4" />
