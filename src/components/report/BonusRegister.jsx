@@ -198,7 +198,7 @@ export const bonusRegistercolumns = [
   { field: "completed", headerName: 'Whther he has Completed 15 Year of Age at the beginning of the Accounting Year' },
   { field: "Designation", headerName: 'Designation', width: "80px", renderCell: (params) => params?.employee?.DesignationDetails?.name },
   { field: "Total No. of Days", headerName: 'Total No. of Days Worked in the Year', renderCell: (params) => params?.total },
-  { field: "Total Salary of Wages", headerName: 'Total Salary of Wages in respect of the Accounting Yaer', renderCell: (params) => params?.TotalGross },
+  { field: "Total Salary of Wages", headerName: 'Total Salary of Wages in respect of the Accounting Yaer', renderCell: (params) => { const totalSalaryOfWages = params?.TotalGross; return totalSalaryOfWages.toFixed(2) } },
   { field: "Amount of Bonus Payable", headerName: 'Amount of Bonus Payable under Sec. 10  or Sec. 11 as the case may be', renderCell: (params) => params?.Bonus },
   { field: "Puja Bonus or Other Customery", headerName: 'Puja Bonus or Other Customery Paid during the Acc. Year' },
   { field: "Interim Bonus", headerName: 'Interim Bonus or Bonus Paid in Advance' },

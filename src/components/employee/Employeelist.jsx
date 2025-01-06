@@ -1,65 +1,197 @@
 import React, { useEffect, useState } from "react";
-import { Pen, Plus, Upload } from "lucide-react";
+import { Box, Pen, Plus, Upload } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ImportFile from "./ImportFile";
 import useRequest from "../../hooks/useRequest";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbar } from '@mui/x-data-grid';
 import CircularProgress from '@mui/material/CircularProgress';
+
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
   const { data, error, loading } = useRequest("/master/employee/");
   const navigate = useNavigate();
-
   const [rows, setRows] = useState([]);
 
   // Define the columns you want to show on the UI
+  // const columns = [
+  //   { field: "id", headerName: "TrnId", width: 80 },
+  //   { field: "EmpId", headerName: "EmpId", width: 80 },
+  //   { field: "Name", headerName: "Name", width: 180 },
+  //   { field: "Father", headerName: "Father", width: 180 },
+  //   { field: "SiteDetails_name", headerName: "Site", width: 180 },
+  //   { field: "DepartmentDetails_name", headerName: "Department", width: 180 },
+  //   { field: "DesignationDetails_name", headerName: "Designation", width: 180 },
+  //   { field: "GangDetails_name", headerName: "Gang", width: 180 },
+  //   { field: "Email", headerName: "Email", width: 220 },
+  //   { field: "Gender", headerName: "Gender", width: 150 },
+  //   // Additional hidden columns
+  //   { field: "Dob", headerName: "Date of Birth", width: 150 },
+  //   { field: "Imageurl", headerName: "Image URL", width: 200 },
+  //   { field: "Uan", headerName: "UAN", width: 150 },
+  //   { field: "Esic", headerName: "ESIC", width: 150 },
+  //   { field: "Mobile", headerName: "Mobile", width: 150 },
+  //   { field: "EmpSafetyCard", headerName: "Safety Card", width: 150 },
+  //   { field: "SafetyCardExpiry", headerName: "Safety Card Expiry", width: 150 },
+  //   { field: "Aadhar", headerName: "Aadhar", width: 150 },
+  //   { field: "Pan", headerName: "PAN", width: 150 },
+  //   { field: "Address", headerName: "Address", width: 200 },
+  //   { field: "Bank", headerName: "Bank", width: 150 },
+  //   { field: "Branch", headerName: "Branch", width: 150 },
+  //   { field: "Ifsc", headerName: "IFSC Code", width: 150 },
+  //   { field: "Ac", headerName: "Account Number", width: 150 },
+  //   { field: "PfApplicable", headerName: "PF Applicable", width: 150 },
+  //   { field: "EsicApplicable", headerName: "ESIC Applicable", width: 150 },
+  //   { field: "PRFTax", headerName: "Professional Tax", width: 150 },
+  //   { field: "AttendAllow", headerName: "Attendance Allowance", width: 150 },
+  //   { field: "AllowAsPer", headerName: "Allowance As Per", width: 150 },
+  //   { field: "ReversePF", headerName: "Reverse PF", width: 150 },
+  //   { field: "OtAppl", headerName: "OT Applicable", width: 150 },
+  //   { field: "MrOtAppl", headerName: "MR OT Applicable", width: 150 },
+  //   { field: "MaritalStatus", headerName: "Marital Status", width: 150 },
+  //   { field: "Doj", headerName: "Date of Joining", width: 150 },
+  //   { field: "Otslave", headerName: "OT Slave", width: 150 },
+  //   { field: "Ottype", headerName: "OT Type", width: 150 },
+  //   { field: "Paymentmode", headerName: "Payment Mode", width: 150 },
+  //   { field: "Weekoff", headerName: "Week Off", width: 150 },
+  //   { field: "Skill", headerName: "Skill", width: 150 },
+  //   { field: "Status", headerName: "Status", width: 150 },
+  // ];
+
   const columns = [
-    { field: "id", headerName: "TrnId", width: 80 },
-    { field: "EmpId", headerName: "EmpId", width: 80 },
-    { field: "Name", headerName: "Name", width: 180 },
-    { field: "Father", headerName: "Father", width: 180 },
-    { field: "SiteDetails_name", headerName: "Site", width: 180 },
-    { field: "DepartmentDetails_name", headerName: "Department", width: 180 },
-    { field: "DesignationDetails_name", headerName: "Designation", width: 180 },
-    { field: "GangDetails_name", headerName: "Gang", width: 180 },
-    { field: "Email", headerName: "Email", width: 220 },
-    { field: "Gender", headerName: "Gender", width: 150 },
-    // Additional hidden columns
-    { field: "Dob", headerName: "Date of Birth", width: 150 },
-    { field: "Imageurl", headerName: "Image URL", width: 200 },
-    { field: "Uan", headerName: "UAN", width: 150 },
-    { field: "Esic", headerName: "ESIC", width: 150 },
-    { field: "Mobile", headerName: "Mobile", width: 150 },
-    { field: "EmpSafetyCard", headerName: "Safety Card", width: 150 },
-    { field: "SafetyCardExpiry", headerName: "Safety Card Expiry", width: 150 },
-    { field: "Aadhar", headerName: "Aadhar", width: 150 },
-    { field: "Pan", headerName: "PAN", width: 150 },
-    { field: "Address", headerName: "Address", width: 200 },
-    { field: "Bank", headerName: "Bank", width: 150 },
-    { field: "Branch", headerName: "Branch", width: 150 },
-    { field: "Ifsc", headerName: "IFSC Code", width: 150 },
-    { field: "Ac", headerName: "Account Number", width: 150 },
-    { field: "PfApplicable", headerName: "PF Applicable", width: 150 },
-    { field: "EsicApplicable", headerName: "ESIC Applicable", width: 150 },
-    { field: "PRFTax", headerName: "Professional Tax", width: 150 },
-    { field: "AttendAllow", headerName: "Attendance Allowance", width: 150 },
-    { field: "AllowAsPer", headerName: "Allowance As Per", width: 150 },
-    { field: "ReversePF", headerName: "Reverse PF", width: 150 },
-    { field: "OtAppl", headerName: "OT Applicable", width: 150 },
-    { field: "MrOtAppl", headerName: "MR OT Applicable", width: 150 },
-    { field: "MaritalStatus", headerName: "Marital Status", width: 150 },
-    { field: "Doj", headerName: "Date of Joining", width: 150 },
-    { field: "Otslave", headerName: "OT Slave", width: 150 },
-    { field: "Ottype", headerName: "OT Type", width: 150 },
-    { field: "Paymentmode", headerName: "Payment Mode", width: 150 },
-    { field: "Weekoff", headerName: "Week Off", width: 150 },
-    { field: "Skill", headerName: "Skill", width: 150 },
-    { field: "Status", headerName: "Status", width: 150 },
+    {
+      field: "id",
+      headerName: "TrnId",
+      width: 80,
+    },
+    {
+      field: "EmpId",
+      headerName: "EmpId",
+      width: 80,
+      renderHeader: () => (
+        <span>
+          EmpId <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
+    {
+      field: "Name",
+      headerName: "Name",
+      width: 180,
+      renderHeader: () => (
+        <span>
+          Name <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
+    {
+      field: "Father",
+      headerName: "Father",
+      width: 180,
+    },
+    {
+      field: "SiteDetails_name",
+      headerName: "Site",
+      width: 180,
+      renderHeader: () => (
+        <span>
+          Site <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
+    {
+      field: "DepartmentDetails_name",
+      headerName: "Department",
+      width: 180,
+      renderHeader: () => (
+        <span>
+          Department <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
+    {
+      field: "DesignationDetails_name",
+      headerName: "Designation",
+      width: 180,
+      renderHeader: () => (
+        <span>
+          Designation <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
+    {
+      field: "GangDetails_name",
+      headerName: "Gang",
+      width: 180,
+    },
+    {
+      field: "Email",
+      headerName: "Email",
+      width: 220,
+    },
+    {
+      field: "Gender",
+      headerName: "Gender",
+      width: 150,
+    },
+    {
+      field: "Dob",
+      headerName: "Date of Birth",
+      width: 150,
+    },
+    {
+      field: "Imageurl",
+      headerName: "Image URL",
+      width: 200,
+    },
+    {
+      field: "Uan",
+      headerName: "UAN",
+      width: 150,
+    },
+    {
+      field: "Esic",
+      headerName: "ESIC",
+      width: 150,
+    },
+    {
+      field: "Mobile",
+      headerName: "Mobile",
+      width: 150,
+    },
+    {
+      field: "Aadhar",
+      headerName: "Aadhar",
+      width: 150,
+      renderHeader: () => (
+        <span>
+          Aadhar <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
+    {
+      field: "Pan",
+      headerName: "PAN",
+      width: 150,
+    },
+    {
+      field: "Address",
+      headerName: "Address",
+      width: 200,
+    },
+    {
+      field: "Status",
+      headerName: "Status",
+      width: 150,
+      renderHeader: () => (
+        <span>
+          Status <span style={{ color: "red" }}>*</span>
+        </span>
+      ),
+    },
   ];
-
-
+  
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Dob: false,
@@ -93,11 +225,8 @@ function Employeelist() {
     Weekoff: false,
     Skill: false,
     Status: false,
-
-  })
-
-
-
+  });
+  console.log("rows", rows)
   const flattenObject = (obj, parentKey = '') => {
     let result = {};
 
@@ -106,10 +235,8 @@ function Employeelist() {
         const newKey = parentKey ? `${parentKey}_${key}` : key;
 
         if (typeof obj[key] === 'object' && obj[key] !== null) {
-          // If the value is an object, recurse to flatten it
           Object.assign(result, flattenObject(obj[key], newKey));
         } else {
-          // Otherwise, just assign the value
           result[newKey] = obj[key];
         }
       }
@@ -119,17 +246,58 @@ function Employeelist() {
   };
 
   useEffect(() => {
-    console.log("Data request started");
     if (data?.length > 0) {
       const filteredRows = data.map((row) => flattenObject(row));
       setRows(filteredRows);
+      console.log("filteredRows, ", filteredRows)
     }
-    console.log("Data fetched:", data);
   }, [data]);
+
+  const ids = rows?.map((row) => row?.id);
+  console.log(ids)
 
   const handleRowClicked = (params) => {
     navigate(`/employee/${params.id}`, { id: params.id });
   };
+
+  // const CustomToolbar = () => {
+  //   const visibleFields = columns
+  //     .filter((col) => columnVisibilityModel[col.field] !== false)
+  //     .map((col) => col.field);
+
+  //   return (
+  //     // <GridToolbarContainer>
+  //     //   <GridToolbarColumnsButton />
+  //     //   <GridToolbarFilterButton />
+  //     //   <GridToolbarDensitySelector />
+  //     //   <GridToolbarExport
+  //     //     printOptions={{
+  //     //       allColumns: false, // Only visible columns
+  //     //       fields: visibleFields, // Dynamically get visible columns
+  //     //       rowIds: rows.map((row) => row.id), // Include all rows
+  //     //     }}
+  //     //   />
+  //     // </GridToolbarContainer>
+  //     <GridToolbarContainer>
+  //       <GridToolbarColumnsButton />
+  //       <GridToolbarFilterButton />
+  //       <GridToolbarDensitySelector
+  //         slotProps={{ tooltip: { title: 'Change density' } }}
+  //       />
+  //       <GridToolbarExport
+  //         slotProps={{
+  //           tooltip: { title: 'Export data' },
+  //           button: { variant: 'outlined' },
+  //         }}
+  //         printOptions={{
+  //           allColumns: false, // Export only visible columns
+  //           fields: visibleFields, // Dynamically show visible columns
+  //           rowIds: ids, // Export all rows
+  //         }}
+  //       />
+  //     </GridToolbarContainer>
+  //   );
+  // };
 
   return (
     <div className="flex flex-col gap-2 p-1">
@@ -195,7 +363,6 @@ function Employeelist() {
       )}
 
       {loading ? (
-        // Show a loader while data is loading
         <div className="flex justify-center items-center">
           Loading...
         </div>
@@ -204,21 +371,19 @@ function Employeelist() {
           <DataGrid
             rows={rows}
             columns={columns}
-
             columnVisibilityModel={columnVisibilityModel}
             pageSizeOptions={[5, 10, 50]}
-            components={{ Toolbar: GridToolbar }}
+            slots={{
+              toolbar: GridToolbar,
+            }}
             disableSelectionOnClick
             onRowClick={handleRowClicked}
-            slots={{ toolbar: GridToolbar }}
-
             onColumnVisibilityModelChange={(newModel) =>
               setColumnVisibilityModel(newModel)
             }
           />
         </div>
       ) : (
-        // Display no data message if no rows are available
         <div>No data available</div>
       )}
     </div>

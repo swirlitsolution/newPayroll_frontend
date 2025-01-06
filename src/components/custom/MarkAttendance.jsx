@@ -82,7 +82,7 @@ function MarkAttendance(props) {
     }
     const getTotalWorking =  (value)=>{
         var empid = watch('EmpId')
-        var attanDate = watch('attanDate')
+        var attanDate = watch('attanDate') 
         const leavevalue = ['EL','CL','FL']
         const leave = leavevalue.includes(value)
         if(leave){
