@@ -185,8 +185,8 @@ const bonusCheckListcolumns = [
     }
   },
   { field: 'arear', headerName: 'Arear' },
-  { field: 'TotalGross', headerName: 'Total' },
-  { field: 'payrate', headerName: 'Pay Rate', renderCell: (params) => params.rate.basic + params.rate.da },
+  { field: 'TotalGross', headerName: 'Total', renderCell: (params)=>{ const total = params.TotalGross; return total.toFixed(2)}},
+  { field: 'payrate', headerName: 'Pay Rate', renderCell: (params) => { const payrate = params.rate.basic + params.rate.da; return payrate.toFixed(2) } },
   { field: 'total', headerName: 'Day Worked' },
   { field: 'Bonus', headerName: 'Bonus Amt' },
 ]
