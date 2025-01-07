@@ -15,183 +15,52 @@ function Employeelist() {
   const [rows, setRows] = useState([]);
 
   // Define the columns you want to show on the UI
-  // const columns = [
-  //   { field: "id", headerName: "TrnId", width: 80 },
-  //   { field: "EmpId", headerName: "EmpId", width: 80 },
-  //   { field: "Name", headerName: "Name", width: 180 },
-  //   { field: "Father", headerName: "Father", width: 180 },
-  //   { field: "SiteDetails_name", headerName: "Site", width: 180 },
-  //   { field: "DepartmentDetails_name", headerName: "Department", width: 180 },
-  //   { field: "DesignationDetails_name", headerName: "Designation", width: 180 },
-  //   { field: "GangDetails_name", headerName: "Gang", width: 180 },
-  //   { field: "Email", headerName: "Email", width: 220 },
-  //   { field: "Gender", headerName: "Gender", width: 150 },
-  //   // Additional hidden columns
-  //   { field: "Dob", headerName: "Date of Birth", width: 150 },
-  //   { field: "Imageurl", headerName: "Image URL", width: 200 },
-  //   { field: "Uan", headerName: "UAN", width: 150 },
-  //   { field: "Esic", headerName: "ESIC", width: 150 },
-  //   { field: "Mobile", headerName: "Mobile", width: 150 },
-  //   { field: "EmpSafetyCard", headerName: "Safety Card", width: 150 },
-  //   { field: "SafetyCardExpiry", headerName: "Safety Card Expiry", width: 150 },
-  //   { field: "Aadhar", headerName: "Aadhar", width: 150 },
-  //   { field: "Pan", headerName: "PAN", width: 150 },
-  //   { field: "Address", headerName: "Address", width: 200 },
-  //   { field: "Bank", headerName: "Bank", width: 150 },
-  //   { field: "Branch", headerName: "Branch", width: 150 },
-  //   { field: "Ifsc", headerName: "IFSC Code", width: 150 },
-  //   { field: "Ac", headerName: "Account Number", width: 150 },
-  //   { field: "PfApplicable", headerName: "PF Applicable", width: 150 },
-  //   { field: "EsicApplicable", headerName: "ESIC Applicable", width: 150 },
-  //   { field: "PRFTax", headerName: "Professional Tax", width: 150 },
-  //   { field: "AttendAllow", headerName: "Attendance Allowance", width: 150 },
-  //   { field: "AllowAsPer", headerName: "Allowance As Per", width: 150 },
-  //   { field: "ReversePF", headerName: "Reverse PF", width: 150 },
-  //   { field: "OtAppl", headerName: "OT Applicable", width: 150 },
-  //   { field: "MrOtAppl", headerName: "MR OT Applicable", width: 150 },
-  //   { field: "MaritalStatus", headerName: "Marital Status", width: 150 },
-  //   { field: "Doj", headerName: "Date of Joining", width: 150 },
-  //   { field: "Otslave", headerName: "OT Slave", width: 150 },
-  //   { field: "Ottype", headerName: "OT Type", width: 150 },
-  //   { field: "Paymentmode", headerName: "Payment Mode", width: 150 },
-  //   { field: "Weekoff", headerName: "Week Off", width: 150 },
-  //   { field: "Skill", headerName: "Skill", width: 150 },
-  //   { field: "Status", headerName: "Status", width: 150 },
-  // ];
-
   const columns = [
-    {
-      field: "id",
-      headerName: "TrnId",
-      width: 80,
-    },
-    {
-      field: "EmpId",
-      headerName: "EmpId",
-      width: 80,
-      renderHeader: () => (
-        <span>
-          EmpId <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
-    {
-      field: "Name",
-      headerName: "Name",
-      width: 180,
-      renderHeader: () => (
-        <span>
-          Name <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
-    {
-      field: "Father",
-      headerName: "Father",
-      width: 180,
-    },
-    {
-      field: "SiteDetails_name",
-      headerName: "Site",
-      width: 180,
-      renderHeader: () => (
-        <span>
-          Site <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
-    {
-      field: "DepartmentDetails_name",
-      headerName: "Department",
-      width: 180,
-      renderHeader: () => (
-        <span>
-          Department <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
-    {
-      field: "DesignationDetails_name",
-      headerName: "Designation",
-      width: 180,
-      renderHeader: () => (
-        <span>
-          Designation <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
-    {
-      field: "GangDetails_name",
-      headerName: "Gang",
-      width: 180,
-    },
-    {
-      field: "Email",
-      headerName: "Email",
-      width: 220,
-    },
-    {
-      field: "Gender",
-      headerName: "Gender",
-      width: 150,
-    },
-    {
-      field: "Dob",
-      headerName: "Date of Birth",
-      width: 150,
-    },
-    {
-      field: "Imageurl",
-      headerName: "Image URL",
-      width: 200,
-    },
-    {
-      field: "Uan",
-      headerName: "UAN",
-      width: 150,
-    },
-    {
-      field: "Esic",
-      headerName: "ESIC",
-      width: 150,
-    },
-    {
-      field: "Mobile",
-      headerName: "Mobile",
-      width: 150,
-    },
-    {
-      field: "Aadhar",
-      headerName: "Aadhar",
-      width: 150,
-      renderHeader: () => (
-        <span>
-          Aadhar <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
-    {
-      field: "Pan",
-      headerName: "PAN",
-      width: 150,
-    },
-    {
-      field: "Address",
-      headerName: "Address",
-      width: 200,
-    },
-    {
-      field: "Status",
-      headerName: "Status",
-      width: 150,
-      renderHeader: () => (
-        <span>
-          Status <span style={{ color: "red" }}>*</span>
-        </span>
-      ),
-    },
+    { field: "id", headerName: "TrnId", width: 80 },
+    { field: "EmpId", headerName: "EmpId", width: 80 },
+    { field: "Name", headerName: "Name", width: 180 },
+    { field: "Father", headerName: "Father", width: 180 },
+    { field: "SiteDetails_name", headerName: "Site", width: 180 },
+    { field: "DepartmentDetails_name", headerName: "Department", width: 180 },
+    { field: "DesignationDetails_name", headerName: "Designation", width: 180 },
+    { field: "GangDetails_name", headerName: "Gang", width: 180 },
+    { field: "Email", headerName: "Email", width: 220 },
+    { field: "Gender", headerName: "Gender", width: 150 },
+    // Additional hidden columns
+    { field: "Dob", headerName: "Date of Birth", width: 150 },
+    { field: "Imageurl", headerName: "Image URL", width: 200 },
+    { field: "Uan", headerName: "UAN", width: 150 },
+    { field: "Esic", headerName: "ESIC", width: 150 },
+    { field: "Mobile", headerName: "Mobile", width: 150 },
+    { field: "EmpSafetyCard", headerName: "Safety Card", width: 150 },
+    { field: "SafetyCardExpiry", headerName: "Safety Card Expiry", width: 150 },
+    { field: "Aadhar", headerName: "Aadhar", width: 150 },
+    { field: "Pan", headerName: "PAN", width: 150 },
+    { field: "Address", headerName: "Address", width: 200 },
+    { field: "Bank", headerName: "Bank", width: 150 },
+    { field: "Branch", headerName: "Branch", width: 150 },
+    { field: "Ifsc", headerName: "IFSC Code", width: 150 },
+    { field: "Ac", headerName: "Account Number", width: 150 },
+    { field: "PfApplicable", headerName: "PF Applicable", width: 150 },
+    { field: "EsicApplicable", headerName: "ESIC Applicable", width: 150 },
+    { field: "PRFTax", headerName: "Professional Tax", width: 150 },
+    { field: "AttendAllow", headerName: "Attendance Allowance", width: 150 },
+    { field: "AllowAsPer", headerName: "Allowance As Per", width: 150 },
+    { field: "ReversePF", headerName: "Reverse PF", width: 150 },
+    { field: "OtAppl", headerName: "OT Applicable", width: 150 },
+    { field: "MrOtAppl", headerName: "MR OT Applicable", width: 150 },
+    { field: "MaritalStatus", headerName: "Marital Status", width: 150 },
+    { field: "Doj", headerName: "Date of Joining", width: 150 },
+    { field: "Otslave", headerName: "OT Slave", width: 150 },
+    { field: "Ottype", headerName: "OT Type", width: 150 },
+    { field: "Paymentmode", headerName: "Payment Mode", width: 150 },
+    { field: "Weekoff", headerName: "Week Off", width: 150 },
+    { field: "Skill", headerName: "Skill", width: 150 },
+    { field: "Status", headerName: "Status", width: 150 },
   ];
-  
+
+
+
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Dob: false,
