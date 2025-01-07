@@ -8,8 +8,8 @@ import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CustomCalendar from '../custom/CustomCalendar';
 import useImportExport from '../../hooks/useImportExport';
+import { Input } from '../ui/input';
 const leaveCheckListcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employee.EmpId},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employee.Name},
     {field:'sex',headerName:'Sex',width:'90px',renderCell:(params)=>params.employee.Gender},
@@ -34,30 +34,28 @@ const leaveCheckListcolumns = [
 ]
 
 const leavebankcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employee.Name},
     {field:'ac',headerName:'Bank A/C',renderCell:(params)=>params.employee.Ac},
     {field:'bank',headerName:'Bank Name',renderCell:(params)=>params.employee.Bank},
     {field:'branch',headerName:'Bank Branch',renderCell:(params)=>params.employee.Branch},
-    {field:'net',headerName:'Net Amount',renderCell:(params)=>(params.rate.basic + params.rate.da) * params.leave},
+    {field:'net',headerName:'Net Amount',renderCell:(params)=>((params.rate.basic + params.rate.da) * params.leave).toFixed(2)},
  
 ]
 const leavepaycolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employee.Name},
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employee.EmpId},
     {field:'Designation',headerName:'Designation',renderCell:(params)=>params.employee.DesignationDetails.Name},
     {field:'leave',headerName:'Total'},
     {field:'unit',headerName:'Units Work Done'},
-    {field:'Basic',headerName:'Basic',renderCell:(params)=>params.rate.basic},
-    {field:'Da',headerName:'Da',renderCell:(params)=>params.rate.da},
+    {field:'Basic',headerName:'Basic',renderCell:(params)=>(params.rate.basic).toFixed(2)},
+    {field:'Da',headerName:'Da',renderCell:(params)=>(params.rate.da).toFixed(2)},
     {field:'overtime',headerName:'Over Time'},
     {field:'othercash',headerName:'Earned Other cash Payment'},
-    {field:'Total',headerName:'Total',renderCell:(params)=>(params.rate.basic + params.rate.da) * params.leave},
+    {field:'Total',headerName:'Total',renderCell:(params)=>((params.rate.basic + params.rate.da) * params.leave).toFixed(2)},
     {field:'Pf',headerName:'PF'},
     {field:'Esic',headerName:'ESIC'},
     {field:'Others',headerName:'Others'},
-    {field:'net',headerName:'Net Amount Paid',renderCell:(params)=>(params.rate.basic + params.rate.da) * params.leave},
+    {field:'net',headerName:'Net Amount Paid',renderCell:(params)=>((params.rate.basic + params.rate.da) * params.leave).toFixed},
     {field:'sig',headerName:'Sig/Thumb Impression Work Man'},
     {field:'Initial',headerName:'Initial of Cont. or His Represent'},
     {field:'cont',headerName:'Signature of Cont. or his Represnt'},
@@ -69,7 +67,8 @@ function LeaveRegister() {
     const {control, handleSubmit, formState: { errors } } = useForm()
     const { data, error, loading,postRequest } = usePost('/leave/')
     const  { LeavePaySlip } = useImportExport("P")
-  
+    const [EmpId,setEmpId] = useState(0)
+    const [ledger,setLedger] = useState(null)
     const onSubmit = (data)=>{
         console.log(data)
         const formattedData = {
@@ -84,8 +83,142 @@ function LeaveRegister() {
         
         postRequest(formattedData)
     }
-    
+    const LeaveLedger = ()=>{
+      return <div className='flex items-center gap-4 p-4'>
 
+         <table className="w-full text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                  <th  className="px-3 border-2 py-3">Year</th>
+                  <th  className="px-3 border-2 py-3">EL</th>
+                  <th  className="px-3 border-2 py-3">CL</th>
+                  <th  className="px-3 border-2 py-3">FL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Jan-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Janeltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Jancltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Janfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Feb-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Febeltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Febcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Febfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Mar-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Mareltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Marcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Marfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Apr-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Apreltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Aprcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Aprfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">May-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Mayeltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Maycltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Mayfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Jun-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Juneltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Juncltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Junfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Jul-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Juleltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Julcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Julfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Aug-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Augeltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Augcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Augfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Sept-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Septeltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Septcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Septfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Oct-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Octeltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Octcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Octfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Nov-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Noveltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Novcltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Novfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Dec-{ledger?.[0].year}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Deceltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Deccltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].Decfltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Total</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].eltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].cltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].fltaken}</td>
+              </tr>
+
+            </tbody>
+          </table>
+
+
+          <table className="w-full  text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                  <th  className="px-3 border-2 py-3">Leave</th>
+                  <th  className="px-3 border-2 py-3">EL</th>
+                  <th  className="px-3 border-2 py-3">CL</th>
+                  <th  className="px-3 border-2 py-3">FL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Earned</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].el}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].cl}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].fl}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Paid</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].eltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].cltaken}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].fltaken}</td>
+              </tr>
+              <tr>
+                <td className="border-2 p-1 text-nowrap">Balance</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].elbalance}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].clbalance}</td>
+                <td className="border-2 p-1 text-nowrap">{ledger?.[0].flbalance}</td>
+              </tr>
+
+            </tbody>
+          </table>
+      </div>
+    }
+    const FindLeaveLedger = ()=>{
+  
+      const employee = data?.leaveregister.filter(item=>item.employee.EmpId === String(EmpId))
+      setLedger(employee)
+      console.log("employee ledger is ",employee)
+      
+    }
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
@@ -142,16 +275,12 @@ function LeaveRegister() {
               )}
             </TabsContent>
             <TabsContent value="leaveledger">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
-              heading="Leave Ledger"
-              columns={slipcolumns} 
-              row={data?.attendance} 
-      
-             
-
-              />):(
-                <div>No data available</div>
-              )}
+            <div className='flex items-center gap-2 justify-center '>  <Label>EmpId</Label>
+              <Input type="text" className="w-40" onChange={(e)=>setEmpId(e.target.value)} />
+              <Button onClick={FindLeaveLedger}>Ok</Button>
+            </div>
+            {<LeaveLedger />}
+          
             </TabsContent>
             <TabsContent value="leavepayslip">
             {loading?"Loading......": data?.leaveregister?.length?(<Button onClick={()=>LeavePaySlip(data?.leaveregister)} >Download</Button>):(

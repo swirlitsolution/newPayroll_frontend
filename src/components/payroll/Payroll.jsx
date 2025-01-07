@@ -89,83 +89,93 @@ const slipcolumns = [
 
 
 
+
 const summarycolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
-    {field:'rate',headerName:'Rate',renderCell:(params)=>params.arate},
-    {field:'aamt',headerName:'Actual Amt'},
-    {field:'hra',headerName:'HRA'},
-    {field:'madical',headerName:'Medical'},
-    {field:'exgratiaretention',headerName:'ExGratia Retention'},
-    {field:'lta',headerName:'LTA'},
-    {field:'foodingamt',headerName:'Fooding'},
-    {field:'caamt',headerName:'CA'},
-    {field:'miscamt',headerName:'MISc'},
-    {field:'cea',headerName:'CEA'},
-    {field:'washingallowance',headerName:'Washing'},
-    {field:'specialallowance',headerName:'SPL Allow'},
-    {field:'professinalpursuites',headerName:'PRF Pursuits'},
-    {field:'incometax',headerName:'Income Tax'},
-    {field:'personalpay',headerName:'Personal Pay'},
-    {field:'petrol',headerName:'Petrol'},
-    {field:'mobile',headerName:'Mobile'},
-    {field:'incentive',headerName:'Incentive'},
-    {field:'fixedamt',headerName:'Fixed Amt'},
-    {field:'othr',headerName:'OT Hrs'},
-    {field:'otherotamt',headerName:'OT Amt'},
-    {field:'fixedamt',headerName:'Fixed Amt'},
-    {field:'pf',headerName:'PF'},
-    {field:'esic',headerName:'ESIC'},
-    {field:'advance',headerName:'Advance'},
-    {field:'othergrosstotal',headerName:'Total'},
-    {field:'mrpgross',headerName:'MRP'},
-    {field:'balance',headerName:'Net Amt'},
-   
+    { field: 'id', headerName: 'TrnId', width: '80px' },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'day', headerName: 'Worked', width: '90px', renderCell: (params) => params.tpayable },
+    { field: 'rate', headerName: 'Rate', renderCell: (params) => params.arate },
+    { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
+    { field: 'hraamt', headerName: 'HRA' },
+    { field: 'madical', headerName: 'Medical' },
+    { field: 'exgratiaretention', headerName: 'ExGratia Retention' },
+    { field: 'lta', headerName: 'LTA' },
+    { field: 'foodingamt', headerName: 'Fooding' },
+    { field: 'caamt', headerName: 'CA' },
+    { field: 'miscamt', headerName: 'MISc' },
+    { field: 'cea', headerName: 'CEA' },
+    { field: 'washingallowance', headerName: 'Washing' },
+    { field: 'professinalpursuites', headerName: 'PRF Pursuits' },
+    { field: 'incometax', headerName: 'Income Tax' },
+    { field: 'personalpay', headerName: 'Personal Pay' },
+    { field: 'petrol', headerName: 'Petrol' },
+    { field: 'mobile', headerName: 'Mobile' },
+    { field: 'incentive', headerName: 'Incentive' },
+    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'othr', headerName: 'OT Hrs' },
+    { field: 'otherotamt', headerName: 'OT Amt' },
+    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'pf', headerName: 'PF' },
+    { field: 'esic', headerName: 'ESIC' },
+    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'advance', headerName: 'Advance' },
+    { field: 'mrpgross', headerName: 'MRP' },
+    { field: 'balance', headerName: 'Net Amt' },
+
 ]
 const pfcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Uan',headerName:'UAN',renderCell:(params)=>params.employeeData.Uan},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'EPF Wages'},
-    {field:'basic',headerName:'EPF Wages'},
-    {field:'eps',headerName:'EPS Wages',renderCell:(params)=>params.basic},
-    {field:'pfaplamt',headerName:'EDLI Wages'},
-    {field:'pf',headerName:'PF'},
-    {field:'epf',headerName:'EPF Amt',renderCell:(params)=>(params.pfaplamt * 0.0833)},
-    {field:'ppf',headerName:'PPF Amt',renderCell:(params)=>(params.pf - (params.pfaplamt * 0.0833))},
-    {field:'ncp',headerName:'NCP Day',renderCell:(params)=>(params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl)},
+    { field: 'id', headerName: 'TrnId', width: '80px' },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
+    { field: 'Uan', headerName: 'UAN', renderCell: (params) => params.employeeData.Uan },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'mrpgross', headerName: 'EPF Wages' },
+    { field: 'basic', headerName: 'EPF Wages' },
+    { field: 'eps', headerName: 'EPS Wages', renderCell: (params) => params.basic },
+    { field: 'pfaplamt', headerName: 'EDLI Wages' },
+    { field: 'pf', headerName: 'PF' },
+    {
+        field: 'epf', headerName: 'EPF Amt', renderCell: (params) => {
+            const value = Number(params.pfaplamt) * 0.0833; // Ensure pfaplamt is a number
+            return value.toFixed(2); // Format the result to 2 decimal places
+        }
+    },
+    {
+        field: 'ppf', headerName: 'PPF Amt', renderCell: (params) => {
+            const value = Number(params.pf) - (Number(params.pfaplamt) * 0.0833);
+            return isNaN(value) ? '0.00' : value.toFixed(2); // Fallback to '0.00' if the value is invalid
+        }
+    },
+    { field: 'ncp', headerName: 'NCP Day', renderCell: (params) => (params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl) },
 ]
 const esiccolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'esic',headerName:'ESIC',renderCell:(params)=>params.employeeData.Esic},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'ESIC_Cont_Amt'},
-    {field:'esic',headerName:'ESIC Amt'},
-    
+    { field: 'id', headerName: 'TrnId', width: '80px' },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
+    { field: 'esic', headerName: 'ESIC', renderCell: (params) => params.employeeData.Esic },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
+    { field: 'esic', headerName: 'ESIC Amt' },
+
 ]
 const bankcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'Bank',renderCell:(params)=>params.employeeData.Bank},
-    {field:'ifsc',headerName:'IFSC',renderCell:(params)=>params.employeeData.Ifsc},
-    {field:'ac',headerName:'Ac/No',renderCell:(params)=>params.employeeData.Ac},
-    {field:'mrpnetamt',headerName:'Net Amt'},
-    
+    { field: 'id', headerName: 'TrnId', width: '80px' },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData.Bank },
+    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData.Ifsc },
+    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData.Ac },
+    { field: 'mrpnetamt', headerName: 'Net Amt' },
+
 ]
 const sumBankcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'Bank',renderCell:(params)=>params.employeeData.Bank},
-    {field:'ifsc',headerName:'IFSC',renderCell:(params)=>params.employeeData.Ifsc},
-    {field:'ac',headerName:'Ac/No',renderCell:(params)=>params.employeeData.Ac},
-    {field:'balance',headerName:'Net Amt'},
-    
+    { field: 'id', headerName: 'TrnId', width: '80px' },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData.Bank },
+    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData.Ifsc },
+    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData.Ac },
+    { field: 'balance', headerName: 'Net Amt' },
+
 ]
 function Payroll() {
     const {control,register,setValue, handleSubmit,reset, watch, formState: { errors } } = useForm()

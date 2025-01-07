@@ -7,6 +7,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 import { LogOut } from 'lucide-react';
+import logo from '../../../assets/logo.jpg';
 
 
 const TopBar = () => {
@@ -88,7 +89,11 @@ const TopBar = () => {
         <header className='h-[10%] md:h-[10%] xsm:h-[10%] bg-white shadow w-full md:p-6 md:px-4 sm:p-2 sm:px-2'>
             {/* Header desktop view */}
             <div className='hidden md:flex h-full w-full items-center justify-between'>
-                <p className=' font-bold'>Payroll</p>
+                <div className="flex items-center space-x-4">
+                    <img src={logo} alt="logo" className="h-16" />
+                    <p className='text-xl'><b>STC Associates</b></p>
+                </div>
+               
 
 
                 <div className="flex items-center gap-8">

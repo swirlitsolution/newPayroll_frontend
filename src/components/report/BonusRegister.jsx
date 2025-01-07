@@ -10,8 +10,8 @@ import CustomCalendar from '../custom/CustomCalendar';
 import useImportExport from '../../hooks/useImportExport';
 import { Input } from '../ui/input';
 import BonusTable from '../custom/BonusTable';
+
 const bonusCheckListcolumns = [
-  { field: 'id', headerName: 'TrnId', width: '80px' },
   { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employee.EmpId },
   { field: 'Name', headerName: 'Name', renderCell: (params) => params.employee.Name },
   { field: 'sex', headerName: 'Sex', width: '90px', renderCell: (params) => params.employee.Gender },
@@ -192,30 +192,38 @@ const bonusCheckListcolumns = [
 ]
 
 export const bonusRegistercolumns = [
-  { field: 'id', headerName: 'TrnId', width: '80px' },
   { field: 'Name', headerName: 'Name', renderCell: (params) => params?.employee?.Name },
   { field: 'Father', headerName: 'Father', width: '90px', renderCell: (params) => params?.employee?.Father },
   { field: "completed", headerName: 'Whther he has Completed 15 Year of Age at the beginning of the Accounting Year' },
   { field: "Designation", headerName: 'Designation', width: "80px", renderCell: (params) => params?.employee?.DesignationDetails?.name },
   { field: "Total No. of Days", headerName: 'Total No. of Days Worked in the Year', renderCell: (params) => params?.total },
-  { field: "Total Salary of Wages", headerName: 'Total Salary of Wages in respect of the Accounting Yaer', renderCell: (params) => params?.TotalGross },
-  { field: "Amount of Bonus Payable", headerName: 'Amount of Bonus Payable under Sec. 10  or Sec. 11 as the case may be', renderCell: (params) => params?.Bonus },
+  { field: "Total Salary of Wages", headerName: 'Total Salary of Wages in respect of the Accounting Yaer', renderCell: (params) => params?.TotalGross.toFixed(2) },
+  { field: "Amount of Bonus Payable", headerName: 'Amount of Bonus Payable under Sec. 10  or Sec. 11 as the case may be', renderCell: (params) => params?.Bonus.toFixed(2) },
   { field: "Puja Bonus or Other Customery", headerName: 'Puja Bonus or Other Customery Paid during the Acc. Year' },
   { field: "Interim Bonus", headerName: 'Interim Bonus or Bonus Paid in Advance' },
   { field: "Amount of Income Tax Deducted", headerName: 'Amount of Income Tax Deducted' },
   { field: "Deduction on A/C ", headerName: 'Deduction on A/C  of Financial Loss if any Caused by Misconduct of the Emp.' },
   { field: "Total Sum", headerName: 'Total Sum Deducted  Col. 9, 10 10A and 11' },
-  { field: "Net Payable Amount", headerName: 'Net Payable Amount Col 8 minus Col 12 ', renderCell: (params) => params?.Bonus },
-  { field: "Amount Actually Paid", headerName: 'Amount Actually Paid', renderCell: (params) => params?.Bonus },
+  { field: "Net Payable Amount", headerName: 'Net Payable Amount Col 8 minus Col 12 ', renderCell: (params) => params?.Bonus.toFixed(2)},
+  { field: "Amount Actually Paid", headerName: 'Amount Actually Paid', renderCell: (params) => params?.Bonus.toFixed(2) },
   { field: "Date", headerName: 'Date on which' },
   { field: "Signature Thumb", headerName: 'Signature Thumb Impression Of the Employee' },
 
 ]
 
+const bonusbankcolumns = [
+
+  {field:'Name',headerName:'Name',renderCell:(params)=>params.employee.Name},
+  {field:'ac',headerName:'Bank A/C',renderCell:(params)=>params.employee.Ac},
+  {field:'bank',headerName:'Bank Name',renderCell:(params)=>params.employee.Bank},
+  {field:'branch',headerName:'Bank Branch',renderCell:(params)=>params.employee.Branch},
+  {field:'net',headerName:'Net Amount',renderCell:(params)=>((params.Bonus).toFixed(2))},
+
+]
 function BonusRegister() {
   const { control, handleSubmit, register, formState: { errors } } = useForm()
   const { data, error, loading, postRequest } = usePost('/bonus/')
-  const { LeavePaySlip } = useImportExport("P")
+  const { BonusPaySlip } = useImportExport("P")
 
   const onSubmit = (data) => {
     console.log(data)
@@ -231,6 +239,8 @@ function BonusRegister() {
 
     postRequest(formattedData)
   }
+
+
 
   return (
     <div>
@@ -262,7 +272,7 @@ function BonusRegister() {
           <TabsList className="flx gap-2">
             <TabsTrigger value="bonuschecklist">Bonus CheckList</TabsTrigger>
             <TabsTrigger value="bonuspayregister">Bonus Pay Register</TabsTrigger>
-            <TabsTrigger value="bonusledger">Bonus Ledger</TabsTrigger>
+            {/* <TabsTrigger value="bonusledger">Bonus Ledger</TabsTrigger> */}
             <TabsTrigger value="bonuspayslip">Bonus Pay Slip</TabsTrigger>
             <TabsTrigger value="bonusbankregister">Bonus Bank Register</TabsTrigger>
 
@@ -294,21 +304,9 @@ function BonusRegister() {
               <div>No data available</div>
             )}
           </TabsContent>
-          {/* <TabsContent value="bonuspayregister">
-            {loading ? (
-              "Loading......"
-            ) : data?.bonusregister?.length ? (
-              <BonusTable
-                heading="Bonus Pay Register"
-                row={data?.bonusregister} // dynamic row data
-                pdfOrientation="landscape"
-              />
-            ) : (
-              <div>No data available</div>
-            )}
-          </TabsContent> */}
+      
 
-          <TabsContent value="bonusledger">
+          {/* <TabsContent value="bonusledger">
             {loading ? "Loading......" : data?.attendance?.length ? (<DataGrid
               heading="Leave Ledger"
               columns={slipcolumns}
@@ -319,17 +317,17 @@ function BonusRegister() {
             />) : (
               <div>No data available</div>
             )}
-          </TabsContent>
-          <TabsContent value="leavepayslip">
-            {loading ? "Loading......" : data?.leaveregister?.length ? (<Button onClick={() => LeavePaySlip(data?.leaveregister)} >Download</Button>) : (
+          </TabsContent> */}
+          <TabsContent value="bonuspayslip">
+            {loading ? "Loading......" : data?.bonusregister?.length ? (<Button onClick={() => BonusPaySlip(data?.bonusregister)} >Download</Button>) : (
               <div>No data available</div>
             )}
           </TabsContent>
           <TabsContent value="bonusbankregister">
-            {loading ? "Loading......" : data?.leaveregister?.length ? (<DataGrid
+            {loading ? "Loading......" : data?.bonusregister?.length ? (<DataGrid
               heading="Leave Bank Register"
-              columns={leavebankcolumns}
-              row={data?.leaveregister}
+              columns={bonusbankcolumns}
+              row={data?.bonusregister}
 
 
 

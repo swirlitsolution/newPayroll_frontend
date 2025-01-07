@@ -25,11 +25,18 @@ const cardlist = [
     "className":"bg-orange-100 text-orange-400",
     "renderComponent":"/nh",
     "icon":"LocateFixed"
+  },
+  {
+    "heading":"Tax Slave", 
+    "paragraph":"Set Tax Slave as per Site",
+    "className":"bg-orange-100 text-orange-400",
+    "renderComponent":"/taxslave",
+    "icon":"IndianRupee"
   }
 
 ]
   return (
-    <div className='w-full flex'>
+    <div className='w-full flex flex-wrap'>
     {
         cardlist.map((item,index)=>{
             return <Card key={index} heading={item.heading} paragraph={item.paragraph} className={item.className} renderComponent={item.renderComponent} icon={item.icon} />

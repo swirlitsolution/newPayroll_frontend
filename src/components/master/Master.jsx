@@ -29,7 +29,10 @@ function Master(props) {
   return (
 
     <div className='grid grid-cols-2 gap-x-2 items-center'>
-        <Label className='text-left'>{props.name.toUpperCase()}</Label>
+        <Label className='text-left'>
+        {props.name.toUpperCase()}
+        {props.mandatoryLabel ? <span style={{ color: 'red' }}> *</span> : null}
+        </Label>
         <div className='flex gap-2 items-center justify-center'>
             <Select className=" w-10"
                 onValueChange={props.onValueChange} // Use onChange directly

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -32,6 +32,8 @@ import LeaveRegister from './components/report/LeaveRegister';
 import BonusRegister from './components/report/BonusRegister';
 import Recalculate from './components/attendance/Recalculate';
 import SyncData from './components/employee/SyncData';
+import TaxSlave from './components/master/TaxSlave';
+import EditTaxSlave from './components/master/EditTaxSlave';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 axios.defaults.baseURL = 'https://global.swirlapps.in';
@@ -59,6 +61,8 @@ function App() {
                     <Route path="/processattendance" element={<ProcessAttendance heading="Process Attendance" delete={false} />} />
                     <Route path="/adminprocessattendance" element={<ProcessAttendance heading="Process Attendance" delete={true} />} />
                     <Route path="/payrollparameter" element={<PayrollParameter />} />
+                    <Route path="/taxslave" element={<TaxSlave />} />
+                    <Route path="/taxslave/:id" element={<EditTaxSlave />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/manageuser" element={<UserManagement />} />
                     <Route path="/nh" element={<Nh />} />
