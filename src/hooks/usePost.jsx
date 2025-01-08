@@ -193,6 +193,9 @@ function usePost(url) {
           if(response.status === 226){
             toast.warning(response.data.exists)
           }
+          if(response.status===201){
+            toast.success(response.data.success)
+          }
           if(response.status===200){
             console.log(response.data)
 

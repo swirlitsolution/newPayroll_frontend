@@ -7,13 +7,13 @@ import { Button } from '../ui/button';
 import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from 'react-toastify';
+import useFlattendObject from '../../hooks/useFlattendObject';
 
 
 const payrollcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData.SiteDetails.name},
+    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
+    {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData_SiteDetails_name},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>{
         return (
             <tr>
@@ -68,9 +68,8 @@ const payrollcolumns = [
 ]
 
 const slipcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
+    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
     {field:'basic',headerName:'Basic'},
     {field:'da',headerName:'DA'},
@@ -91,9 +90,8 @@ const slipcolumns = [
 
 
 const summarycolumns = [
-    { field: 'id', headerName: 'TrnId', width: '80px' },
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
     { field: 'day', headerName: 'Worked', width: '90px', renderCell: (params) => params.tpayable },
     { field: 'rate', headerName: 'Rate', renderCell: (params) => params.arate },
     { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
@@ -125,10 +123,9 @@ const summarycolumns = [
 
 ]
 const pfcolumns = [
-    { field: 'id', headerName: 'TrnId', width: '80px' },
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
-    { field: 'Uan', headerName: 'UAN', renderCell: (params) => params.employeeData.Uan },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Uan', headerName: 'UAN', renderCell: (params) => params.employeeData_Uan },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
     { field: 'mrpgross', headerName: 'EPF Wages' },
     { field: 'basic', headerName: 'EPF Wages' },
     { field: 'eps', headerName: 'EPS Wages', renderCell: (params) => params.basic },
@@ -150,30 +147,29 @@ const pfcolumns = [
 ]
 const esiccolumns = [
     { field: 'id', headerName: 'TrnId', width: '80px' },
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
-    { field: 'esic', headerName: 'ESIC', renderCell: (params) => params.employeeData.Esic },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'esic', headerName: 'ESIC', renderCell: (params) => params.employeeData_Esic },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
     { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
     { field: 'esic', headerName: 'ESIC Amt' },
 
 ]
 const bankcolumns = [
     { field: 'id', headerName: 'TrnId', width: '80px' },
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
-    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData.Bank },
-    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData.Ifsc },
-    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData.Ac },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
+    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
+    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
     { field: 'mrpnetamt', headerName: 'Net Amt' },
 
 ]
 const sumBankcolumns = [
-    { field: 'id', headerName: 'TrnId', width: '80px' },
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
-    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData.Bank },
-    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData.Ifsc },
-    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData.Ac },
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
+    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
+    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
     { field: 'balance', headerName: 'Net Amt' },
 
 ]
@@ -182,6 +178,8 @@ function Payroll() {
     const { data, error, loading,getRequest } = usePost('')
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
+    const [rowdata,setRowdata] = useState(null)
+    const { flattenObject } = useFlattendObject()
     const onSubmit = (data)=>{
         console.log(data)
         console.log("attendance data",data)
@@ -215,6 +213,9 @@ function Payroll() {
         console.log("get request",data)
         if(data?.attendance){
             setDownload(true)
+            const row = data?.attendance.map(item=>flattenObject(item))
+            setRowdata(row)
+            console.log("row data is ",rowdata)
         }
     },[data])
   return (
@@ -271,10 +272,10 @@ function Payroll() {
                 <TabsTrigger value="esic">ESIC</TabsTrigger>
             </TabsList>
             <TabsContent value="payroll">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll"
               columns={payrollcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -283,10 +284,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="summary">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll"
               columns={summarycolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -295,10 +296,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="slip">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll slip"
               columns={slipcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -307,10 +308,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="p_statement">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll Bank Statement"
               columns={bankcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -319,10 +320,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="s_statement">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Summary Bank Statement"
               columns={sumBankcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -331,10 +332,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="pf">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="PF Report"
               columns={pfcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -343,10 +344,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="esic">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="ESIC Report"
               columns={esiccolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 

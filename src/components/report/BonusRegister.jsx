@@ -185,8 +185,8 @@ const bonusCheckListcolumns = [
     }
   },
   { field: 'arear', headerName: 'Arear' },
-  { field: 'TotalGross', headerName: 'Total' },
-  { field: 'payrate', headerName: 'Pay Rate', renderCell: (params) => params.rate.basic + params.rate.da },
+  { field: 'TotalGross', headerName: 'Total', renderCell: (params) => params.TotalGross.toFixed(2) },
+  { field: 'payrate', headerName: 'Pay Rate', renderCell: (params) => (params.rate.basic + params.rate.da).toFixed(2) },
   { field: 'total', headerName: 'Day Worked' },
   { field: 'Bonus', headerName: 'Bonus Amt' },
 ]
@@ -297,7 +297,7 @@ function BonusRegister() {
                 columns={bonusRegistercolumns}
                 row={data?.bonusregister}
                 pdfOrientation="landscape"
-                isBonusPayRegister={true}
+                isBonusPayRegister={false}
 
               />
             ) : (

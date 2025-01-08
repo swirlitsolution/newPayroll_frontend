@@ -411,7 +411,7 @@ import { Search } from "lucide-react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import html2canvas from "html2canvas";
-
+import html2pdf from 'html2pdf.js';
 // Utility function to process and return value from the object
 export const processValue = (value) => {
   if (React.isValidElement(value)) {
@@ -531,22 +531,18 @@ function DataGrid({
         doc.save("bonus-pay-register.pdf");
       });
     } else {
-      const tableColumnHeaders = columns.map((col) => col.headerName);
-      const tableRows = tableData.map((item) =>
-        columns.map((col) =>
-          col.renderCell ? col.renderCell(item) : getValue(item, col.field)
-        )
-      );
-      doc.setFontSize(12);
-      doc.text(heading.toUpperCase(), 14, 15);
-      doc.autoTable({
-        startY: 25,
-        head: [tableColumnHeaders],
-        body: tableRows,
-      });
+      const mytable = document.getElementById("mytable");
+      html2canvas(mytable, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = doc.internal.pageSize.getWidth();
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+       
       doc.save(`${heading.toLowerCase().replace(/\s+/g, "-")}.pdf`);
+});
     }
   };
+
 
   return (
     <div className="flex flex-col overflow-x-hidden overflow-y-auto gap-4">
@@ -588,7 +584,7 @@ function DataGrid({
         </div>
       </div>
       <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm h-auto scrollbar-thin">
-        <table className="w-full text-sm text-left text-gray-500" ref={tableRef}>
+        <table className="w-full text-sm text-left text-gray-500" ref={tableRef} id="mytable">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-3 border-2 py-3">Sl</th>
