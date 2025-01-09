@@ -254,7 +254,7 @@ const SideBar = ({ children }) => {
     },
   };
   useEffect(() => {
-console.log("user is", user)
+
     const renderroute = ()=>{
       if(user){
 

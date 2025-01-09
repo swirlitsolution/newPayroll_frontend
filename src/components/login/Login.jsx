@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'; 
 import { AuthContext } from '../../AuthContext';
@@ -7,10 +7,13 @@ import { Key, UserRound } from 'lucide-react';
 const Login = () => {
     const navigate = useNavigate(); // Initialize useNavigate
     const {user, login } = useContext(AuthContext);
-    
-    if(user){
-        navigate('/home')
-    }
+    useEffect(()=>{
+      
+        if(user){
+            navigate('/home')
+        }
+    },[])
+   
   
    
     const handleSubmit = async (e) => {
@@ -21,7 +24,9 @@ const Login = () => {
         await login(username, password);
         navigate('/home');
     };
-
+    if(user){
+      return <></>
+    }
     return (
       <section className="flex w-full h-screen justify-center items-center bg-[#356c7c]">
     
