@@ -25,7 +25,7 @@ function usePost(url) {
           );
           console.log("post response",response)
           if(response.status === 201){
-          
+            toast.success(response.data.success)
             setData(response.data);
       
           return response
@@ -37,9 +37,10 @@ function usePost(url) {
           if(response.status === 226){
             toast.warning(response.data.exists)
           }
+          
           if(response.status===200){
             console.log(response.data)
-            
+            toast.success("Process Successfully")
           setData(response.data);
       
           return response

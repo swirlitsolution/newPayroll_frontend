@@ -7,7 +7,6 @@ import { Button } from '../ui/button';
 import DataGrid from '../custom/DataGrid';
 
 const columns = [
-    {field:'id',headerName:'TrnId',width:'80px', renderCell:(params)=>params.employeeData.id},
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name', renderCell:(params)=>params.employeeData.Name},
     {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData.SiteDetails.name},
@@ -76,6 +75,9 @@ const columns = [
         return <span>{params.day30}{params.otday30?("/"+params.otday30):""}</span>}},
     {field:'day31',headerName:'31',renderCell:(params)=>{
         return <span>{params.day31}{params.otday31?("/"+params.otday31):""}</span>}},
+    {field:'tpresent',headerName:'Present'},
+    {field:'tpayable',headerName:'Payable'},
+    {field:'tot',headerName:'OT'},
 ]
 function AttendanceReport(props) {
     const {register,handleSubmit,control, formState: { errors } } = useForm()

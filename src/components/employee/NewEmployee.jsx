@@ -72,7 +72,7 @@ function NewEmployee(props) {
         }
     }
     const onSubmit = (data) => {
-        console.log(data)
+    
         postRequest(data)
     }
     const getNextEmpId = async () => {
