@@ -34,6 +34,9 @@ function usePost(url) {
             toast.success(response.data.success)
             setData(response.data);
           }
+          if(response.status === 204){
+            toast.success("Nothing found")
+          }
           if(response.status === 226){
             toast.warning(response.data.exists)
           }

@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CustomCalendar from '../custom/CustomCalendar';
 import useImportExport from '../../hooks/useImportExport';
 import { Input } from '../ui/input';
+import Master from '../master/Master';
 const leaveCheckListcolumns = [
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employee.EmpId},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employee.Name},
@@ -223,6 +224,23 @@ function LeaveRegister() {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
+                <Controller
+                    name="Site"
+                    defaultValue="" // Initial value can be set here
+                    control={control}
+                    
+                    render={({ field, fieldState: { error } }) => {
+                        const { onChange, value, ref } = field;
+                    return (
+                        <Master 
+                        api = "/master/site/"
+                        onValueChange={(newValue) => {onChange(newValue || null)
+                  
+                        }} 
+                        value={value} name='Site' />
+                    );
+                    }}
+                />
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">Date Range</label>
                 <Controller
                     name="dateRange"  // Field name
@@ -279,7 +297,7 @@ function LeaveRegister() {
               <Input type="text" className="w-40" onChange={(e)=>setEmpId(e.target.value)} />
               <Button onClick={FindLeaveLedger}>Ok</Button>
             </div>
-            {<LeaveLedger />}
+            {ledger?.length?<LeaveLedger />:<div></div>}
           
             </TabsContent>
             <TabsContent value="leavepayslip">
