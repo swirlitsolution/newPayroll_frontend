@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import reactLogo from '../assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Employeelist from './components/employee/Employeelist'
@@ -34,6 +32,7 @@ import Recalculate from './components/attendance/Recalculate';
 import SyncData from './components/employee/SyncData';
 import TaxSlave from './components/master/TaxSlave';
 import EditTaxSlave from './components/master/EditTaxSlave';
+import NewLeave from './components/leave/NewLeave';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 axios.defaults.baseURL = 'https://global.swirlapps.in';
@@ -78,6 +77,7 @@ function App() {
                     <Route path="/updateuser/:id" element={<UpdateUser />} />
                     <Route path="/rate/:id" element={<EmpRate heading="Update Rate" />} />
                     <Route path="/sync" element={<SyncData />} />
+                    <Route path="/newleave" element={<NewLeave />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>

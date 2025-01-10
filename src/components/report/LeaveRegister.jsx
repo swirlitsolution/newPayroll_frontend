@@ -39,7 +39,7 @@ const leavebankcolumns = [
     {field:'ac',headerName:'Bank A/C',renderCell:(params)=>params.employee.Ac},
     {field:'bank',headerName:'Bank Name',renderCell:(params)=>params.employee.Bank},
     {field:'branch',headerName:'Bank Branch',renderCell:(params)=>params.employee.Branch},
-    {field:'net',headerName:'Net Amount',renderCell:(params)=>((params.rate.basic + params.rate.da) * params.leave).toFixed(2)},
+    {field:'net',headerName:'Net Amount',renderCell:(params)=>Math.ceil((params.rate.basic + params.rate.da) * params.leave)},
  
 ]
 const leavepaycolumns = [
@@ -52,7 +52,7 @@ const leavepaycolumns = [
     {field:'Da',headerName:'Da',renderCell:(params)=>(params.rate.da).toFixed(2)},
     {field:'overtime',headerName:'Over Time'},
     {field:'othercash',headerName:'Earned Other cash Payment'},
-    {field:'Total',headerName:'Total',renderCell:(params)=>((params.rate.basic + params.rate.da) * params.leave).toFixed(2)},
+    {field:'Total',headerName:'Total',renderCell:(params)=>Math.ceil((params.rate.basic + params.rate.da) * params.leave)},
     {field:'Pf',headerName:'PF'},
     {field:'Esic',headerName:'ESIC'},
     {field:'Others',headerName:'Others'},

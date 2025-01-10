@@ -95,12 +95,12 @@ function useImportExport(orientation) {
                  
                   doc.setFontSize(12);
                   currentY+=5
-                  doc.text("STC Associates", 80, currentY);
+                  doc.text("GLOBAL AC SYSTEM JSR PVT LTD", 80, currentY);
                   currentY += 5;
                   doc.setFontSize(10);
-                  doc.text("103, Purilia Highway", 90, currentY);
+                  doc.text("502/A JAWAHARNAGAR ROAD-17", 90, currentY);
                   currentY += 5;
-                  doc.text("Sakchi, Jamshedpur", 91, currentY);
+                  doc.text("AZADNAGAR MANGO JSR-832110", 91, currentY);
             
                   currentY += 8;
                 
@@ -195,12 +195,12 @@ function useImportExport(orientation) {
                   
             doc.setFontSize(12);
             currentY+=5
-            doc.text("XSTC Associates", 80, currentY);
+            doc.text("GLOBAL AC SYSTEM JSR PVT LTD", 80, currentY);
             currentY += 5;
             doc.setFontSize(10);
-            doc.text("103, Purilia Highway", 90, currentY);
+            doc.text("502/A JAWAHARNAGAR ROAD-17", 90, currentY);
             currentY += 5;
-            doc.text("Sakchi, Jamshedpur", 91, currentY);
+            doc.text("AZADNAGAR MANGO JSR-832110", 91, currentY);
             currentY += 8;
             doc.line(xMargin, currentY, doc.internal.pageSize.width - xMargin, currentY); // horizontal line
             currentY += 5;
@@ -230,11 +230,11 @@ function useImportExport(orientation) {
             doc.text(`${curElem.leave}`, 170, currentY);
             doc.text('', 170, currentY + 5);
             doc.text(`${curElem.rate.basic} + ${curElem.rate.da}  =  ${curElem.rate.basic + curElem.rate.da}`, 170, currentY + 10);
-            doc.text(`${(curElem.rate.basic * curElem.leave).toFixed(2)}  +  ${(curElem.rate.da * curElem.leave).toFixed(2)}`, 170, currentY + 15);
+            doc.text(`${Math.ceil(curElem.rate.basic * curElem.leave)}  +  ${Math.ceil(curElem.rate.da * curElem.leave)}`, 170, currentY + 15);
             doc.text('', 170, currentY + 20);
-            doc.text(`${(curElem.rate.basic * curElem.leave + curElem.rate.da * curElem.leave).toFixed(2)}`, 170, currentY + 25);
+            doc.text(`${Math.ceil(curElem.rate.basic * curElem.leave + curElem.rate.da * curElem.leave)}`, 170, currentY + 25);
             doc.text('', 170, currentY + 30);
-            doc.text(`${(curElem.rate.basic * curElem.leave + curElem.rate.da * curElem.leave).toFixed(2)}`, 170, currentY + 35);
+            doc.text(`${Math.ceil(curElem.rate.basic * curElem.leave + curElem.rate.da * curElem.leave)}`, 170, currentY + 35);
             
             doc.rect(xMargin, currentY + 40, doc.internal.pageSize.width - xMargin * 2, 10, 'S');
             doc.text('Initial of Contractor or his Representative', xMargin + 5, currentY + 45);
