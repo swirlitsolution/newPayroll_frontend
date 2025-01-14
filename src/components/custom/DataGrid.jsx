@@ -411,6 +411,7 @@ import { Search } from "lucide-react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import html2canvas from "html2canvas";
+import { payrollcolumns } from "../payroll/Payroll";
 
 // Utility function to process and return value from the object
 export const processValue = (value) => {
@@ -441,11 +442,12 @@ export const getValue = (obj, field) => {
 function DataGrid({
   heading,
   columns,
-  checkBoxSelection,  
+  checkBoxSelection,
   rowClicked,
   pdfOrientation = "landscape",
   isBonusPayRegister,
   row,
+  isPayrollColumns
 }) {
   const [filterBy, setFilterBy] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -474,7 +476,9 @@ function DataGrid({
       const data = row.filter((element) => {
         return columns.find((col) => {
           if (col.field === filterBy) {
-            let cellValue = col.renderCell ? col.renderCell(element) : getValue(element, col.field);
+            let cellValue = col.renderCell
+              ? col.renderCell(element)
+              : getValue(element, col.field);
             if (`${cellValue}`.toLowerCase().includes(`${searchValue}`.toLowerCase())) {
               return element;
             }
@@ -487,14 +491,14 @@ function DataGrid({
     }
   };
 
-  const flattenObject = (obj, parentKey = '') => {
+  const flattenObject = (obj, parentKey = "") => {
     let result = {};
 
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
         const newKey = parentKey ? `${parentKey}_${key}` : key;
 
-        if (typeof obj[key] === 'object' && obj[key] !== null) {
+        if (typeof obj[key] === "object" && obj[key] !== null) {
           // If the value is an object, recurse to flatten it
           Object.assign(result, flattenObject(obj[key], newKey));
         } else {
@@ -507,16 +511,74 @@ function DataGrid({
     return result;
   };
 
+  // const handleGenerateExcel = () => {
+  //   const transformedArray = tableData.map((item) => flattenObject(item));
+  //   const ws = XLSX.utils.json_to_sheet(transformedArray);
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Data");
+  //   XLSX.writeFile(wb, `${heading}.xlsx`);
+  // };
+
   const handleGenerateExcel = () => {
-    const transformedArray = row.map(item => flattenObject(item));
+    // Transform tableData to include appropriate formatting
+    const transformedArray = tableData.map((item) => {
+      let rowData = {};
+  
+      columns.forEach((column) => {
+        const field = column.field;
+  
+        // Handle fields with `renderCell`
+        if (column.renderCell) {
+          if (field === "EmpId") {
+            rowData[field] = item.employeeData?.EmpId || ""; // Custom logic for EmpId
+          } else if (field === "Name") {
+            rowData[field] = item.employeeData?.Name || ""; // Custom logic for Name
+          } else if (field === "day") {
+            // Format Worked
+            rowData[field] = `P:${item.tpresent || 0}, NH:${(item.tnh || 0) + (item.tpn || 0)}, L:${(item.tel || 0) + (item.tcl || 0) + (item.tfl || 0)}, Total:${item.tpayable || 0}`;
+          } else if (field === "rate") {
+            // Format Rate
+            const basicRate = parseFloat(item.basicrate || 0);
+            const daRate = parseFloat(item.darate || 0);
+            rowData[field] = `Basic: ${basicRate}, DA: ${daRate}, Total: ${basicRate + daRate}`;
+          } else {
+            // Apply custom renderCell logic for other columns
+            const renderedValue = column.renderCell(item);
+            rowData[field] = typeof renderedValue === "object" && renderedValue !== null
+              ? JSON.stringify(renderedValue) // Safeguard against unexpected objects
+              : renderedValue || "";
+          }
+        } else {
+          // For fields without `renderCell`, get the raw value
+          let value = item[field] || "";
+  
+         
+          rowData[field] = value;
+        }
+      });
+  
+      return rowData;
+    });
+  
+    // Create worksheet from transformed data
     const ws = XLSX.utils.json_to_sheet(transformedArray);
+  
+    // Use column headers as the first row
+    const tableColumnHeaders = columns.map((col) => col.headerName);
+    XLSX.utils.sheet_add_aoa(ws, [tableColumnHeaders], { origin: "A1" });
+  
+    // Create a workbook and append the worksheet
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Data");
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+    // Export the workbook as an Excel file
     XLSX.writeFile(wb, `${heading}.xlsx`);
   };
+  
 
   const handleGeneratePDF = () => {
     const doc = new jsPDF(pdfOrientation);
+  
     if (isBonusPayRegister) {
       const bonusTableElement = document.getElementById("bonus-table");
       if (!bonusTableElement) {
@@ -531,12 +593,34 @@ function DataGrid({
         doc.save("bonus-pay-register.pdf");
       });
     } else {
+      // Get visible column headers
       const tableColumnHeaders = columns.map((col) => col.headerName);
+  
+      // Process table rows dynamically, ensuring proper formatting
       const tableRows = tableData.map((item) =>
-        columns.map((col) =>
-          col.renderCell ? col.renderCell(item) : getValue(item, col.field)
-        )
+        columns.map((col) => {
+          if (col.renderCell) {
+            // Handle custom `renderCell` columns dynamically
+            const renderedValue = col.renderCell(item);
+            return typeof renderedValue === "object" && renderedValue !== null
+              ? JSON.stringify(renderedValue) // Safeguard against unexpected objects
+              : renderedValue || ""; // Fallback to empty string
+          } else {
+            // Handle regular fields
+            const value = item[col.field];
+  
+            // Fix issue with improperly accessing `toFixed`
+            if (typeof value === "number") {
+              return value.toFixed(2); // Format numeric values to two decimal places
+            }
+  
+            return value !== undefined && value !== null
+              ? value.toString() // Convert other values to strings
+              : ""; // Default to an empty string if value is null/undefined
+          }
+        })
       );
+  
       doc.setFontSize(12);
       doc.text(heading.toUpperCase(), 14, 15);
       doc.autoTable({
@@ -544,9 +628,13 @@ function DataGrid({
         head: [tableColumnHeaders],
         body: tableRows,
       });
+  
       doc.save(`${heading.toLowerCase().replace(/\s+/g, "-")}.pdf`);
     }
   };
+  
+  
+
 
   return (
     <div className="flex flex-col overflow-x-hidden overflow-y-auto gap-4">

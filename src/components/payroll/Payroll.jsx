@@ -6,9 +6,11 @@ import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
 import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast } from 'react-toastify';
+import useFlattendObject from '../../hooks/useFlattenedObject';
 
 
-const payrollcolumns = [
+export const payrollcolumns = [
     { field: 'id', headerName: 'TrnId', width: '80px' },
     { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
     { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
@@ -83,12 +85,12 @@ const slipcolumns = [
     { field: 'mrpnetamt', headerName: 'Net Amt' },
     {
         field: 'view', headerName: 'View', renderCell: (params) => {
-            return <a href={'http://127.0.0.1:8000//slip/' + params.id + '/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
+            return <a href={'http://127.0.0.1:8000/slip/' + params.id + '/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
         }
     },
     {
         field: 'download', headerName: 'Download', renderCell: (params) => {
-            return <a href={'http://127.0.0.1:8000//downloadslip/' + params.id + '/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
+            return <a href={'http://127.0.0.1:8000/downloadslip/' + params.id + '/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
         }
     },
 
@@ -161,8 +163,8 @@ const esiccolumns = [
     { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData.Name },
     { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
     { field: 'esic', headerName: 'ESIC Amt' },
-
 ]
+
 const bankcolumns = [
     { field: 'id', headerName: 'TrnId', width: '80px' },
     { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
@@ -171,8 +173,8 @@ const bankcolumns = [
     { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData.Ifsc },
     { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData.Ac },
     { field: 'mrpnetamt', headerName: 'Net Amt' },
-
 ]
+
 const sumBankcolumns = [
     { field: 'id', headerName: 'TrnId', width: '80px' },
     { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData.EmpId },
@@ -183,10 +185,12 @@ const sumBankcolumns = [
     { field: 'balance', headerName: 'Net Amt' },
 
 ]
+
 function Payroll() {
     const { control, register, setValue, handleSubmit, reset, watch, formState: { errors } } = useForm()
     const { data, error, loading, getRequest } = usePost('')
     const [nh, setNh] = useState(0)
+    const [rowdata, setRowdata] = useState(null)
     const [download, setDownload] = useState(false)
 
     console.log("data", data)
@@ -197,11 +201,16 @@ function Payroll() {
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
+        if (data.Site && data.month !== "") {
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
 
-        getRequest(`/getattendancereport/${month}/${year}/`)
-
+        }
+        else {
+            toast.warning("Select the site and month")
+        }
         // postRequest(data)
     }
+
     const getNhDays = (site) => {
         const res = getRequest(`/master/nhday/?site=${site}`)
         res.then((response) => {
@@ -220,6 +229,9 @@ function Payroll() {
         console.log("get request", data)
         if (data?.attendance) {
             setDownload(true)
+            const row = data?.attendance.map(item => useFlattendObject(item))
+            setRowdata(row)
+            console.log("row data is ", rowdata)
         }
     }, [data])
     return (
@@ -281,9 +293,7 @@ function Payroll() {
                             heading="Payroll"
                             columns={payrollcolumns}
                             row={data?.attendance}
-
-
-
+                            isPayrollColumns={true}
                         />) : (
                             <div>No data available</div>
                         )}
