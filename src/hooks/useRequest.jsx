@@ -211,6 +211,37 @@ const useRequest = (url) => {
           setLoading(false);
         }
       };
+      const onlyputRequest = async (api,payload) => {
+        console.log("data to update",payload,url)
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await axios.put(api, payload,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                withCredentials: true
+            }
+          );
+          if(response.status===200){
+          setData(response.data);
+          toast.success("Update Successfully")
+          }
+        } catch (err) {
+          console.error(err)
+          if(err.status === 400){
+            const error = err.response.data
+            Object.entries(error).map(([key, value]) => (toast.warning(`${key}  ${value}`)))
+          }
+            if(err.status===409){
+                toast.warning(err.response.data.warning)
+              }
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
       const putRequest = async (payload) => {
         console.log("data to update",payload,url)
         setLoading(true);
@@ -302,6 +333,6 @@ const useRequest = (url) => {
 
 
  
-return { data, error, loading, getRequest,getNextRequest,postRequest,onlypostRequest,putRequest,patchRequest,onlypatchRequest,deleteRequest }
+return { data, error, loading, getRequest,getNextRequest,postRequest,onlypostRequest,putRequest,onlyputRequest,patchRequest,onlypatchRequest,deleteRequest }
 }
 export default useRequest;

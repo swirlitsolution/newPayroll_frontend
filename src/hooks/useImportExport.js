@@ -23,6 +23,8 @@ function useImportExport(orientation) {
         const data = rows.map(row => 
           columns.map(col => {
             if (col.renderCell) {
+              const tablerow = col.renderCell(row);
+              
               return col.renderCell(row);
             }
             return row[col.field];

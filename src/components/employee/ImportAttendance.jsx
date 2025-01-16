@@ -22,7 +22,7 @@ function ImportAttendance({heading,closeModel,newItem, api}) {
     const { data, error, loading,postRequest } = usePost(api)
     const [isSending, setIsSending] = useState(false)
     const [selectedType,setSelectedType] = useState('att')
-    console.log("submition is ",submissionStatus)
+
     const excelDateToJSDate = (num) => {
         const utcDays = num - 25569; // Offset for Excel's epoch (Jan 1, 1900)
         const utcValue = utcDays * 86400; // Convert days to seconds
@@ -87,6 +87,13 @@ function ImportAttendance({heading,closeModel,newItem, api}) {
                
             } else if (res.status === 200) {
                 setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: true }));
+            }
+            else if(res.status === 204){
+                setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: false }));
+
+            }
+            else if (res.status === 501){
+                setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: false })); 
             }
             else if (res.status === 201){
                 setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: true })); 

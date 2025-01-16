@@ -10,10 +10,10 @@ import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
 
 
-const payrollcolumns = [
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
-    {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData_SiteDetails_name},
+export const payrollcolumns = [
+    {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
+    {field:'employeeData_Name',headerName:'Name'},
+    {field:'employeeData_SiteDetails_name',headerName:'Site'},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>{
         return (
             <tr>
@@ -123,9 +123,9 @@ const summarycolumns = [
 
 ]
 const pfcolumns = [
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
-    { field: 'Uan', headerName: 'UAN', renderCell: (params) => params.employeeData_Uan },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
+    { field: 'employeeData_Uan', headerName: 'UAN' },
+    { field: 'employeeData_Name', headerName: 'Name' },
     { field: 'mrpgross', headerName: 'EPF Wages' },
     { field: 'basic', headerName: 'EPF Wages' },
     { field: 'eps', headerName: 'EPS Wages', renderCell: (params) => params.basic },
@@ -146,16 +146,14 @@ const pfcolumns = [
     { field: 'ncp', headerName: 'NCP Day', renderCell: (params) => (params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl) },
 ]
 const esiccolumns = [
-    { field: 'id', headerName: 'TrnId', width: '80px' },
-    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
-    { field: 'esic', headerName: 'ESIC', renderCell: (params) => params.employeeData_Esic },
-    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
+    { field: 'employeeData_Esic', headerName: 'ESIC'},
+    { field: 'employeeData_Name', headerName: 'Name' },
     { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
     { field: 'esic', headerName: 'ESIC Amt' },
 
 ]
 const bankcolumns = [
-    { field: 'id', headerName: 'TrnId', width: '80px' },
     { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
     { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
     { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
@@ -289,7 +287,6 @@ function Payroll() {
               columns={summarycolumns} 
               row={rowdata} 
       
-             
 
               />):(
                 <div>No data available</div>

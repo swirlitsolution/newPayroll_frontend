@@ -27,15 +27,13 @@ function usePost(url) {
           if(response.status === 201){
             toast.success(response.data.success)
             setData(response.data);
-      
-          return response
           }
           if(response.status === 202){
             toast.success(response.data.success)
             setData(response.data);
           }
           if(response.status === 204){
-            toast.success("Nothing found")
+            toast.warning(`Nothing found ${payload?.attendance?.Aadhar?payload.attendance?.Aadhar:''}`)
           }
           if(response.status === 226){
             toast.warning(response.data.exists)
@@ -46,8 +44,9 @@ function usePost(url) {
             toast.success("Process Successfully")
           setData(response.data);
       
-          return response
+          
           }
+          return response
         } catch (err) {
           console.error(err)
           if(err.response.status === 404){
@@ -205,8 +204,9 @@ function usePost(url) {
 
           setData(response.data);
       
-          return response
+         
           }
+          return response
         } catch (err) {
           console.error(err)
           if(err.response.status === 404){

@@ -52,6 +52,11 @@ const adminroutes = [
           name: "Recal Payroll",
           icon: <FileSymlink />,
         },
+        {
+          path: "/newleave",
+          name: "leave",
+          icon: <FileSymlink />,
+        },
       ],
   },
   {
@@ -185,6 +190,11 @@ const users = [
         {
           path: "/recal",
           name: "Recal Payroll",
+          icon: <FileSymlink />,
+        },
+        {
+          path: "/newleave",
+          name: "leave",
           icon: <FileSymlink />,
         },
       ],

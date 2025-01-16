@@ -33,10 +33,10 @@ function Employees() {
     return (
         <div className='flex flex-col gap-2 p-1'>
        
-          {loading?"Loading......": data?.results?.length?(<DataGrid 
+          {loading?"Loading......": data?.length?(<DataGrid 
                 heading="Select Employee"
                 columns={columns} 
-                row={data?.results} 
+                row={data} 
         
                 rowClicked={handleRowClicked}
                 Increament={pageState}

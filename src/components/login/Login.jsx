@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'; 
 import { AuthContext } from '../../AuthContext';
@@ -7,6 +7,7 @@ import { Key, UserRound } from 'lucide-react';
 const Login = () => {
     const navigate = useNavigate(); // Initialize useNavigate
     const {user, login } = useContext(AuthContext);
+    const [loading,setLoading] = useState(false)
     useEffect(()=>{
       
         if(user){
@@ -18,11 +19,18 @@ const Login = () => {
    
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
         const username = e.target.username.value;
         const password = e.target.password.value;
  
-        await login(username, password);
-        navigate('/home');
+        const response = await login(username, password);
+        if(response?.status === 200){
+            setLoading(false)
+            navigate('/home');
+        }
+        setLoading(false)
+        
+        
     };
     if(user){
       return <></>
@@ -62,7 +70,7 @@ const Login = () => {
                                    
                                       <div className="w-full p-4">
                                         <motion.input whileTap={{scale:0.6}} type='submit' className="text-white bg-gray-800 font-medium text-center cursor-pointer text-sm py-2 px-2 rounded-md w-full"
-                                           value="Sign In" />
+                                         value={loading?"Wait ....":"Sign In"} disabled={loading} />
                                           
                                       </div>
                                       </form>
