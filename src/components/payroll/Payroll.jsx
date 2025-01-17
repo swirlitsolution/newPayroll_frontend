@@ -286,7 +286,7 @@ function Payroll() {
               heading="Payroll"
               columns={summarycolumns} 
               row={rowdata} 
-      
+              isPayrollSummary={true}     
 
               />):(
                 <div>No data available</div>

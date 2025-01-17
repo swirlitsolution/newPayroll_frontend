@@ -35,7 +35,8 @@ import EditTaxSlave from './components/master/EditTaxSlave';
 import NewLeave from './components/leave/NewLeave';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-axios.defaults.baseURL = 'http://127.0.0.1:8000';
+// axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.baseURL = 'https://global.swirlapps.in';
 
 function App() {
  

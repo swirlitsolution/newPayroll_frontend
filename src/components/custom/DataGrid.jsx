@@ -445,7 +445,7 @@ function DataGrid({
   pdfOrientation = "landscape",
   isBonusPayRegister,
   row,
-  isPayrollColumns
+  isPayrollSummary
 }) {
   const [filterBy, setFilterBy] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -575,39 +575,39 @@ function DataGrid({
 
   const handleGeneratePDF = () => {
     const doc = new jsPDF(pdfOrientation);
-  
+
     if (isBonusPayRegister) {
       const bonusTableElement = document.getElementById("bonus-table");
-  
+
       if (!bonusTableElement) {
         console.error("Bonus Table element not found!");
         return;
       }
-  
+
       // Generate PDF from the bonus table element
       html2canvas(bonusTableElement, { scale: 2 }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const imgWidth = doc.internal.pageSize.getWidth() - 20; // Adjust image width
         const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
-  
+
         doc.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
         doc.save("bonus-pay-register.pdf");
       });
     } else {
       // Extract visible column headers
       const tableColumnHeaders = columns.map((col) => col.headerName);
-  
+
       // Process table rows dynamically
       const tableRows = tableData.map((item) =>
         columns.map((col) => {
           const field = col.field;
-  
+
           if (col.renderCell) {
             // Handle custom `renderCell` dynamically
             if (field === "EmpId") {
-              return item.employeeData?.EmpId || item.employee?.EmpId || ""; // Custom logic for EmpId
+              return item.employeeData?.EmpId || item.employee?.EmpId || item?.employeeData_Name || ""; // Custom logic for EmpId
             } else if (field === "Name") {
-              return item.employeeData?.Name || item.employee?.Name || ""; // Custom logic for Name
+              return item.employeeData?.Name || item.employee?.Name || item?.employeeData_Name || ""; // Custom logic for Name
             } else if (field === "day") {
               // Format Worked (day)
               return `P:${item.tpresent || 0}, NH:${(item.tnh || 0) + (item.tpn || 0)}, L:${(item.tel || 0) + (item.tcl || 0) + (item.tfl || 0)}, Total:${item.tpayable || 0}`;
@@ -632,24 +632,48 @@ function DataGrid({
           }
         })
       );
-  
-      // Set the title of the PDF
-      doc.setFontSize(12);
-      doc.text(heading.toUpperCase(), 14, 15);
-  
-      // Generate the table in the PDF
-      doc.autoTable({
-        startY: 25, // Start position below the title
-        head: [tableColumnHeaders], // Table headers
-        body: tableRows, // Table rows
-      });
-  
+
+      if (isPayrollSummary) {
+        // Set the title of the PDF
+        doc.text(heading.toUpperCase(), 14, 15);
+
+        // Generate the table in the PDF
+        doc.autoTable({
+          startY: 25, // Start position below the title
+          head: [tableColumnHeaders], // Table headers
+          body: tableRows, // Table rows
+          styles: {
+            fontSize: 6,
+            overflow: "linebreak", // Handle content overflow
+          },
+          columnStyles: {
+            // Set dynamic widths for each column
+            0: { cellWidth: "auto" }, // Dynamically adjust the first column's width
+            1: { cellWidth: "auto" }, // Second column
+            // Add similar entries for all columns, or use a default fallback
+          },
+          theme: "grid", // Use grid theme for cleaner layout
+          useCss: true, // Allow dynamic width adjustment
+        });
+      } else {
+        // Set the title of the PDF
+        doc.setFontSize(12);
+        doc.text(heading.toUpperCase(), 14, 15);
+
+        // Generate the table in the PDF
+        doc.autoTable({
+          startY: 25, // Start position below the title
+          head: [tableColumnHeaders], // Table headers
+          body: tableRows, // Table rows
+        });
+      }
+
       // Save the generated PDF
       doc.save(`${heading.toLowerCase().replace(/\s+/g, "-")}.pdf`);
     }
   };
-  
-  
+
+
 
 
 

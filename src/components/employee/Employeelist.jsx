@@ -1,96 +1,72 @@
+import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid';
+import { Plus, Upload, Download } from "lucide-react";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 import React, { useEffect, useState } from "react";
-import { Pen, Plus, Upload } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import ImportFile from "./ImportFile";
+import { NavLink, useNavigate } from "react-router-dom";
 import useRequest from "../../hooks/useRequest";
-import { DataGrid, GridToolbar,  } from '@mui/x-data-grid';
-const columns = [
-  { field: "id", headerName: "TrnId", width: 80 },
-  { field: "EmpId", headerName: "EmpId", width: 80 },
-  { field: "Name", headerName: "Name", width: 180 },
-  { field: "Father", headerName: "Father", width: 180 },
-  {
-    field: "SiteDetails_name",
-    headerName: "Site",
-    width: 180,
-  },
-  {
-    field: "DepartmentDetails_name",
-    headerName: "Department",
-    width: 180
-  },
-  {
-    field: "DesignationDetails_name",
-    headerName: "Designation",
-    width: 180,
-  },
-  {
-    field: "GangDetails_name",
-    headerName: "Gang",
-    width: 180,
-  },
-  { field: "Email", headerName: "Email", width: 220 },
-  { field: "Gender", headerName: "Gender", width: 220 },
-  { field: "MaritalStatus", headerName: "Married", width: 220 },
-  { field: "PfApplicable", headerName: "PfApplicable", width: 220 },
-  { field: "Uan", headerName: "Uan", width: 220 },
-  { field: "EsicApplicable", headerName: "EsicApplicable", width: 220 },
-  { field: "Esic", headerName: "Esic", width: 220 },
-  { field: "PRFTax", headerName: "PRFTax", width: 220 },
-  { field: "Mobile", headerName: "Mobile", width: 220 },
-  { field: "EmpSafetyCard", headerName: "EmpSafetyCard", width: 220 },
-  { field: "SafetyCardExpiry", headerName: "SafetyCardExpiry", width: 220 },
-  { field: "Address", headerName: "Gender", width: 220 },
-  { field: "AttendAllow", headerName: "AttendAllow", width: 220 },
-  { field: "OtAppl", headerName: "OtAppl", width: 220 },
-  { field: "MrOtAppl", headerName: "MrOtAppl", width: 220 },
-  { field: "ReversePF", headerName: "ReversePF", width: 220 },
-  { field: "Bank", headerName: "Bank", width: 220 },
-  { field: "Branch", headerName: "Branch", width: 220 },
-  { field: "Ifsc", headerName: "Ifsc", width: 220 },
-  { field: "Ac", headerName: "Ac", width: 220 },
-  { field: "Aadhar", headerName: "Aadhar", width: 220 },
-  { field: "Pan", headerName: "Pan", width: 220 },
-  { field: "Otslave", headerName: "Otslave", width: 220 },
-  { field: "Ottype", headerName: "Ottype", width: 220 },
-  { field: "Paymentmode", headerName: "Paymentmode", width: 220 },
-  { field: "Weekoff", headerName: "Weekoff", width: 220 },
-  { field: "Skill", headerName: "Skill", width: 220 },
-  { field: "Status", headerName: "Status", width: 220 },
-  { field: "Doe", headerName: "Doe", width: 220 },
-  { field: "rate_basic", headerName: "basic", width: 220 },
-  { field: "rate_da", headerName: "da", width: 220 },
-  { field: "rate_arate", headerName: "arate", width: 220 },
-  { field: "rate_otrate", headerName: "otrate", width: 220 },
-  { field: "rate_hra", headerName: "hra", width: 220 },
-  { field: "rate_madical", headerName: "madical", width: 220 },
-  { field: "rate_ExgratiaRetention", headerName: "ExgratiaRetention", width: 220 },
-  { field: "rate_LTARetention", headerName: "LTARetention", width: 220 },
-  { field: "rate_LTA", headerName: "LTA", width: 220 },
-  { field: "rate_CA", headerName: "CA", width: 220 },
-  { field: "rate_Fooding", headerName: "Fooding", width: 220 },
-  { field: "rate_Misc", headerName: "Misc", width: 220 },
-  { field: "rate_CEA", headerName: "CEA", width: 220 },
-  { field: "rate_WashingAllowance", headerName: "WashingAllowance", width: 220 },
-  { field: "rate_ProfessionalPursuits", headerName: "ProfessionalPursuits", width: 220 },
-  { field: "rate_SpecialAllowance", headerName: "SpecialAllowance", width: 220 },
-  { field: "rate_IncomeTax", headerName: "IncomeTax", width: 220 },
-  { field: "rate_personalpay", headerName: "personalpay", width: 220 },
-  { field: "rate_petrol", headerName: "petrol", width: 220 },
-  { field: "rate_mobile", headerName: "mobile", width: 220 },
-  { field: "rate_incentive", headerName: "incentive", width: 220 },
-  { field: "rate_fixedamt", headerName: "fixedamt", width: 220 },
+import ImportFile from "./ImportFile";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import * as XLSX from "xlsx";
 
-];
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
   const { data, error, loading } = useRequest("/master/employee/");
   const navigate = useNavigate();
-
   const [rows, setRows] = useState([]);
-  
+
+  // Define the columns you want to show on the UI
+  const columns = [
+    { field: "id", headerName: "TrnId", width: 80 },
+    { field: "EmpId", headerName: "EmpId", width: 80 },
+    { field: "Name", headerName: "Name", width: 180 },
+    { field: "Father", headerName: "Father", width: 180 },
+    { field: "SiteDetails_name", headerName: "Site", width: 180 },
+    { field: "DepartmentDetails_name", headerName: "Department", width: 180 },
+    { field: "DesignationDetails_name", headerName: "Designation", width: 180 },
+    { field: "GangDetails_name", headerName: "Gang", width: 180 },
+    { field: "Email", headerName: "Email", width: 220 },
+    { field: "Gender", headerName: "Gender", width: 150 },
+    // Additional hidden columns
+    { field: "Dob", headerName: "Date of Birth", width: 150 },
+    { field: "Imageurl", headerName: "Image URL", width: 200 },
+    { field: "Uan", headerName: "UAN", width: 150 },
+    { field: "Esic", headerName: "ESIC", width: 150 },
+    { field: "Mobile", headerName: "Mobile", width: 150 },
+    { field: "EmpSafetyCard", headerName: "Safety Card", width: 150 },
+    { field: "SafetyCardExpiry", headerName: "Safety Card Expiry", width: 150 },
+    { field: "Aadhar", headerName: "Aadhar", width: 150 },
+    { field: "Pan", headerName: "PAN", width: 150 },
+    { field: "Address", headerName: "Address", width: 200 },
+    { field: "Bank", headerName: "Bank", width: 150 },
+    { field: "Branch", headerName: "Branch", width: 150 },
+    { field: "Ifsc", headerName: "IFSC Code", width: 150 },
+    { field: "Ac", headerName: "Account Number", width: 150 },
+    { field: "PfApplicable", headerName: "PF Applicable", width: 150 },
+    { field: "EsicApplicable", headerName: "ESIC Applicable", width: 150 },
+    { field: "PRFTax", headerName: "Professional Tax", width: 150 },
+    { field: "AttendAllow", headerName: "Attendance Allowance", width: 150 },
+    { field: "AllowAsPer", headerName: "Allowance As Per", width: 150 },
+    { field: "ReversePF", headerName: "Reverse PF", width: 150 },
+    { field: "OtAppl", headerName: "OT Applicable", width: 150 },
+    { field: "MrOtAppl", headerName: "MR OT Applicable", width: 150 },
+    { field: "MaritalStatus", headerName: "Marital Status", width: 150 },
+    { field: "Doj", headerName: "Date of Joining", width: 150 },
+    { field: "Otslave", headerName: "OT Slave", width: 150 },
+    { field: "Ottype", headerName: "OT Type", width: 150 },
+    { field: "Paymentmode", headerName: "Payment Mode", width: 150 },
+    { field: "Weekoff", headerName: "Week Off", width: 150 },
+    { field: "Skill", headerName: "Skill", width: 150 },
+    { field: "Status", headerName: "Status", width: 150 },
+  ];
+
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Dob: false,
     Imageurl: false,
@@ -123,34 +99,8 @@ function Employeelist() {
     Weekoff: false,
     Skill: false,
     Status: false,
-    Doe:false,
-    rate_basic:false,
-    rate_da:false,
-    rate_arate:false,
-    rate_otrate:false,
-    rate_hra:false,
-    rate_madical:false,
-    rate_ExgratiaRetention:false,
-    rate_LTARetention:false,
-    rate_LTA:false,
-    rate_CA:false,
-    rate_Fooding:false,
-    rate_Misc:false,
-    rate_CEA:false,
-    rate_WashingAllowance:false,
-    rate_ProfessionalPursuits:false,
-    rate_SpecialAllowance:false,
-    rate_IncomeTax:false,
-    rate_personalpay:false,
-    rate_petrol:false,
-    rate_mobile:false,
-    rate_incentive:false,
-    rate_fixedamt:false
-  })
-
-  // Define the columns you want to show on the UI
-  
-
+  });
+  console.log("rows", rows)
   const flattenObject = (obj, parentKey = '') => {
     let result = {};
 
@@ -159,10 +109,8 @@ function Employeelist() {
         const newKey = parentKey ? `${parentKey}_${key}` : key;
 
         if (typeof obj[key] === 'object' && obj[key] !== null) {
-          // If the value is an object, recurse to flatten it
           Object.assign(result, flattenObject(obj[key], newKey));
         } else {
-          // Otherwise, just assign the value
           result[newKey] = obj[key];
         }
       }
@@ -172,18 +120,125 @@ function Employeelist() {
   };
 
   useEffect(() => {
-    console.log("Data request started");
     if (data?.length > 0) {
       const filteredRows = data.map((row) => flattenObject(row));
       setRows(filteredRows);
+      console.log("filteredRows, ", filteredRows)
     }
-    console.log("Data fetched:", data);
   }, [data]);
+
+  const ids = rows?.map((row) => row?.id);
+  console.log(ids)
 
   const handleRowClicked = (params) => {
     navigate(`/employee/${params.id}`, { id: params.id });
   };
+ 
 
+  const generatePDF = () => {
+    // Initialize jsPDF with landscape orientation
+    const doc = new jsPDF("landscape");
+  
+    // Get the visible columns
+    const visibleColumns = columns.filter(
+      (col) => columnVisibilityModel[col.field] !== false
+    );
+  
+    // Prepare headers and rows
+    const headers = visibleColumns.map((col) => col.headerName);
+    const dataRows = rows.map((row) =>
+      visibleColumns.map((col) => row[col.field] || "")
+    );
+
+    
+  
+    // Add title
+    doc.text("Employee List", 14, 10);
+  
+    // Calculate dynamic column widths
+    const columnStyles = {};
+    visibleColumns.forEach((col, index) => {
+      columnStyles[index] = { cellWidth: 'auto' }; // Automatically adjust the width
+    });
+  
+    // Add the table
+    doc.autoTable({
+      startY: 25,
+      head: [headers],
+      body: dataRows,
+      styles: {
+        fontSize: 8, // Font size for table content
+        cellPadding: 3, // Padding for cells
+      },
+      headStyles: {
+        fillColor: [22, 160, 133], // Custom header color
+        fontSize: 8,
+        halign: "center", // Center align header text
+      },
+      columnStyles, // Dynamic column width
+      theme: "grid", // Table theme
+      bodyStyles: {
+        halign: "left", // Align text in data cells
+      },
+      tableWidth: "auto", // Automatically adjust table width
+    });
+  
+    // Save the PDF
+    doc.save("EmployeeList.pdf");
+  };
+  
+  const generateExcel = () => {
+    // Get the visible columns
+    const visibleColumns = columns.filter(
+      (col) => columnVisibilityModel[col.field] !== false
+    );
+  
+    // Prepare headers and rows
+    const headers = visibleColumns.map((col) => col.headerName);
+    const dataRows = rows.map((row) =>
+      visibleColumns.map((col) => row[col.field] || "")
+    );
+  
+    // Create a worksheet from data
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
+  
+    // Create a workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Employee List");
+  
+    // Set custom styles (this is optional, Excel styling capabilities are limited in comparison to PDF)
+    const wscols = visibleColumns.map(() => ({ wpx: 100 })); // Set default column width
+  
+    ws["!cols"] = wscols; // Apply column width
+    ws["!rows"] = dataRows.length; // Set the number of rows
+  
+    // Export to Excel (download the file)
+    XLSX.writeFile(wb, "EmployeeList.xlsx");
+  };
+ 
+  const CustomToolbar = () => {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', padding: '8px' }}>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <Menubar>
+          <MenubarMenu>
+            <MenubarTrigger className="text-[#1976d2] cursor-pointer flex items-center gap-1">
+              <Download size={16} strokeWidth={2.5} /> {/* Export icon */}
+              EXPORT
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem className="cursor-pointer" onClick={generateExcel}>Excel</MenubarItem>
+              <MenubarItem className="cursor-pointer" onClick={generatePDF}>PDF</MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+      </div>
+    );
+  };
+
+  
   return (
     <div className="flex flex-col gap-2 p-1">
       <div className="mt-4 mr-2">
@@ -232,7 +287,6 @@ function Employeelist() {
             setRateImport(false);
           }}
           newItem={true}
-          filename="sample_employee_master.xlsx"
           api="/master/employee/"
         />
       )}
@@ -243,14 +297,12 @@ function Employeelist() {
             setImportFile(false);
             setRateImport(false);
           }}
-          filename="rate.xlsx"
           newItem={false}
           api="/master/rate/"
         />
       )}
 
       {loading ? (
-        // Show a loader while data is loading
         <div className="flex justify-center items-center">
           Loading...
         </div>
@@ -259,20 +311,19 @@ function Employeelist() {
           <DataGrid
             rows={rows}
             columns={columns}
-      
             columnVisibilityModel={columnVisibilityModel}
-            pageSizeOptions={[5, 10, 50,100,801]}
-            components={{ Toolbar: GridToolbar }}
+            pageSizeOptions={[5, 10, 50]}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
             disableSelectionOnClick
             onRowClick={handleRowClicked}
-            slots={{ toolbar: GridToolbar }}
             onColumnVisibilityModelChange={(newModel) =>
               setColumnVisibilityModel(newModel)
-            } 
+            }
           />
         </div>
       ) : (
-        // Display no data message if no rows are available
         <div>No data available</div>
       )}
     </div>
