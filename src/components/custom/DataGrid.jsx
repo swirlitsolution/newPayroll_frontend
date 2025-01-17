@@ -517,61 +517,54 @@ function DataGrid({
   //   XLSX.writeFile(wb, `${heading}.xlsx`);
   // };
 
-  const handleGenerateExcel = () => {
-    // Transform tableData to include appropriate formatting
-    const transformedArray = tableData.map((item) => {
-      let rowData = {};
+ const handleGenerateExcel = () => {
+  const transformedArray = tableData.map((item) => {
+    let rowData = {};
 
-      columns.forEach((column) => {
-        const field = column.field;
+    columns.forEach((column) => {
+      const field = column.field;
 
-        // Handle fields with `renderCell`
-        if (column.renderCell) {
-          if (field === "EmpId") {
-            rowData[field] = item.employeeData?.EmpId || item.employee?.EmpId || ""; // Custom logic for EmpId
-          } else if (field === "Name") {
-            rowData[field] = item.employeeData?.Name || item.employee?.Name || ""; // Custom logic for Name
-          } else if (field === "day") {
-            // Format Worked
-            rowData[field] = `P:${item.tpresent || 0}, NH:${(item.tnh || 0) + (item.tpn || 0)}, L:${(item.tel || 0) + (item.tcl || 0) + (item.tfl || 0)}, Total:${item.tpayable || 0}`;
-          } else if (field === "rate") {
-            // Format Rate
-            const basicRate = parseFloat(item.basicrate || 0);
-            const daRate = parseFloat(item.darate || 0);
-            rowData[field] = `Basic: ${basicRate}, DA: ${daRate}, Total: ${basicRate + daRate}`;
+      // Handle fields with `renderCell`
+      if (column.renderCell) {
+        const renderedValue = column.renderCell(item);
+
+        if (React.isValidElement(renderedValue)) {
+          // Extract meaningful data from React elements
+          if (renderedValue.props.href) {
+            rowData[field] = renderedValue.props.href; // Extract href from <a> tags
+          } else if (renderedValue.props.children) {
+            rowData[field] = renderedValue.props.children; // Extract text from children
           } else {
-            // Apply custom renderCell logic for other columns
-            const renderedValue = column.renderCell(item);
-            rowData[field] = typeof renderedValue === "object" && renderedValue !== null
-              ? JSON.stringify(renderedValue) // Safeguard against unexpected objects
-              : renderedValue || "";
+            rowData[field] = JSON.stringify(renderedValue.props); // Fallback: stringify props
           }
         } else {
-          // For fields without `renderCell`, get the raw value
-          let value = item[field] || "";
-
-
-          rowData[field] = value;
+          rowData[field] = renderedValue || ""; // Handle non-element values
         }
-      });
-
-      return rowData;
+      } else {
+        // Handle non-renderCell fields
+        const value = item[field];
+        rowData[field] = value !== undefined && value !== null ? value.toString() : ""; // Default to an empty string
+      }
     });
 
-    // Create worksheet from transformed data
-    const ws = XLSX.utils.json_to_sheet(transformedArray);
+    return rowData;
+  });
 
-    // Use column headers as the first row
-    const tableColumnHeaders = columns.map((col) => col.headerName);
-    XLSX.utils.sheet_add_aoa(ws, [tableColumnHeaders], { origin: "A1" });
+  // Create worksheet
+  const ws = XLSX.utils.json_to_sheet(transformedArray);
 
-    // Create a workbook and append the worksheet
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  // Add headers
+  const tableColumnHeaders = columns.map((col) => col.headerName);
 
-    // Export the workbook as an Excel file
-    XLSX.writeFile(wb, `${heading}.xlsx`);
-  };
+  XLSX.utils.sheet_add_aoa(ws, [tableColumnHeaders], { origin: "A1" });
+
+  // Create workbook and export as Excel file
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, `${heading}.xlsx`);
+};
+
+  
 
   const handleGeneratePDF = () => {
     const doc = new jsPDF(pdfOrientation);
@@ -600,12 +593,12 @@ function DataGrid({
       // Process table rows dynamically
       const tableRows = tableData.map((item) =>
         columns.map((col) => {
-          const field = col.field;
+          const field = col.field;         
 
           if (col.renderCell) {
             // Handle custom `renderCell` dynamically
             if (field === "EmpId") {
-              return item.employeeData?.EmpId || item.employee?.EmpId || item?.employeeData_Name || ""; // Custom logic for EmpId
+              return item.employeeData?.EmpId || item.employee?.EmpId || item?.employeeData_EmpId || ""; // Custom logic for EmpId
             } else if (field === "Name") {
               return item.employeeData?.Name || item.employee?.Name || item?.employeeData_Name || ""; // Custom logic for Name
             } else if (field === "day") {
@@ -633,6 +626,7 @@ function DataGrid({
         })
       );
 
+    
       if (isPayrollSummary) {
         // Set the title of the PDF
         doc.text(heading.toUpperCase(), 14, 15);
