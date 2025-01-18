@@ -47,6 +47,16 @@ const adminroutes = [
           name: "Process Attend",
           icon: <FileSymlink />,
         },
+        {
+          path: "/recal",
+          name: "Recal Payroll",
+          icon: <FileSymlink />,
+        },
+        {
+          path: "/newleave",
+          name: "leave",
+          icon: <FileSymlink />,
+        },
       ],
   },
   {
@@ -177,6 +187,16 @@ const users = [
           name: "Process Attend",
           icon: <FileSymlink />,
         },
+        {
+          path: "/recal",
+          name: "Recal Payroll",
+          icon: <FileSymlink />,
+        },
+        {
+          path: "/newleave",
+          name: "leave",
+          icon: <FileSymlink />,
+        },
       ],
   },
   {
@@ -244,7 +264,7 @@ const SideBar = ({ children }) => {
     },
   };
   useEffect(() => {
-console.log("user is", user)
+
     const renderroute = ()=>{
       if(user){
 

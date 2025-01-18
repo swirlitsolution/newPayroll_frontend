@@ -1,12 +1,12 @@
 import React from 'react'
 import { Input } from '../ui/input'
-import { useForm  } from "react-hook-form";
+import Master from '../master/Master';
+import { useForm,Controller  } from "react-hook-form";
 import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
 import DataGrid from '../custom/DataGrid';
 
 const columns = [
-    {field:'id',headerName:'TrnId',width:'80px', renderCell:(params)=>params.employeeData.id},
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name', renderCell:(params)=>params.employeeData.Name},
     {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData.SiteDetails.name},
@@ -75,9 +75,12 @@ const columns = [
         return <span>{params.day30}{params.otday30?("/"+params.otday30):""}</span>}},
     {field:'day31',headerName:'31',renderCell:(params)=>{
         return <span>{params.day31}{params.otday31?("/"+params.otday31):""}</span>}},
+    {field:'tpresent',headerName:'Present'},
+    {field:'tpayable',headerName:'Payable'},
+    {field:'tot',headerName:'OT'},
 ]
 function AttendanceReport(props) {
-    const {register,handleSubmit, formState: { errors } } = useForm()
+    const {register,handleSubmit,control, formState: { errors } } = useForm()
     const { data, loading,getRequest} = usePost("/markattendance/")
 
     
@@ -91,7 +94,7 @@ function AttendanceReport(props) {
         const year = splited_date[0]
         const month = splited_date[1]
         
-        getRequest(`/getattendancereport/${month}/${year}/`)
+        getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
 
   
     }
@@ -103,7 +106,25 @@ function AttendanceReport(props) {
                 <h3 className="font-bold">{props?.heading.toUpperCase()}</h3>
               </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
-                <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                
+                <Controller
+                        name="Site"
+                        defaultValue="" // Initial value can be set here
+                        control={control}
+                        
+                        render={({ field, fieldState: { error } }) => {
+                            const { onChange, value, ref } = field;
+                        return (
+                            <Master 
+                            api = "/master/site/"
+                            onValueChange={(newValue) => {onChange(newValue || null)
+                      
+                            }} 
+                            value={value} name='Site' />
+                        );
+                        }}
+                    />
+                <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         
                 <Button type='submit' >Ok</Button>
                 </form>

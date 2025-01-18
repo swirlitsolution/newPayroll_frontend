@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }) => {
             else if(res.status === 401){
                 toast.warning("Invalid Username or Password");
             }
+            return res
         }
         catch(error){
             console.log(error)

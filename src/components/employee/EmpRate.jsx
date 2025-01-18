@@ -21,7 +21,7 @@ function EmpRate(props) {
     }
 
     useEffect(()=>{
-  
+        console.log("Rate is ",data)
         if(data){
         const rate = data[0]
         setValue('basic',rate?.basic)

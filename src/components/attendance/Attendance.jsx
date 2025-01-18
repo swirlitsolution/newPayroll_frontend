@@ -6,11 +6,14 @@ import MarkAttendance from '../custom/MarkAttendance';
 import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
 import { toast } from 'react-toastify';
+import { Upload } from 'lucide-react';
+import ImportAttendance from '../employee/ImportAttendance';
 
 
 const columns = [
-    {field:'id',headerName:'ID',width:'50px', renderCell:(param)=>param.employee.EmpId},
+    {field:'id',headerName:'EmpID',width:'50px', renderCell:(param)=>param.employee.EmpId},
     {field:'Name',headerName:"Employee", renderCell:(param)=>param.employee.Name},
+    {field:'Site',headerName:"Site", renderCell:(param)=>param.employee.SiteDetails.name},
     {field:'Status',headerName:'Status', renderCell:(param)=>param.attendance_status.status},
     {field:'Ot',headerName:'OT', renderCell:(param)=>param.attendance_status.ot},
     {field:'extrahour',headerName:'Extra', renderCell:(param)=>param.attendance_status.extrahour},
@@ -21,6 +24,7 @@ function Attendance(props) {
   const {control, formState: { errors } } = useForm()
     const { data, error, loading, getRequest} = usePost("/getcurrentattendance/")
     const [mark,setMark] = useState(false)
+    const [importFile,setImportFile] = useState(false)
     const [permitno,setPermitNo] = useState(0)
     const [row,setRow] = useState(null)
     const [currentDate,setCurrentDate] = useState(null)
@@ -74,12 +78,22 @@ function Attendance(props) {
                   <Button onClick={SavePermitNo} >Save</Button>
               
             </div>
+            <div className='flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer' 
+              onClick={()=>{
+                setImportFile(true)
+                }}><Upload /> Import</div>
             <span>{currentDate?.getDate() + "-"+ parseInt(currentDate?.getMonth()+1) +"-"+currentDate?.getFullYear()}</span>
       
           </div>
         </div>
        
         <div className='flex gap-2 w-full'>
+        {importFile?<ImportAttendance heading="import attendance"  
+                    closeModel={()=>{
+                      setImportFile(false)
+                      }} 
+                      newItem={true}
+                    api="/importattendance/" / >:<></>}
        <div className="  w-[100%] ">
        {loading?"Loading......": data?.length? 
                ( <DataGrid 
@@ -87,6 +101,9 @@ function Attendance(props) {
                 columns={columns} 
                 row={data} 
                 rowClicked={handleRowClicked}
+                pageInfo={true}
+                checkBoxSelection={true}
+                totalCounts={data?.count || 0}
                 />  ):(
               <div>No data available</div>)}
             </div>

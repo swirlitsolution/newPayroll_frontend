@@ -1,10 +1,6 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import DataGrid from './components/custom/DataGrid'
-import Autocomplete from './components/custom/Autocomplete'
 import Employeelist from './components/employee/Employeelist'
 import NewEmployee from './components/employee/NewEmployee'
 import EditEmployee from './components/employee/EditEmployee';
@@ -32,9 +28,15 @@ import Payroll from './components/payroll/Payroll';
 import Nh from './components/master/Nh';
 import LeaveRegister from './components/report/LeaveRegister';
 import BonusRegister from './components/report/BonusRegister';
+import Recalculate from './components/attendance/Recalculate';
+import SyncData from './components/employee/SyncData';
+import TaxSlave from './components/master/TaxSlave';
+import EditTaxSlave from './components/master/EditTaxSlave';
+import NewLeave from './components/leave/NewLeave';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-axios.defaults.baseURL = 'https://backend.leadingconstruction.co.in';
+// axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.baseURL = 'https://global.swirlapps.in';
 
 function App() {
  
@@ -59,6 +61,8 @@ function App() {
                     <Route path="/processattendance" element={<ProcessAttendance heading="Process Attendance" delete={false} />} />
                     <Route path="/adminprocessattendance" element={<ProcessAttendance heading="Process Attendance" delete={true} />} />
                     <Route path="/payrollparameter" element={<PayrollParameter />} />
+                    <Route path="/taxslave" element={<TaxSlave />} />
+                    <Route path="/taxslave/:id" element={<EditTaxSlave />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/manageuser" element={<UserManagement />} />
                     <Route path="/nh" element={<Nh />} />
@@ -66,13 +70,15 @@ function App() {
                     <Route path="/transferlog" element={<TransferLogs heading="Transfer Logs" />} />
                     <Route path="/selectemployee" element={<Employees />} />
                     <Route path="/payroll" element={<Payroll />} />
+                    <Route path="/recal" element={<Recalculate />} />
                     <Route path="/leave" element={<LeaveRegister />} />
                     <Route path="/bonus" element={<BonusRegister />} />
                     <Route path="/selectgang/:id" element={<GangTransfer />} />
                     <Route path="/createuser/:id" element={<CreateUser />} />
                     <Route path="/updateuser/:id" element={<UpdateUser />} />
                     <Route path="/rate/:id" element={<EmpRate heading="Update Rate" />} />
-                    
+                    <Route path="/sync" element={<SyncData />} />
+                    <Route path="/newleave" element={<NewLeave />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>

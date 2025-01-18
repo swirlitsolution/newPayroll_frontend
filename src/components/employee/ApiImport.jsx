@@ -3,18 +3,29 @@ import { useState, useCallback,useRef } from 'react'
 import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Check, FileSpreadsheet, FileSpreadsheetIcon, Upload, X } from "lucide-react"
 import usePost from '../../hooks/usePost'
+import axios from 'axios'
+import Cookies from 'universal-cookie'
+import { toast } from 'react-toastify'
 
-function ImportFile({heading,closeModel,newItem,filename, api}) {
+
+function ApiImport({heading,closeModel,newItem}) {
     const [sheetData, setSheetData] = useState([])
-    const [headers, setHeaders] = useState([])
+    const [headers, setHeaders] = useState([
+        ""
+    ])
+    const [fromapi,setFromApi] = useState("")
+    const [toapi,setToApi] = useState("")
+    const [empdata,setEmpData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [cError, setcError] = useState(null)
     const [submissionStatus, setSubmissionStatus] = useState({})
     const { data, error, loading,postRequest,putapiRequest } = usePost(api)
     const [isSending, setIsSending] = useState(false)
-   
+    const cookies = new Cookies()
+    const token = cookies.get('access')
     console.log("submition is ",submissionStatus)
     const excelDateToJSDate = (num) => {
         const utcDays = num - 25569; // Offset for Excel's epoch (Jan 1, 1900)
@@ -30,7 +41,30 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-
+    const getemplist = async ()=>{
+        try {
+            const response = await axios.get(fromapi,
+              {
+                  auth: {
+                  username: "global",
+                  password: "Kumar@123"
+                },
+                  withCredentials: false
+              }
+            );
+            console.log("get response",response)
+            if(response?.data){
+              console.log(response.data)
+              setEmpData(response.data)
+              toast.success("Synced successfully")
+            }
+          } catch (err) {
+            console.error(err)
+            
+          } finally {
+            console.log("fetched successed")
+          }
+    }
   const handleFileUpload = useCallback((e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -118,14 +152,14 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                     <X className="h-6 w-6" />
                     </button>
                 </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex items-center space-x-2">
-                        <Input
-                        type="file"
-                        accept=".xlsx, .xls"
-                        onChange={handleFileUpload}
-                        className="file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                        aria-label="Upload Excel file"
-                        />
+                        <Label>From api </Label>
+                        <Input type="text" id="fromapi" {...register("Branch")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Label>to api </Label>
+                        <Input type="text" id="toapi" {...register("Branch")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                    
+                      
                          {isSending ? (
                             <Button onClick={handleCancelClick} variant="destructive">
                                 <X className="mr-2 h-4 w-4" />
@@ -133,14 +167,14 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                             </Button>
                            
                             ) : (
-                                <Button onClick={handleImportClick} disabled={isLoading || sheetData.length === 0}>
+                                <Button type="submit" disabled={isLoading || sheetData.length === 0}>
                                 <Upload className="mr-2 h-4 w-4" />
                                 Import Excel
                             </Button>
                             )}
                      
                     </div>
-            
+            </form>
                     {isLoading && <p className="text-muted-foreground">Loading...</p>}
                     {cError && <p className="text-destructive">{Error}</p>}
             
@@ -184,7 +218,7 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                         <FileSpreadsheet className="mx-auto h-12 w-12 text-muted-foreground" />
                         <h3 className="mt-2 text-sm font-semibold text-muted-foreground">No Excel data</h3>
                         <p className="mt-1 text-sm text-muted-foreground">Upload an Excel file to see the data here</p>
-                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href={"https://global.swirlapps.in/media/" + filename}> click here</a> </p>
+                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href="https://global.swirlapps.in/media/sample_employee_master.xlsx"> click here</a> </p>
                         
                         
                         </div>
@@ -196,4 +230,4 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
       )
 }
 
-export default ImportFile
+export default ApiImport

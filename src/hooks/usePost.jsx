@@ -25,25 +25,28 @@ function usePost(url) {
           );
           console.log("post response",response)
           if(response.status === 201){
-          
+            toast.success(response.data.success)
             setData(response.data);
-      
-          return response
           }
           if(response.status === 202){
             toast.success(response.data.success)
             setData(response.data);
           }
+          if(response.status === 204){
+            toast.warning(`Nothing found ${payload?.attendance?.Aadhar?payload.attendance?.Aadhar:''}`)
+          }
           if(response.status === 226){
             toast.warning(response.data.exists)
           }
+          
           if(response.status===200){
             console.log(response.data)
-
+            toast.success("Process Successfully")
           setData(response.data);
       
-          return response
+          
           }
+          return response
         } catch (err) {
           console.error(err)
           if(err.response.status === 404){
@@ -187,16 +190,23 @@ function usePost(url) {
             }
           );
           console.log("get response",response)
+          if(response.status === 404){
+            toast.warning("Requested source not found !")
+          }
           if(response.status === 226){
             toast.warning(response.data.exists)
+          }
+          if(response.status===201){
+            toast.success(response.data.success)
           }
           if(response.status===200){
             console.log(response.data)
 
           setData(response.data);
       
-          return response
+         
           }
+          return response
         } catch (err) {
           console.error(err)
           if(err.response.status === 404){

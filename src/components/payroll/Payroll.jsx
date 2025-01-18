@@ -6,12 +6,14 @@ import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
 import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast } from 'react-toastify';
+import useFlattendObject from '../../hooks/useFlattendObject';
 
 
-const payrollcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
+export const payrollcolumns = [
+    {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
+    {field:'employeeData_Name',headerName:'Name'},
+    {field:'employeeData_SiteDetails_name',headerName:'Site'},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>{
         return (
             <tr>
@@ -66,9 +68,8 @@ const payrollcolumns = [
 ]
 
 const slipcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
+    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
     {field:'basic',headerName:'Basic'},
     {field:'da',headerName:'DA'},
@@ -77,107 +78,119 @@ const slipcolumns = [
     {field:'deduction',headerName:'Deduction'},
     {field:'mrpnetamt',headerName:'Net Amt'},
     {field:'view',headerName:'View',renderCell:(params)=>{
-        return <a href={'http://backend.leadingconstruction.co.in/slip/'+params.id+'/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
+        return <a href={'https://global.swirlapps.in/slip/'+params.id+'/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
     }},
     {field:'download',headerName:'Download',renderCell:(params)=>{
-        return <a href={'http://backend.leadingconstruction.co.in/downloadslip/'+params.id+'/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
+        return <a href={'https://global.swirlapps.in/downloadslip/'+params.id+'/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
     }},
    
 ]
+
 
 
 
 const summarycolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
-    {field:'rate',headerName:'Rate',renderCell:(params)=>params.arate},
-    {field:'aamt',headerName:'Actual Amt'},
-    {field:'hraamt',headerName:'HRA'},
-    {field:'madical',headerName:'Medical'},
-    {field:'exgratiaretention',headerName:'ExGratia Retention'},
-    {field:'lta',headerName:'LTA'},
-    {field:'foodingamt',headerName:'Fooding'},
-    {field:'caamt',headerName:'CA'},
-    {field:'miscamt',headerName:'MISc'},
-    {field:'cea',headerName:'CEA'},
-    {field:'washingallowance',headerName:'Washing'},
-    {field:'professinalpursuites',headerName:'PRF Pursuits'},
-    {field:'incometax',headerName:'Income Tax'},
-    {field:'personalpay',headerName:'Personal Pay'},
-    {field:'petrol',headerName:'Petrol'},
-    {field:'mobile',headerName:'Mobile'},
-    {field:'incentive',headerName:'Incentive'},
-    {field:'fixedamt',headerName:'Fixed Amt'},
-    {field:'othr',headerName:'OT Hrs'},
-    {field:'otherotamt',headerName:'OT Amt'},
-    {field:'fixedamt',headerName:'Fixed Amt'},
-    {field:'pf',headerName:'PF'},
-    {field:'esic',headerName:'ESIC'},
-    {field:'fixedamt',headerName:'Fixed Amt'},
-    {field:'advance',headerName:'Advance'},
-    {field:'mrpgross',headerName:'MRP'},
-    {field:'balance',headerName:'Net Amt'},
-   
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'day', headerName: 'Worked', width: '90px', renderCell: (params) => params.tpayable },
+    { field: 'rate', headerName: 'Rate', renderCell: (params) => params.arate },
+    { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
+    { field: 'hraamt', headerName: 'HRA' },
+    { field: 'madical', headerName: 'Medical' },
+    { field: 'exgratiaretention', headerName: 'ExGratia Retention' },
+    { field: 'lta', headerName: 'LTA' },
+    { field: 'foodingamt', headerName: 'Fooding' },
+    { field: 'caamt', headerName: 'CA' },
+    { field: 'miscamt', headerName: 'MISc' },
+    { field: 'cea', headerName: 'CEA' },
+    { field: 'washingallowance', headerName: 'Washing' },
+    { field: 'professinalpursuites', headerName: 'PRF Pursuits' },
+    { field: 'incometax', headerName: 'Income Tax' },
+    { field: 'personalpay', headerName: 'Personal Pay' },
+    { field: 'petrol', headerName: 'Petrol' },
+    { field: 'mobile', headerName: 'Mobile' },
+    { field: 'incentive', headerName: 'Incentive' },
+    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'othr', headerName: 'OT Hrs' },
+    { field: 'otherotamt', headerName: 'OT Amt' },
+    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'pf', headerName: 'PF' },
+    { field: 'esic', headerName: 'ESIC' },
+    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'advance', headerName: 'Advance' },
+    { field: 'mrpgross', headerName: 'MRP' },
+    { field: 'balance', headerName: 'Net Amt' },
+
 ]
 const pfcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Uan',headerName:'UAN',renderCell:(params)=>params.employeeData.Uan},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'EPF Wages'},
-    {field:'basic',headerName:'EPF Wages'},
-    {field:'eps',headerName:'EPS Wages',renderCell:(params)=>params.basic},
-    {field:'pfaplamt',headerName:'EDLI Wages'},
-    {field:'pf',headerName:'PF'},
-    {field:'epf',headerName:'EPF Amt',renderCell:(params)=>(params.pfaplamt * 0.0833)},
-    {field:'ppf',headerName:'PPF Amt',renderCell:(params)=>(params.pf - (params.pfaplamt * 0.0833))},
-    {field:'ncp',headerName:'NCP Day',renderCell:(params)=>(params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl)},
+    { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
+    { field: 'employeeData_Uan', headerName: 'UAN' },
+    { field: 'employeeData_Name', headerName: 'Name' },
+    { field: 'mrpgross', headerName: 'EPF Wages' },
+    { field: 'basic', headerName: 'EPF Wages' },
+    { field: 'eps', headerName: 'EPS Wages', renderCell: (params) => params.basic },
+    { field: 'pfaplamt', headerName: 'EDLI Wages' },
+    { field: 'pf', headerName: 'PF' },
+    {
+        field: 'epf', headerName: 'EPF Amt', renderCell: (params) => {
+            const value = Number(params.pfaplamt) * 0.0833; // Ensure pfaplamt is a number
+            return value.toFixed(2); // Format the result to 2 decimal places
+        }
+    },
+    {
+        field: 'ppf', headerName: 'PPF Amt', renderCell: (params) => {
+            const value = Number(params.pf) - (Number(params.pfaplamt) * 0.0833);
+            return isNaN(value) ? '0.00' : value.toFixed(2); // Fallback to '0.00' if the value is invalid
+        }
+    },
+    { field: 'ncp', headerName: 'NCP Day', renderCell: (params) => (params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl) },
 ]
 const esiccolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'esic',headerName:'ESIC',renderCell:(params)=>params.employeeData.Esic},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'ESIC_Cont_Amt'},
-    {field:'esic',headerName:'ESIC Amt'},
-    
+    { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
+    { field: 'employeeData_Esic', headerName: 'ESIC'},
+    { field: 'employeeData_Name', headerName: 'Name' },
+    { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
+    { field: 'esic', headerName: 'ESIC Amt' },
+
 ]
 const bankcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'Bank',renderCell:(params)=>params.employeeData.Bank},
-    {field:'ifsc',headerName:'IFSC',renderCell:(params)=>params.employeeData.Ifsc},
-    {field:'ac',headerName:'Ac/No',renderCell:(params)=>params.employeeData.Ac},
-    {field:'mrpnetamt',headerName:'Net Amt'},
-    
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
+    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
+    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
+    { field: 'mrpnetamt', headerName: 'Net Amt' },
+
 ]
 const sumBankcolumns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData.EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData.Name},
-    {field:'mrpgross',headerName:'Bank',renderCell:(params)=>params.employeeData.Bank},
-    {field:'ifsc',headerName:'IFSC',renderCell:(params)=>params.employeeData.Ifsc},
-    {field:'ac',headerName:'Ac/No',renderCell:(params)=>params.employeeData.Ac},
-    {field:'balance',headerName:'Net Amt'},
-    
+    { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
+    { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
+    { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
+    { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
+    { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
+    { field: 'balance', headerName: 'Net Amt' },
+
 ]
 function Payroll() {
     const {control,register,setValue, handleSubmit,reset, watch, formState: { errors } } = useForm()
     const { data, error, loading,getRequest } = usePost('')
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
+    const [rowdata,setRowdata] = useState(null)
+    const { flattenObject } = useFlattendObject()
     const onSubmit = (data)=>{
         console.log(data)
         console.log("attendance data",data)
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
-        
-        getRequest(`/getattendancereport/${month}/${year}/`)
-        
+        if(data.Site && data.month !== ""){
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
+
+        }
+        else{
+            toast.warning("Select the site and month")
+        }
         // postRequest(data)
     }
     const getNhDays = (site)=>{
@@ -198,6 +211,9 @@ function Payroll() {
         console.log("get request",data)
         if(data?.attendance){
             setDownload(true)
+            const row = data?.attendance.map(item=>flattenObject(item))
+            setRowdata(row)
+            console.log("row data is ",rowdata)
         }
     },[data])
   return (
@@ -206,7 +222,7 @@ function Payroll() {
   
         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
-                <Label>Applicable NH </Label><span className='rounded-md bg-slate-300 px-4 py-2'>{nh}</span>
+                {/* <Label>Applicable NH </Label><span className='rounded-md bg-slate-300 px-4 py-2'>{nh}</span> */}
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here
@@ -217,9 +233,9 @@ function Payroll() {
                             <Master
                             api = "/master/site/"
                             onValueChange={(newValue) => {onChange(newValue || null)
-                            getNhDays(newValue)
+                   
                             }} 
-                            value={value} name='site' />
+                            value={value} name='Site' />
                         );
                         }}
                     />
@@ -231,8 +247,8 @@ function Payroll() {
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
-                            <a href={'http://backend.leadingconstruction.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
-                            <a href={'http://backend.leadingconstruction.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
+                            <a href={'https://global.swirlapps.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
+                            <a href={'https://global.swirlapps.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
 
                         </div>
                
@@ -254,10 +270,10 @@ function Payroll() {
                 <TabsTrigger value="esic">ESIC</TabsTrigger>
             </TabsList>
             <TabsContent value="payroll">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll"
               columns={payrollcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -266,22 +282,21 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="summary">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll"
               columns={summarycolumns} 
-              row={data?.attendance} 
-      
-             
+              row={rowdata} 
+              isPayrollSummary={true}     
 
               />):(
                 <div>No data available</div>
               )}
             </TabsContent>
             <TabsContent value="slip">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll slip"
               columns={slipcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -290,10 +305,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="p_statement">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll Bank Statement"
               columns={bankcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -302,10 +317,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="s_statement">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Summary Bank Statement"
               columns={sumBankcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -314,10 +329,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="pf">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="PF Report"
               columns={pfcolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 
@@ -326,10 +341,10 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="esic">
-            {loading?"Loading......": data?.attendance?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="ESIC Report"
               columns={esiccolumns} 
-              row={data?.attendance} 
+              row={rowdata} 
       
              
 

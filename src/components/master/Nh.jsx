@@ -8,7 +8,6 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input';
 
 const columns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
     {field:'site',headerName:'Site',renderCell:(params)=>params.siteinfo.name},
     {field:'day',headerName:'Days'},
     ] 

@@ -4,18 +4,25 @@ import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, FileSpreadsheet, FileSpreadsheetIcon, Upload, X } from "lucide-react"
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 import usePost from '../../hooks/usePost'
 
-function ImportFile({heading,closeModel,newItem,filename, api}) {
+function ImportAttendance({heading,closeModel,newItem, api}) {
     const [sheetData, setSheetData] = useState([])
     const [headers, setHeaders] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [attanDate,setAttanDate] = useState(null)
     const [cError, setcError] = useState(null)
     const [submissionStatus, setSubmissionStatus] = useState({})
-    const { data, error, loading,postRequest,putapiRequest } = usePost(api)
+    const { data, error, loading,postRequest } = usePost(api)
     const [isSending, setIsSending] = useState(false)
-   
-    console.log("submition is ",submissionStatus)
+    const [selectedType,setSelectedType] = useState('att')
+
     const excelDateToJSDate = (num) => {
         const utcDays = num - 25569; // Offset for Excel's epoch (Jan 1, 1900)
         const utcValue = utcDays * 86400; // Convert days to seconds
@@ -47,16 +54,10 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
         const wsname = wb.SheetNames[0]
         const ws = wb.Sheets[wsname]
         const data = XLSX.utils.sheet_to_json(ws, {raw:false,dateNF:'yyyy-mm-dd'})
-        const updatedData = data.map(row => {
        
-            
-            row['Dob'] = excelDateToJSDate(row['Dob']); // Format to yyyy-mm-dd
-            row['Doj'] = excelDateToJSDate(row['Doj']);
-            return row;
-        });
-        console.log("excel data is ",updatedData)
-        setSheetData(updatedData)
-        if (updatedData.length > 0) {
+        console.log("excel data is ",data)
+        setSheetData(data)
+        if (data.length > 0) {
           setHeaders(Object.keys(data[0]))
         }
         setIsLoading(false)
@@ -71,17 +72,13 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
     }
     reader.readAsArrayBuffer(file)
   }, [])
-  const sendRowToAPI = async (row) => {
-    // Replace this with your actual API endpoint
-    
-   postRequest(row)
-  }
+
 
   const handleImportClick = async () => {
     setIsSending(true)
     for (let i = 0; i < sheetData.length; i++) {
-        const row = sheetData[i]
-        var res =  await postRequest(row)
+        const attendance = sheetData[i]
+        var res =  await postRequest({attanDate,attendance,selectedType})
             console.log(" data is ",res)
             if (res.status === 400) {
                 setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: false }));
@@ -90,6 +87,13 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                
             } else if (res.status === 200) {
                 setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: true }));
+            }
+            else if(res.status === 204){
+                setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: false }));
+
+            }
+            else if (res.status === 501){
+                setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: false })); 
             }
             else if (res.status === 201){
                 setSubmissionStatus(prevStatus => ({ ...prevStatus, [i]: true })); 
@@ -119,13 +123,34 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                     </button>
                 </div>
                     <div className="flex items-center space-x-2">
-                        <Input
+                    <Input
+                        type="month" 
+                        className='bg-white w-48' 
+                        onChange={(e)=>setAttanDate(e.target.value)} />
+                    <FormControl >
+                      
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            className=' w-96 items-center justify-around'
+                            value={selectedType}  // Step 3: Bind the value to the state
+                            onChange={(e)=>setSelectedType(e.target.value)}  // Step 4: Add the onChange handler
+                        >
+                          <FormLabel id="demo-row-radio-buttons-group-label">Type</FormLabel>
+                            <FormControlLabel value="att" control={<Radio />} label="Attendance" />
+                            <FormControlLabel value="ot" control={<Radio />} label="OT" />
+                          
+                        </RadioGroup>
+                    </FormControl>
+                    <Input
                         type="file"
                         accept=".xlsx, .xls"
                         onChange={handleFileUpload}
-                        className="file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        className=" w-96 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                         aria-label="Upload Excel file"
                         />
+                        
                          {isSending ? (
                             <Button onClick={handleCancelClick} variant="destructive">
                                 <X className="mr-2 h-4 w-4" />
@@ -184,7 +209,7 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                         <FileSpreadsheet className="mx-auto h-12 w-12 text-muted-foreground" />
                         <h3 className="mt-2 text-sm font-semibold text-muted-foreground">No Excel data</h3>
                         <p className="mt-1 text-sm text-muted-foreground">Upload an Excel file to see the data here</p>
-                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href={"https://global.swirlapps.in/media/" + filename}> click here</a> </p>
+                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href="https://global.swirlapps.in/media/attendance.xlsx"> click here</a> </p>
                         
                         
                         </div>
@@ -196,4 +221,4 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
       )
 }
 
-export default ImportFile
+export default ImportAttendance
