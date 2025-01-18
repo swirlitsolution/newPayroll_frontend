@@ -33,9 +33,10 @@ import SyncData from './components/employee/SyncData';
 import TaxSlave from './components/master/TaxSlave';
 import EditTaxSlave from './components/master/EditTaxSlave';
 import NewLeave from './components/leave/NewLeave';
+import Advance from './components/advance/Advance';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-axios.defaults.baseURL = 'https://global.swirlapps.in';
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
 
 function App() {
  
@@ -78,6 +79,7 @@ function App() {
                     <Route path="/rate/:id" element={<EmpRate heading="Update Rate" />} />
                     <Route path="/sync" element={<SyncData />} />
                     <Route path="/newleave" element={<NewLeave />} />
+                    <Route path="/advance" element={<Advance />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>

@@ -41,7 +41,7 @@ function usePost(url) {
           
           if(response.status===200){
             console.log(response.data)
-            toast.success("Process Successfully")
+            toast.success("Processed Successfully")
           setData(response.data);
       
           

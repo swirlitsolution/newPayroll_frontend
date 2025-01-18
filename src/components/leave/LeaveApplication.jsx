@@ -14,7 +14,6 @@ import {
 import CustomCalendar from '../custom/CustomCalendar';
 import { Button } from '../ui/button';
 import usePost from '../../hooks/usePost';
-import { Input } from '../ui/input';
 import { Autocomplete, TextField } from '@mui/material';
 
   
@@ -107,7 +106,7 @@ function LeaveApplication({user,onClose}) {
                                             <SelectValue placeholder="Leave Type" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="EL">Emergency Leave</SelectItem>
+                                            <SelectItem value="EL">Earned Leave</SelectItem>
                                             <SelectItem value="CL">Casual Leave</SelectItem>
                                             <SelectItem value="FL">Festival Leave</SelectItem>
                                         </SelectContent>
