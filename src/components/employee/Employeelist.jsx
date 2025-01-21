@@ -198,96 +198,169 @@ function Employeelist() {
     navigate(`/employee/${params.id}`, { id: params.id });
   };
 
-  const handlePaginationModelChange = (model) => {
-    setPaginationModel(model);
+  // const handlePaginationModelChange = (model) => {
+  //   setPaginationModel(model);
 
-    // Calculate the current page data
-    const startIndex = model.page * model.pageSize;
-    const endIndex = startIndex + model.pageSize;
-    const currentPageData = rows.slice(startIndex, endIndex);
+  //   // Calculate the current page data
+  //   const startIndex = model.page * model.pageSize;
+  //   const endIndex = startIndex + model.pageSize;
+  //   const currentPageData = rows.slice(startIndex, endIndex);
 
-    console.log("Current Page Data:", currentPageData);
-  };
+  //   console.log("Current Page Data:", currentPageData);
+  // };
+
+
+  // const generatePDF = () => {
+  //   // Initialize jsPDF with landscape orientation
+  //   const doc = new jsPDF("landscape");
+
+  //   // Get the visible columns
+  //   const visibleColumns = columns.filter(
+  //     (col) => columnVisibilityModel[col.field] !== false
+  //   );
+
+  //   // Prepare headers and rows
+  //   const headers = visibleColumns.map((col) => col.headerName);
+  //   const dataRows = rows.map((row) =>
+  //     visibleColumns.map((col) => row[col.field] || "")
+  //   );
+
+  //   // Add title
+  //   doc.text("Employee List", 14, 10);
+
+  //   // Calculate dynamic column widths
+  //   const columnStyles = {};
+  //   visibleColumns.forEach((col, index) => {
+  //     columnStyles[index] = { cellWidth: 'auto' }; // Automatically adjust the width
+  //   });
+
+  //   // Add the table
+  //   doc.autoTable({
+  //     startY: 25,
+  //     head: [headers],
+  //     body: dataRows,
+  //     styles: {
+  //       fontSize: 8, // Font size for table content
+  //       cellPadding: 3, // Padding for cells
+  //     },
+  //     headStyles: {
+  //       fillColor: [22, 160, 133], // Custom header color
+  //       fontSize: 8,
+  //       halign: "center", // Center align header text
+  //     },
+  //     columnStyles, // Dynamic column width
+  //     theme: "grid", // Table theme
+  //     bodyStyles: {
+  //       halign: "left", // Align text in data cells
+  //     },
+  //     tableWidth: "auto", // Automatically adjust table width
+  //   });
+
+  //   // Save the PDF
+  //   doc.save("EmployeeList.pdf");
+  // };
+
+  // const generateExcel = () => {
+  //   // Get the visible columns
+  //   const visibleColumns = columns.filter(
+  //     (col) => columnVisibilityModel[col.field] !== false
+  //   );
+
+  //   // Prepare headers and rows
+  //   const headers = visibleColumns.map((col) => col.headerName);
+  //   const dataRows = rows.map((row) =>
+  //     visibleColumns.map((col) => row[col.field] || "")
+  //   );
+
+  //   // Create a worksheet from data
+  //   const ws = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
+
+  //   // Create a workbook
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Employee List");
+
+  //   // Set custom styles (this is optional, Excel styling capabilities are limited in comparison to PDF)
+  //   const wscols = visibleColumns.map(() => ({ wpx: 100 })); // Set default column width
+
+  //   ws["!cols"] = wscols; // Apply column width
+  //   ws["!rows"] = dataRows.length; // Set the number of rows
+
+  //   // Export to Excel (download the file)
+  //   XLSX.writeFile(wb, "EmployeeList.xlsx");
+  // };
 
 
   const generatePDF = () => {
-    // Initialize jsPDF with landscape orientation
-    const doc = new jsPDF("landscape");
-
-    // Get the visible columns
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
-
-    // Prepare headers and rows
+  
     const headers = visibleColumns.map((col) => col.headerName);
-    const dataRows = rows.map((row) =>
+  
+    // Filter rows based on pagination
+    const startIndex = paginationModel.page * paginationModel.pageSize;
+    const endIndex = startIndex + paginationModel.pageSize;
+    const currentPageRows = rows.slice(startIndex, endIndex);
+  
+    const dataRows = currentPageRows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
-
-    // Add title
+  
+    const doc = new jsPDF("landscape");
     doc.text("Employee List", 14, 10);
-
-    // Calculate dynamic column widths
+  
     const columnStyles = {};
     visibleColumns.forEach((col, index) => {
-      columnStyles[index] = { cellWidth: 'auto' }; // Automatically adjust the width
+      columnStyles[index] = { cellWidth: "auto" };
     });
-
-    // Add the table
+  
     doc.autoTable({
       startY: 25,
       head: [headers],
       body: dataRows,
       styles: {
-        fontSize: 8, // Font size for table content
-        cellPadding: 3, // Padding for cells
+        fontSize: 8,
+        cellPadding: 3,
       },
       headStyles: {
-        fillColor: [22, 160, 133], // Custom header color
+        fillColor: [22, 160, 133],
         fontSize: 8,
-        halign: "center", // Center align header text
+        halign: "center",
       },
-      columnStyles, // Dynamic column width
-      theme: "grid", // Table theme
+      columnStyles,
+      theme: "grid",
       bodyStyles: {
-        halign: "left", // Align text in data cells
+        halign: "left",
       },
-      tableWidth: "auto", // Automatically adjust table width
+      tableWidth: "auto",
     });
-
-    // Save the PDF
-    doc.save("EmployeeList.pdf");
+  
+    doc.save(`EmployeeList_Page_${paginationModel.page + 1}.pdf`);
   };
-
+  
   const generateExcel = () => {
-    // Get the visible columns
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
-
-    // Prepare headers and rows
+  
     const headers = visibleColumns.map((col) => col.headerName);
-    const dataRows = rows.map((row) =>
+  
+    // Filter rows based on pagination
+    const startIndex = paginationModel.page * paginationModel.pageSize;
+    const endIndex = startIndex + paginationModel.pageSize;
+    const currentPageRows = rows.slice(startIndex, endIndex);
+  
+    const dataRows = currentPageRows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
-
-    // Create a worksheet from data
+  
     const ws = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
-
-    // Create a workbook
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Employee List");
-
-    // Set custom styles (this is optional, Excel styling capabilities are limited in comparison to PDF)
-    const wscols = visibleColumns.map(() => ({ wpx: 100 })); // Set default column width
-
-    ws["!cols"] = wscols; // Apply column width
-    ws["!rows"] = dataRows.length; // Set the number of rows
-
-    // Export to Excel (download the file)
-    XLSX.writeFile(wb, "EmployeeList.xlsx");
+  
+    XLSX.writeFile(wb, `EmployeeList_Page_${paginationModel.page + 1}.xlsx`);
   };
+  
 
   const CustomToolbar = () => {
     return (
@@ -387,7 +460,7 @@ function Employeelist() {
             columnVisibilityModel={columnVisibilityModel}
             paginationModel={paginationModel}
             onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
-            pageSizeOptions={[5, 10, 50]}
+            pageSizeOptions={[5, 10, 50, 100]}
             slots={{
               toolbar: CustomToolbar,
             }}
