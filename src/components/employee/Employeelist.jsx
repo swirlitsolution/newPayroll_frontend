@@ -297,11 +297,11 @@ function Employeelist() {
     const headers = visibleColumns.map((col) => col.headerName);
   
     // Filter rows based on pagination
-    const startIndex = paginationModel.page * paginationModel.pageSize;
-    const endIndex = startIndex + paginationModel.pageSize;
-    const currentPageRows = rows.slice(startIndex, endIndex);
+    // const startIndex = paginationModel.page * paginationModel.pageSize;
+    // const endIndex = startIndex + paginationModel.pageSize;
+    // const currentPageRows = rows.slice(startIndex, endIndex);
   
-    const dataRows = currentPageRows.map((row) =>
+    const dataRows = rows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
   
