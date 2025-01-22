@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, useGridApiContext, gridExpandedSortedRowIdsSelector } from '@mui/x-data-grid';
 import { Plus, Upload, Download } from "lucide-react";
 import {
   Menubar,
@@ -7,7 +7,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useRequest from "../../hooks/useRequest";
 import ImportFile from "./ImportFile";
@@ -164,7 +164,6 @@ function Employeelist() {
   })
 
 
-  console.log("rows", rows)
   const flattenObject = (obj, parentKey = '') => {
     let result = {};
 
@@ -187,15 +186,15 @@ function Employeelist() {
     if (data?.length > 0) {
       const filteredRows = data.map((row) => flattenObject(row));
       setRows(filteredRows);
-      console.log("filteredRows, ", filteredRows)
     }
   }, [data]);
 
-  const ids = rows?.map((row) => row?.id);
-  console.log(ids)
 
   const handleRowClicked = (params) => {
+    if(params.field == "Name"){
     navigate(`/employee/${params.id}`, { id: params.id });
+    }
+    
   };
 
   // const handlePaginationModelChange = (model) => {
@@ -337,8 +336,10 @@ function Employeelist() {
   
     doc.save(`EmployeeList_Page_${paginationModel.page + 1}.pdf`);
   };
+
   
   const generateExcel = () => {
+  
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
@@ -346,11 +347,10 @@ function Employeelist() {
     const headers = visibleColumns.map((col) => col.headerName);
   
     // Filter rows based on pagination
-    const startIndex = paginationModel.page * paginationModel.pageSize;
-    const endIndex = startIndex + paginationModel.pageSize;
-    const currentPageRows = rows.slice(startIndex, endIndex);
-  
-    const dataRows = currentPageRows.map((row) =>
+    // const startIndex = paginationModel.page * paginationModel.pageSize;
+    // const endIndex = startIndex + paginationModel.pageSize;
+
+    const dataRows = rows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
   
@@ -360,9 +360,9 @@ function Employeelist() {
   
     XLSX.writeFile(wb, `EmployeeList_Page_${paginationModel.page + 1}.xlsx`);
   };
-  
 
   const CustomToolbar = () => {
+   
     return (
       <div style={{ display: 'flex', alignItems: 'center', padding: '8px' }}>
         <GridToolbarColumnsButton />
@@ -457,15 +457,12 @@ function Employeelist() {
           <DataGrid
             rows={rows}
             columns={columns}
+            checkboxSelection={true}
             columnVisibilityModel={columnVisibilityModel}
-            paginationModel={paginationModel}
-            onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
-            pageSizeOptions={[5, 10, 50, 100]}
             slots={{
               toolbar: CustomToolbar,
             }}
-            disableSelectionOnClick
-            onRowClick={handleRowClicked}
+            onCellClick={handleRowClicked}
             onColumnVisibilityModelChange={(newModel) =>
               setColumnVisibilityModel(newModel)
             }
