@@ -32,12 +32,67 @@ function LeaveApplication({user,onClose}) {
            
         postRequest(formdata)
     }
-
+  
+    const getBalanceLeave = (data)=>{
+        var bel = 0
+        var bcl = 0
+        var bfl = 0
+        try{
+            var worked = data?.worked
+            var eltaken = data?.eltaken
+            var cltaken = data?.cltaken
+            var fltaken = data?.fltaken
+            var eel = worked/20
+            var ecl = worked/35
+            var efl = worked/60
+            if(eel>=1){
+                eel = Math.ceil(eel)
+            }
+               
+            else{
+                eel = 0
+            }
+                
+            if(ecl>=1){
+                ecl = Math.ceil(ecl)
+            }
+            else{
+                ecl = 0
+            } 
+            if(efl>=1){
+                efl = Math.ceil(efl)
+            }  
+            else{
+                efl = 0
+            }  
+            if(eel>15){
+                eel = 15
+            }   
+            if(ecl>7){
+                ecl = 7
+            }
+            if(efl>4){
+                efl = 4
+            }
+            bel = eel - eltaken
+            bcl = ecl - cltaken
+            bfl = efl - fltaken
+            console.log("bel",bel,"bcl",bcl,"bfl",bfl)
+            return {bel,bcl,bfl}
+        }
+        catch{
+            console.log("bel",bel,"bcl",bcl,"bfl",bfl)
+            return {bel,bcl,bfl}
+        }
+            
+    }
     useEffect(()=>{
         if(user?.is_superuser){
            const emp = getRequest("/master/employee/")
             emp.then((res)=>{
                 setEmployee(res.data)
+                // get total working day taken leave to display total earned leave and balance leave
+                const response =  getRequest(`/gettotalworkingday/${empid}/${attanDate}/`) 
             })
         }
     },[user])
