@@ -35,6 +35,8 @@ function EmpRate(props) {
         setValue('LTA',rate?.LTA)
         setValue('CA',rate?.CA)
         setValue('CEA',rate?.CEA)
+        setValue('Fooding',rate?.Fooding)
+        setValue('Misc',rate?.Misc)
         setValue('WashingAllowance',rate?.WashingAllowance)
         setValue('ProfessionalPursuits',rate?.ProfessionalPursuits)
         setValue('SpecialAllowance',rate?.SpecialAllowance)
