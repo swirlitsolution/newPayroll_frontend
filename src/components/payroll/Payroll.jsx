@@ -120,8 +120,8 @@ const summarycolumns = [
     { field: 'advance', headerName: 'Advance' },
     { field: 'mrpgross', headerName: 'MRP' },
     { field: 'balance', headerName: 'Net Amt' },
-
 ]
+
 const pfcolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Uan', headerName: 'UAN' },
