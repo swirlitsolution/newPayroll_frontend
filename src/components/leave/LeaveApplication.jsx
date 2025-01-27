@@ -35,7 +35,7 @@ function LeaveApplication({user,onClose}) {
               
             };
            
-        // postRequest(formdata)
+        postRequest(formdata)
     }
 
     const getBalanceLeave = (data)=>{
