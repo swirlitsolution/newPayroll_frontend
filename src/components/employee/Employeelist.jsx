@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, useGridApiContext, gridExpandedSortedRowIdsSelector } from '@mui/x-data-grid';
 import { Plus, Upload, Download } from "lucide-react";
 import {
   Menubar,
@@ -7,7 +7,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useRequest from "../../hooks/useRequest";
 import ImportFile from "./ImportFile";
@@ -164,7 +164,6 @@ function Employeelist() {
   })
 
 
-  console.log("rows", rows)
   const flattenObject = (obj, parentKey = '') => {
     let result = {};
 
@@ -190,18 +189,23 @@ function Employeelist() {
         id: row.EmpId || index,
       }));
       setRows(filteredRows);
-      console.log("filteredRows, ", filteredRows)
     }
   }, [data]);
 
+<<<<<<< HEAD
   const allData = data?.length;
   console.log("allData", allData)
 
   const ids = rows?.map((row) => row?.id);
   console.log(ids)
+=======
+>>>>>>> af341abd3e3e5ab111ae8aa2b5d6b35a367e1a55
 
   const handleRowClicked = (params) => {
+    if(params.field == "Name"){
     navigate(`/employee/${params.id}`, { id: params.id });
+    }
+    
   };
 
   // const generatePDF = () => {
@@ -292,11 +296,19 @@ function Employeelist() {
     const headers = visibleColumns.map((col) => col.headerName);
 
     // Filter rows based on pagination
+<<<<<<< HEAD
     const startIndex = paginationModel.page * paginationModel.pageSize;
     const endIndex = startIndex + paginationModel.pageSize;
     const currentPageRows = rows.slice(startIndex, endIndex);
 
     const dataRows = currentPageRows.map((row) =>
+=======
+    // const startIndex = paginationModel.page * paginationModel.pageSize;
+    // const endIndex = startIndex + paginationModel.pageSize;
+    // const currentPageRows = rows.slice(startIndex, endIndex);
+  
+    const dataRows = rows.map((row) =>
+>>>>>>> af341abd3e3e5ab111ae8aa2b5d6b35a367e1a55
       visibleColumns.map((col) => row[col.field] || "")
     );
 
@@ -332,7 +344,12 @@ function Employeelist() {
     doc.save(`EmployeeList_Page_${paginationModel.page + 1}.pdf`);
   };
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> af341abd3e3e5ab111ae8aa2b5d6b35a367e1a55
   const generateExcel = () => {
+  
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
@@ -340,11 +357,18 @@ function Employeelist() {
     const headers = visibleColumns.map((col) => col.headerName);
 
     // Filter rows based on pagination
+<<<<<<< HEAD
     const startIndex = paginationModel.page * paginationModel.pageSize;
     const endIndex = startIndex + paginationModel.pageSize;
     const currentPageRows = rows.slice(startIndex, endIndex);
 
     const dataRows = currentPageRows.map((row) =>
+=======
+    // const startIndex = paginationModel.page * paginationModel.pageSize;
+    // const endIndex = startIndex + paginationModel.pageSize;
+
+    const dataRows = rows.map((row) =>
+>>>>>>> af341abd3e3e5ab111ae8aa2b5d6b35a367e1a55
       visibleColumns.map((col) => row[col.field] || "")
     );
 
@@ -354,9 +378,13 @@ function Employeelist() {
 
     XLSX.writeFile(wb, `EmployeeList_Page_${paginationModel.page + 1}.xlsx`);
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> af341abd3e3e5ab111ae8aa2b5d6b35a367e1a55
 
   const CustomToolbar = () => {
+   
     return (
       <div style={{ display: 'flex', alignItems: 'center', padding: '8px' }}>
         <GridToolbarColumnsButton />
@@ -451,15 +479,18 @@ function Employeelist() {
           <DataGrid
             rows={rows}
             columns={columns}
+            checkboxSelection={true}
             columnVisibilityModel={columnVisibilityModel}
+<<<<<<< HEAD
             paginationModel={paginationModel}
             onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
             pageSizeOptions={[5, 10, 20, 50, 100, allData]}
+=======
+>>>>>>> af341abd3e3e5ab111ae8aa2b5d6b35a367e1a55
             slots={{
               toolbar: CustomToolbar,
             }}
-            disableSelectionOnClick
-            onRowClick={handleRowClicked}
+            onCellClick={handleRowClicked}
             onColumnVisibilityModelChange={(newModel) =>
               setColumnVisibilityModel(newModel)
             }

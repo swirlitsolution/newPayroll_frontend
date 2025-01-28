@@ -12,10 +12,10 @@ const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px'},
     {field:'Name',headerName:'Name'},
     {field:'Father',headerName:'Father'},
-    {field:'Site',headerName:'Site',renderCell:(params)=>params.SiteDetails.name},
-    {field:'Department',headerName:'Department',renderCell:(params)=>params.DepartmentDetails.name},
-    {field:'Designation',headerName:'Designation',renderCell:(params)=>params.DesignationDetails.name},
-    {field:'Gang',headerName:'Gang',renderCell:(params)=>params.GangDetails.name},
+    {field:'Site',headerName:'Site',renderCell:(params)=>params?.SiteDetails?.name},
+    {field:'Department',headerName:'Department',renderCell:(params)=>params?.DepartmentDetails?.name},
+    {field:'Designation',headerName:'Designation',renderCell:(params)=>params?.DesignationDetails?.name},
+    {field:'Gang',headerName:'Gang',renderCell:(params)=>params?.GangDetails?.name},
     {field:'Email',headerName:'Email'},
    ] 
 
@@ -41,10 +41,10 @@ function EmployeeTransfer() {
     <div className='flex flex-col gap-2 p-1'>
       
      
-        {loading?"Loading......": data?.results?.length?(<DataGrid 
+        {loading?"Loading......": data?.length?(<DataGrid 
               heading="Employees"
               columns={columns} 
-              row={data?.results} 
+              row={data} 
       
               rowClicked={handleRowClicked}
               Increament={pageState}

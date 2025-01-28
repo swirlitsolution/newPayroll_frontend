@@ -3,14 +3,13 @@ import DataGrid from '../custom/DataGrid'
 import useRequest from '../../hooks/useRequest'
 import { useNavigate } from 'react-router-dom'
 const columns = [
-    {field:'id',headerName:'TrnId',width:'80px'},
     {field:'EmpId',headerName:'EmpId',width:'80px'},
     {field:'Name',headerName:'Name'},
     {field:'Father',headerName:'Father'},
-    {field:'Site',headerName:'Site',renderCell:(params)=>params.SiteDetails.name},
-    {field:'Department',headerName:'Department',renderCell:(params)=>params.DepartmentDetails.name},
-    {field:'Designation',headerName:'Designation',renderCell:(params)=>params.DesignationDetails.name},
-    {field:'Gang',headerName:'Gang',renderCell:(params)=>params.GangDetails.name},
+    {field:'Site',headerName:'Site',renderCell:(params)=>params?.SiteDetails?.name},
+    {field:'Department',headerName:'Department',renderCell:(params)=>params?.DepartmentDetails?.name},
+    {field:'Designation',headerName:'Designation',renderCell:(params)=>params?.DesignationDetails?.name},
+    {field:'Gang',headerName:'Gang',renderCell:(params)=>params?.GangDetails?.name},
     {field:'Email',headerName:'Email'},
    ] 
 

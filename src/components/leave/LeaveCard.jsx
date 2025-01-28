@@ -103,7 +103,7 @@ function LeaveCard({
       initial={false}
       animate={{ height: isExpanded ? 'auto' : 0 }}
       transition={{ duration: 0.3 }}
-      className="overflow-hidden"
+      className="overflow-hidden "
     >
       {user.is_superuser?
       <div>
@@ -117,12 +117,14 @@ function LeaveCard({
       )
       
       }
+     
+      </div>:<p>No action required</p>}
       {status === 'rejected' && (
         <p className='text-start p-2'><b>Reason for rejection  </b>: {remarks}</p>
+      
       )
       
       }
-      </div>:<p>No action required</p>}
     </motion.div>
   </Card>
 )

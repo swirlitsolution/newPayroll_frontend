@@ -721,7 +721,7 @@ function DataGrid({
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {tableData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length + 1} className="text-center py-3">

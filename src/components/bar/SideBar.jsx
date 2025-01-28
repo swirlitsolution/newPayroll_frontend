@@ -57,6 +57,11 @@ const adminroutes = [
           name: "leave",
           icon: <FileSymlink />,
         },
+        {
+        path: "/advance",
+        name: "advance",
+        icon: <FileSymlink />,
+      },
       ],
   },
   {
@@ -195,6 +200,11 @@ const users = [
         {
           path: "/newleave",
           name: "leave",
+          icon: <FileSymlink />,
+        },
+        {
+          path: "/advance",
+          name: "advance",
           icon: <FileSymlink />,
         },
       ],

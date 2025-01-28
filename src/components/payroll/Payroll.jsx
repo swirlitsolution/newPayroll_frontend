@@ -105,6 +105,7 @@ const summarycolumns = [
     { field: 'cea', headerName: 'CEA' },
     { field: 'washingallowance', headerName: 'Washing' },
     { field: 'professinalpursuites', headerName: 'PRF Pursuits' },
+    { field: 'specialallowance', headerName:'Spcl Allow'},
     { field: 'incometax', headerName: 'Income Tax' },
     { field: 'personalpay', headerName: 'Personal Pay' },
     { field: 'petrol', headerName: 'Petrol' },
@@ -113,15 +114,14 @@ const summarycolumns = [
     { field: 'fixedamt', headerName: 'Fixed Amt' },
     { field: 'othr', headerName: 'OT Hrs' },
     { field: 'otherotamt', headerName: 'OT Amt' },
-    { field: 'fixedamt', headerName: 'Fixed Amt' },
+    { field: 'othergrosstotal', headerName: 'Total'},
     { field: 'pf', headerName: 'PF' },
     { field: 'esic', headerName: 'ESIC' },
-    { field: 'fixedamt', headerName: 'Fixed Amt' },
     { field: 'advance', headerName: 'Advance' },
     { field: 'mrpgross', headerName: 'MRP' },
     { field: 'balance', headerName: 'Net Amt' },
-
 ]
+
 const pfcolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Uan', headerName: 'UAN' },
