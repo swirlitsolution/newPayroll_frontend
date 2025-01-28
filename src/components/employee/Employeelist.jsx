@@ -28,7 +28,7 @@ function Employeelist() {
 
   // Define the columns you want to show on the UI
   const columns = [
-    { field: "id", headerName: "TrnId", width: 80 },
+    // { field: "id", headerName: "TrnId", width: 80 },
     { field: "EmpId", headerName: "EmpId", width: 80 },
     { field: "Name", headerName: "Name", width: 180 },
     { field: "Father", headerName: "Father", width: 180 },
@@ -184,10 +184,16 @@ function Employeelist() {
 
   useEffect(() => {
     if (data?.length > 0) {
-      const filteredRows = data.map((row) => flattenObject(row));
+      const filteredRows = data.map((row, index) => ({
+        ...flattenObject(row),
+        id: row.EmpId || index,
+      }));
       setRows(filteredRows);
     }
   }, [data]);
+
+  const allData = data?.length;
+  console.log("allData", allData)
 
 
   const handleRowClicked = (params) => {
@@ -196,18 +202,6 @@ function Employeelist() {
     }
     
   };
-
-  // const handlePaginationModelChange = (model) => {
-  //   setPaginationModel(model);
-
-  //   // Calculate the current page data
-  //   const startIndex = model.page * model.pageSize;
-  //   const endIndex = startIndex + model.pageSize;
-  //   const currentPageData = rows.slice(startIndex, endIndex);
-
-  //   console.log("Current Page Data:", currentPageData);
-  // };
-
 
   // const generatePDF = () => {
   //   // Initialize jsPDF with landscape orientation
@@ -293,9 +287,9 @@ function Employeelist() {
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
-  
+
     const headers = visibleColumns.map((col) => col.headerName);
-  
+
     // Filter rows based on pagination
     // const startIndex = paginationModel.page * paginationModel.pageSize;
     // const endIndex = startIndex + paginationModel.pageSize;
@@ -304,15 +298,15 @@ function Employeelist() {
     const dataRows = rows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
-  
+
     const doc = new jsPDF("landscape");
     doc.text("Employee List", 14, 10);
-  
+
     const columnStyles = {};
     visibleColumns.forEach((col, index) => {
       columnStyles[index] = { cellWidth: "auto" };
     });
-  
+
     doc.autoTable({
       startY: 25,
       head: [headers],
@@ -333,7 +327,7 @@ function Employeelist() {
       },
       tableWidth: "auto",
     });
-  
+
     doc.save(`EmployeeList_Page_${paginationModel.page + 1}.pdf`);
   };
 
@@ -343,9 +337,9 @@ function Employeelist() {
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
-  
+
     const headers = visibleColumns.map((col) => col.headerName);
-  
+
     // Filter rows based on pagination
     // const startIndex = paginationModel.page * paginationModel.pageSize;
     // const endIndex = startIndex + paginationModel.pageSize;
@@ -353,11 +347,11 @@ function Employeelist() {
     const dataRows = rows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
-  
+
     const ws = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Employee List");
-  
+
     XLSX.writeFile(wb, `EmployeeList_Page_${paginationModel.page + 1}.xlsx`);
   };
 
