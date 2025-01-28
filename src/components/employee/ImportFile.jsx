@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, FileSpreadsheet, FileSpreadsheetIcon, Upload, X } from "lucide-react"
 import usePost from '../../hooks/usePost'
-
 function ImportFile({heading,closeModel,newItem,filename, api}) {
     const [sheetData, setSheetData] = useState([])
     const [headers, setHeaders] = useState([])
@@ -20,7 +19,6 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
         const utcDays = num - 25569; // Offset for Excel's epoch (Jan 1, 1900)
         const utcValue = utcDays * 86400; // Convert days to seconds
         const mydate = new Date(utcValue * 1000)
-
         return String(formatDate(mydate)); // Convert to milliseconds
     };
 
@@ -49,9 +47,31 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
         const data = XLSX.utils.sheet_to_json(ws, {raw:false,dateNF:'yyyy-mm-dd'})
         const updatedData = data.map(row => {
        
-            
-            row['Dob'] = excelDateToJSDate(row['Dob']); // Format to yyyy-mm-dd
-            row['Doj'] = excelDateToJSDate(row['Doj']);
+            console.log("Dob is",row['Dob'],typeof row['Dob'])
+            if(typeof row['Dob'] === 'number'){
+                row['Dob'] = excelDateToJSDate(row['Dob']); // Format to yyyy-mm-dd
+                row['Doj'] = excelDateToJSDate(row['Doj']);
+            }
+            else{
+                const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
+                if(typeof row['Dob'] === 'string' && datePattern.test(row['Dob'])){
+                    console.log(row['SafetyCardExpiry'])
+                    row['Dob'] = row['Dob'].split('/').reverse().join('-');
+                    if(row['SafetyCardExpiry'] === "NA"){
+                        row['SafetyCardExpiry'] = null
+                    }
+                    else{
+                        row['SafetyCardExpiry'] = row['SafetyCardExpiry'].split('/').reverse().join('-');
+                    }
+                    if(row['Doe'] === "NA"){
+                        row['Doe'] = null
+                    }
+                    else{
+                        row['Doe'] = row['Doe'].split('/').reverse().join('-');
+                    }
+                    row['Doj'] = row['Doj'].split('/').reverse().join('-');
+                }
+            }
             return row;
         });
         console.log("excel data is ",updatedData)
