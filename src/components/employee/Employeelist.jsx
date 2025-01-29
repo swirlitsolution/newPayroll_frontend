@@ -14,6 +14,83 @@ import ImportFile from "./ImportFile";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
+const columns = [
+  { field: "EmpId", headerName: "EmpId", width: 80 },
+  { field: "Name", headerName: "Name", width: 180 },
+  { field: "Father", headerName: "Father", width: 180 },
+  {
+    field: "SiteDetails_name",
+    headerName: "Site",
+    width: 180,
+  },
+  {
+    field: "DepartmentDetails_name",
+    headerName: "Department",
+    width: 180
+  },
+  {
+    field: "DesignationDetails_name",
+    headerName: "Designation",
+    width: 180,
+  },
+  {
+    field: "GangDetails_name",
+    headerName: "Gang",
+    width: 180,
+  },
+  { field: "Email", headerName: "Email", width: 220 },
+  { field: "Gender", headerName: "Gender", width: 220 },
+  { field: "MaritalStatus", headerName: "Married", width: 220 },
+  { field: "PfApplicable", headerName: "PfApplicable", width: 220 },
+  { field: "Uan", headerName: "Uan", width: 220 },
+  { field: "EsicApplicable", headerName: "EsicApplicable", width: 220 },
+  { field: "Esic", headerName: "Esic", width: 220 },
+  { field: "PRFTax", headerName: "PRFTax", width: 220 },
+  { field: "Mobile", headerName: "Mobile", width: 220 },
+  { field: "EmpSafetyCard", headerName: "EmpSafetyCard", width: 220 },
+  { field: "SafetyCardExpiry", headerName: "SafetyCardExpiry", width: 220 },
+  { field: "Address", headerName: "Gender", width: 220 },
+  { field: "AttendAllow", headerName: "AttendAllow", width: 220 },
+  { field: "OtAppl", headerName: "OtAppl", width: 220 },
+  { field: "MrOtAppl", headerName: "MrOtAppl", width: 220 },
+  { field: "ReversePF", headerName: "ReversePF", width: 220 },
+  { field: "Bank", headerName: "Bank", width: 220 },
+  { field: "Branch", headerName: "Branch", width: 220 },
+  { field: "Ifsc", headerName: "Ifsc", width: 220 },
+  { field: "Ac", headerName: "Ac", width: 220 },
+  { field: "Aadhar", headerName: "Aadhar", width: 220 },
+  { field: "Pan", headerName: "Pan", width: 220 },
+  { field: "Otslave", headerName: "Otslave", width: 220 },
+  { field: "Ottype", headerName: "Ottype", width: 220 },
+  { field: "Paymentmode", headerName: "Paymentmode", width: 220 },
+  { field: "Weekoff", headerName: "Weekoff", width: 220 },
+  { field: "Skill", headerName: "Skill", width: 220 },
+  { field: "Status", headerName: "Status", width: 220 },
+  { field: "Doe", headerName: "Doe", width: 220 },
+  { field: "rate_basic", headerName: "basic", width: 220 },
+  { field: "rate_da", headerName: "da", width: 220 },
+  { field: "rate_arate", headerName: "arate", width: 220 },
+  { field: "rate_otrate", headerName: "otrate", width: 220 },
+  { field: "rate_hra", headerName: "hra", width: 220 },
+  { field: "rate_madical", headerName: "madical", width: 220 },
+  { field: "rate_ExgratiaRetention", headerName: "ExgratiaRetention", width: 220 },
+  { field: "rate_LTARetention", headerName: "LTARetention", width: 220 },
+  { field: "rate_LTA", headerName: "LTA", width: 220 },
+  { field: "rate_CA", headerName: "CA", width: 220 },
+  { field: "rate_Fooding", headerName: "Fooding", width: 220 },
+  { field: "rate_Misc", headerName: "Misc", width: 220 },
+  { field: "rate_CEA", headerName: "CEA", width: 220 },
+  { field: "rate_WashingAllowance", headerName: "WashingAllowance", width: 220 },
+  { field: "rate_ProfessionalPursuits", headerName: "ProfessionalPursuits", width: 220 },
+  { field: "rate_SpecialAllowance", headerName: "SpecialAllowance", width: 220 },
+  { field: "rate_IncomeTax", headerName: "IncomeTax", width: 220 },
+  { field: "rate_personalpay", headerName: "personalpay", width: 220 },
+  { field: "rate_petrol", headerName: "petrol", width: 220 },
+  { field: "rate_mobile", headerName: "mobile", width: 220 },
+  { field: "rate_incentive", headerName: "incentive", width: 220 },
+  { field: "rate_fixedamt", headerName: "fixedamt", width: 220 },
+
+];
 
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
@@ -27,85 +104,7 @@ function Employeelist() {
   });
 
   // Define the columns you want to show on the UI
-  const columns = [
-    // { field: "id", headerName: "TrnId", width: 80 },
-    { field: "EmpId", headerName: "EmpId", width: 80 },
-    { field: "Name", headerName: "Name", width: 180 },
-    { field: "Father", headerName: "Father", width: 180 },
-    {
-      field: "SiteDetails_name",
-      headerName: "Site",
-      width: 180,
-    },
-    {
-      field: "DepartmentDetails_name",
-      headerName: "Department",
-      width: 180
-    },
-    {
-      field: "DesignationDetails_name",
-      headerName: "Designation",
-      width: 180,
-    },
-    {
-      field: "GangDetails_name",
-      headerName: "Gang",
-      width: 180,
-    },
-    { field: "Email", headerName: "Email", width: 220 },
-    { field: "Gender", headerName: "Gender", width: 220 },
-    { field: "MaritalStatus", headerName: "Married", width: 220 },
-    { field: "PfApplicable", headerName: "PfApplicable", width: 220 },
-    { field: "Uan", headerName: "Uan", width: 220 },
-    { field: "EsicApplicable", headerName: "EsicApplicable", width: 220 },
-    { field: "Esic", headerName: "Esic", width: 220 },
-    { field: "PRFTax", headerName: "PRFTax", width: 220 },
-    { field: "Mobile", headerName: "Mobile", width: 220 },
-    { field: "EmpSafetyCard", headerName: "EmpSafetyCard", width: 220 },
-    { field: "SafetyCardExpiry", headerName: "SafetyCardExpiry", width: 220 },
-    { field: "Address", headerName: "Gender", width: 220 },
-    { field: "AttendAllow", headerName: "AttendAllow", width: 220 },
-    { field: "OtAppl", headerName: "OtAppl", width: 220 },
-    { field: "MrOtAppl", headerName: "MrOtAppl", width: 220 },
-    { field: "ReversePF", headerName: "ReversePF", width: 220 },
-    { field: "Bank", headerName: "Bank", width: 220 },
-    { field: "Branch", headerName: "Branch", width: 220 },
-    { field: "Ifsc", headerName: "Ifsc", width: 220 },
-    { field: "Ac", headerName: "Ac", width: 220 },
-    { field: "Aadhar", headerName: "Aadhar", width: 220 },
-    { field: "Pan", headerName: "Pan", width: 220 },
-    { field: "Otslave", headerName: "Otslave", width: 220 },
-    { field: "Ottype", headerName: "Ottype", width: 220 },
-    { field: "Paymentmode", headerName: "Paymentmode", width: 220 },
-    { field: "Weekoff", headerName: "Weekoff", width: 220 },
-    { field: "Skill", headerName: "Skill", width: 220 },
-    { field: "Status", headerName: "Status", width: 220 },
-    { field: "Doe", headerName: "Doe", width: 220 },
-    { field: "rate_basic", headerName: "basic", width: 220 },
-    { field: "rate_da", headerName: "da", width: 220 },
-    { field: "rate_arate", headerName: "arate", width: 220 },
-    { field: "rate_otrate", headerName: "otrate", width: 220 },
-    { field: "rate_hra", headerName: "hra", width: 220 },
-    { field: "rate_madical", headerName: "madical", width: 220 },
-    { field: "rate_ExgratiaRetention", headerName: "ExgratiaRetention", width: 220 },
-    { field: "rate_LTARetention", headerName: "LTARetention", width: 220 },
-    { field: "rate_LTA", headerName: "LTA", width: 220 },
-    { field: "rate_CA", headerName: "CA", width: 220 },
-    { field: "rate_Fooding", headerName: "Fooding", width: 220 },
-    { field: "rate_Misc", headerName: "Misc", width: 220 },
-    { field: "rate_CEA", headerName: "CEA", width: 220 },
-    { field: "rate_WashingAllowance", headerName: "WashingAllowance", width: 220 },
-    { field: "rate_ProfessionalPursuits", headerName: "ProfessionalPursuits", width: 220 },
-    { field: "rate_SpecialAllowance", headerName: "SpecialAllowance", width: 220 },
-    { field: "rate_IncomeTax", headerName: "IncomeTax", width: 220 },
-    { field: "rate_personalpay", headerName: "personalpay", width: 220 },
-    { field: "rate_petrol", headerName: "petrol", width: 220 },
-    { field: "rate_mobile", headerName: "mobile", width: 220 },
-    { field: "rate_incentive", headerName: "incentive", width: 220 },
-    { field: "rate_fixedamt", headerName: "fixedamt", width: 220 },
-
-  ];
-
+  
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Dob: false,
     Imageurl: false,
@@ -186,7 +185,7 @@ function Employeelist() {
     if (data?.length > 0) {
       const filteredRows = data.map((row, index) => ({
         ...flattenObject(row),
-        id: row.EmpId || index,
+        id: row.id || index,
       }));
       setRows(filteredRows);
     }
@@ -198,6 +197,7 @@ function Employeelist() {
 
   const handleRowClicked = (params) => {
     if(params.field == "Name"){
+      console.log("params", params)
     navigate(`/employee/${params.id}`, { id: params.id });
     }
     

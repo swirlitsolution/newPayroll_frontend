@@ -41,7 +41,6 @@ axios.defaults.baseURL = 'https://global.swirlapps.in';
 
 function App() {
  
-  // const [user, setUser] = useState(null);
   return (
     <AuthProvider>
       <Router>
