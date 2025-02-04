@@ -97,8 +97,6 @@ const summarycolumns = [
     { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
     { field: 'allownetamt', headerName: 'Allowance' },
     { field: 'othergrosstotal', headerName: 'Total' },
-    { field: 'mrpgross', headerName: 'MRP' },
-    { field: 'balance', headerName: 'Net Amt' },
 ]
 
 const pfcolumns = [
