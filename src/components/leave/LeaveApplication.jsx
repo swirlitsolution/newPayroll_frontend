@@ -18,24 +18,46 @@ import { Autocomplete, TextField } from '@mui/material';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { eslintUseValue } from '@mui/x-data-grid/internals';
-
   
 function LeaveApplication({user,onClose}) {
-    const { control, register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm()
+    const { control, register, handleSubmit, watch, formState: { errors } } = useForm()
     const [employee,setEmployee] = useState(null)
     const { data, error, loading,getRequest,postRequest } = usePost("/master/leave/");
     const [leavedata,setLeaveData] = useState({})
     const [disabled,setDisabled] = useState(false)
     const onSubmit = (formdata)=>{
-        const payload =  {
-              ...formdata,
-                leaveFrom: format(new Date(formdata.dateRange.from), 'yyyy-MM-dd'),
-                leaveTo: format(new Date(formdata.dateRange.to), 'yyyy-MM-dd'),
-              
-            };
-           
-        postRequest(formdata)
+        console.log(formdata)
+        var payload = ""
+        if(formdata.to){
+            payload =  {
+                ...formdata,
+                  leaveFrom: format(new Date(formdata.dateRange.from), 'yyyy-MM-dd'),
+                  leaveTo: format(new Date(formdata.dateRange.to), 'yyyy-MM-dd'),
+                
+              };
+        }
+        else{
+            payload =  {
+                ...formdata,
+                  leaveFrom: format(new Date(formdata.dateRange.from), 'yyyy-MM-dd'),
+                  leaveTo: format(new Date(formdata.dateRange.from), 'yyyy-MM-dd'),
+                
+              }; 
+        }
+       
+        
+        const res = postRequest(payload)
+        console.log("response is",res)
+        // promises.then((res)=>{
+        //     if(res.status === 201){
+        //         toast.success("Leave Application Submitted Successfully.")
+        //         onClose()
+        //     }
+        // })
+        // .catch((error)=>{
+        //     console.log("Error during submitting leave application.",error)
+        //     toast.error("Error during submitting leave application.")
+        // })
     }
 
     const getBalanceLeave = (data)=>{
