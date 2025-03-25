@@ -32,11 +32,25 @@ const cardlist = [
     "className":"bg-orange-100 text-orange-400",
     "renderComponent":"/taxslave",
     "icon":"IndianRupee"
+  },
+  {
+    "heading":"Other Allowance", 
+    "paragraph":"Applicable in MR Site Wise ",
+    "className":"bg-gray-100 text-gray-400",
+    "renderComponent":"/otherallowance",
+    "icon":"IndianRupee"
+  },
+  {
+    "heading":"Rate", 
+    "paragraph":"Update rate category wise & site wise ",
+    "className":"bg-yellow-100 text-yellow-400",
+    "renderComponent":"/rateupdate",
+    "icon":"BadgeDollarSign"
   }
 
 ]
   return (
-    <div className='w-full flex flex-wrap'>
+    <div className='w-full flex flex-wrap items-center justify-center'>
     {
         cardlist.map((item,index)=>{
             return <Card key={index} heading={item.heading} paragraph={item.paragraph} className={item.className} renderComponent={item.renderComponent} icon={item.icon} />

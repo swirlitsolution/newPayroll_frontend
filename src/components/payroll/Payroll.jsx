@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
 
 
-export const payrollcolumns = [
+ const payrollcolumns = [
     {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
     {field:'employeeData_Name',headerName:'Name'},
     {field:'employeeData_SiteDetails_name',headerName:'Site'},
@@ -57,6 +57,8 @@ export const payrollcolumns = [
     {field:'attallow',headerName:'Other Cash'},
     {field:'othr',headerName:'OT Hrs'},
     {field:'totamt',headerName:'OT Amt'},
+    {field:'mrpallownetamt',headerName:'Other Allowance'},
+
     {field:'mrpgross',headerName:'Gross'},
     {field:'pf',headerName:'PF'},
     {field:'esic',headerName:'ESIC'},

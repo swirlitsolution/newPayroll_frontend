@@ -34,6 +34,8 @@ import TaxSlave from './components/master/TaxSlave';
 import EditTaxSlave from './components/master/EditTaxSlave';
 import NewLeave from './components/leave/NewLeave';
 import Advance from './components/advance/Advance';
+import OtherAllowance from './components/settings/OtherAllowance';
+import Rate from './components/settings/Rate';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
@@ -81,6 +83,8 @@ function App() {
                     <Route path="/sync" element={<SyncData />} />
                     <Route path="/newleave" element={<NewLeave />} />
                     <Route path="/advance" element={<Advance />} />
+                    <Route path="/otherallowance" element={<OtherAllowance />} />
+                    <Route path="/rateupdate" element={<Rate />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>
