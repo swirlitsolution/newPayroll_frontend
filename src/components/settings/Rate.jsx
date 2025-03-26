@@ -77,6 +77,7 @@ function Rate() {
                                 <option value="SKILLED">SKILLED</option>
                                 <option value="SEMI-SKILLED">SEMI-SKILLED</option>
                                 <option value="HIGH-SKILLED">HIGH-SKILLED</option>
+                                <option value="OTHER">OTHER</option>
                             </select>
                         </div>
                         <div className="flex m-2 gap-2">
