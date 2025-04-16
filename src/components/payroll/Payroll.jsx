@@ -97,7 +97,7 @@ const summarycolumns = [
     { field: 'day', headerName: 'Worked', width: '90px', renderCell: (params) => params.tpayable },
     { field: 'rate', headerName: 'Rate', renderCell: (params) => params.arate },
     { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
-    {field:'tiscoothr',headerName:'OT Hrs'},
+    {field:'restothr',headerName:'OT Hrs'},
     {field:'restotamt',headerName:'OT Amt'},
     { field: 'allownetamt', headerName: 'Allowance' },
     { field: 'othergrosstotal', headerName: 'Total' },
