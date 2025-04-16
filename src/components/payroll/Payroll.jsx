@@ -56,7 +56,7 @@ import useFlattendObject from '../../hooks/useFlattendObject';
     {field:'hraamt',headerName:'HRA'},
     {field:'attallow',headerName:'Other Cash'},
     {field:'othr',headerName:'OT Hrs'},
-    {field:'totamt',headerName:'OT Amt'},
+    {field:'mrpotamt',headerName:'OT Amt'},
     {field:'mrpallownetamt',headerName:'Other Allowance'},
 
     {field:'mrpgross',headerName:'Gross'},
@@ -97,6 +97,8 @@ const summarycolumns = [
     { field: 'day', headerName: 'Worked', width: '90px', renderCell: (params) => params.tpayable },
     { field: 'rate', headerName: 'Rate', renderCell: (params) => params.arate },
     { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
+    {field:'othr',headerName:'OT Hrs'},
+    {field:'restotamt',headerName:'OT Amt'},
     { field: 'allownetamt', headerName: 'Allowance' },
     { field: 'othergrosstotal', headerName: 'Total' },
 ]
