@@ -33,12 +33,12 @@ function NewSiteConfig() {
                 console.log("data recieved",res)
                 setValue('site',res?.data?.SiteDetails?.name)
                 setValue('PfApplicable',res?.data?.PfApplicable)
-                setValue('EsicApplicable',res?.data?.EsicApplicable)
+                setValue('EsiApplicable',res?.data?.EsiApplicable)
                 setValue('PrfTax',res?.data?.PrfTax)
-                setValue('AttendAllow',res?.data?.AttendAllow)
-                setValue('AllowAsPer',res?.data?.AllowAsPer)
+                setValue('AttendanceAllow',res?.data?.AttendanceAllow)
+                setValue('AllowanceAsPer',res?.data?.AllowanceAsPer)
                 setValue('OtApplicable',res?.data?.OtApplicable)
-                setValue('MrOtAppl',res?.data?.MrOtAppl)
+                setValue('MrOtApplicable',res?.data?.MrOtApplicable)
                 setValue('PfLimitApplicable',res?.data?.PfLimitApplicable)
                 setValue('EsicLimitApplicable',res?.data?.EsicLimitApplicable)
                 setValue('PfLimit',res?.data?.PfLimit)
@@ -74,19 +74,19 @@ function NewSiteConfig() {
                         <Input type="checkbox" id="pfappl"  {...register("PfApplicable")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
 
                         <Label htmlFor='pfappl' className='col-span-3'>Pf Applicable</Label>
-                        <Input type="checkbox" id="esicappl"  {...register("EsicApplicable")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Input type="checkbox" id="esicappl"  {...register("EsiApplicable")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='esicappl' className='col-span-3'>ESIC Applicable</Label>
-                        <Input type="checkbox" id="prftax"  {...register("PRFTax")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Input type="checkbox" id="prftax"  {...register("PrfTax")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='prftax' className='col-span-3'>PRF Tax Applicable</Label>
-                        <Input type="checkbox" id="attendallow"  {...register("AttendAllow")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Input type="checkbox" id="attendallow"  {...register("AttendanceAllow")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='attendallow' className='col-span-3'>Attendance Allowance</Label>
-                        <Input type="checkbox" id="allowasper"  {...register("AllowAsPer")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Input type="checkbox" id="allowasper"  {...register("AllowanceAsPer")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='allowasper' className='col-span-3'>Allowance as per day</Label>
-                        <Input type="checkbox" id="reversepf"  {...register("ReversePF")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Input type="checkbox" id="OtApplicable"  {...register("OtApplicable")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         
-                        <Label htmlFor='otappl' className='col-span-3'>OT Applicable</Label>
-                        <Input type="checkbox" id="mrotappl"  {...register("MrOtAppl")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
-                        <Label htmlFor='mrotappl' className='col-span-3'>MR OT Applicable</Label>
+                        <Label htmlFor='OtApplicable' className='col-span-3'>OT Applicable</Label>
+                        <Input type="checkbox" id="MrOtApplicable"  {...register("MrOtApplicable")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Label htmlFor='MrOtApplicable' className='col-span-3'>MR OT Applicable</Label>
                         
                         <Input type="checkbox" id="PfLimitApplicable"  {...register("PfLimitApplicable")} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='PfLimitApplicable' className='col-span-3'>Pf Limit Applicable</Label>

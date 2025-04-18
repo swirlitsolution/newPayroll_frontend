@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from '../ui/input'
 import Master from '../master/Master';
 import { useForm,Controller  } from "react-hook-form";
@@ -80,9 +80,9 @@ const columns = [
     {field:'tot',headerName:'OT'},
 ]
 function AttendanceReport(props) {
-    const {register,handleSubmit,control, formState: { errors } } = useForm()
+    const {register,handleSubmit,control,watch, formState: { errors } } = useForm()
     const { data, loading,getRequest} = usePost("/markattendance/")
-
+    const [download,setDownload] = useState(false)
     
     const handleRowClicked = (params)=>{
         console.log(params)
@@ -98,6 +98,14 @@ function AttendanceReport(props) {
 
   
     }
+    useEffect(()=>{
+        if(data?.attendance?.length){
+            setDownload(true)
+        }
+        else{
+            setDownload(false)
+        }
+    },[data])
     return (
       <div className="flex flex-col overflow-x-hidden overflow-y-auto gap-2 mt-2">
           <div className="bg-white rounded-lg shadow p-2 border-2">
@@ -128,6 +136,18 @@ function AttendanceReport(props) {
         
                 <Button type='submit' >Ok</Button>
                 </form>
+                {
+                    download?
+                    <div className='border-2 rounded-md'>
+                        <h3 className=' bg-slate-200 font-bold'>Download</h3>
+                        <div className='flex gap-2 px-2'>
+                            <a href={'https://global.swirlapps.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
+             
+                        </div>
+               
+                    </div>
+                    :""
+                   }
             </div>
           </div>
          

@@ -61,7 +61,7 @@ function Employeelist() {
     return result;
   };
   const getemplist = async ()=>{
-    const empurl = "http://127.0.0.1:8080/api/payroll/master/employee/"
+    const empurl = "https://global.swirlapps.in/api/payroll/master/employee/"
     try {
       const response = await axios.get(empurl,
         {
