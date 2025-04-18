@@ -46,6 +46,13 @@ const cardlist = [
     "className":"bg-yellow-100 text-yellow-400",
     "renderComponent":"/rateupdate",
     "icon":"BadgeDollarSign"
+  },
+  {
+    "heading":"Site Config", 
+    "paragraph":"Site Wise enable/disable configration ",
+    "className":"bg-yellow-100 text-yellow-400",
+    "renderComponent":"/siteconfig",
+    "icon":"Settings2"
   }
 
 ]
