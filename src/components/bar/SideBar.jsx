@@ -69,6 +69,11 @@ const adminroutes = [
     name: "Report",
     icon: <FileStack />,
     subRoutes: [
+      {
+        path: "/mis",
+        name: "MIS",
+        icon: <UserSearch />,
+      },
         {
           path: "/attendancereport",
           name: "Attendance",

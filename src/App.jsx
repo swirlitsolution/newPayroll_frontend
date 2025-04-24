@@ -38,6 +38,8 @@ import OtherAllowance from './components/settings/OtherAllowance';
 import Rate from './components/settings/Rate';
 import SiteConfig from './components/settings/SiteConfig';
 import NewSiteConfig from './components/settings/NewSiteConfig';
+import Mis from './components/report/Mis';
+import PayrollSummery from './components/report/PayrollSummery';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
@@ -89,6 +91,8 @@ function App() {
                     <Route path="/rateupdate" element={<Rate />} />
                     <Route path="/siteconfig" element={<SiteConfig /> } />
                     <Route path="/newsiteconfig" element={<NewSiteConfig />} />
+                    <Route path="/mis" element={<Mis />} />
+                    <Route path="/payrollsummery" element={<PayrollSummery />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>

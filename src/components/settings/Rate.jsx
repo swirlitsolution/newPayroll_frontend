@@ -36,7 +36,7 @@ function Rate() {
             if(editingId){
                 if(Array.isArray(data)){
                 const row = data?.find((row)=>row.id === editingId)
-                console.log(row)
+      
                 setValue('Site',row.SiteDetails.name)
                 setValue('category',row.category)
                 setValue('basic',row.basic)
