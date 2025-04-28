@@ -34,8 +34,6 @@ const summarycolumns = [
 function PayrollSummery() {
     const {control,register,setValue, handleSubmit,reset, watch, formState: { errors } } = useForm()
     const { data, error, loading,getRequest } = usePost('')
-    const [nh,setNh] = useState(0)
-    const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
     const { flattenObject } = useFlattendObject()
     
@@ -54,10 +52,8 @@ function PayrollSummery() {
     useEffect(()=>{
         console.log("get request",data)
         if(data?.attendance){
-            setDownload(true)
-            const row = data?.attendance.map(item=>flattenObject(item))
+            const row = data?.attendance.map(item=>flattenObject(item)).sort((a,b)=>a.employeeData_Name - b.employeeData_Name)
             setRowdata(row)
-            console.log("row data is ",rowdata)
         }
     },[data])
   return (

@@ -28,13 +28,14 @@ function Master(props) {
 
   return (
 
-    <div className='grid grid-cols-2 gap-x-2 items-center'>
+    <div className={'grid grid-cols-2 gap-x-2 items-center' + props.className}>
         <Label className='text-left'>
         {props.name.toUpperCase()}
         {props.mandatoryLabel ? <span style={{ color: 'red' }}> *</span> : null}
         </Label>
         <div className='flex gap-2 items-center justify-center'>
             <Select className=" w-10"
+                disabled={props.disabled} // Disable the select if the prop is true
                 onValueChange={props.onValueChange} // Use onChange directly
                 value={props.value} // Set the value prop to the selected value
                 >

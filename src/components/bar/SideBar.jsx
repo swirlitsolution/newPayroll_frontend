@@ -74,6 +74,11 @@ const adminroutes = [
         name: "MIS",
         icon: <UserSearch />,
       },
+      {
+        path: "/misc",
+        name: "MISc",
+        icon: <UserSearch />,
+      },
         {
           path: "/attendancereport",
           name: "Attendance",

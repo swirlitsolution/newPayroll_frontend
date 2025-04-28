@@ -40,6 +40,7 @@ import SiteConfig from './components/settings/SiteConfig';
 import NewSiteConfig from './components/settings/NewSiteConfig';
 import Mis from './components/report/Mis';
 import PayrollSummery from './components/report/PayrollSummery';
+import Misc from './components/report/Misc';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
@@ -93,6 +94,7 @@ function App() {
                     <Route path="/newsiteconfig" element={<NewSiteConfig />} />
                     <Route path="/mis" element={<Mis />} />
                     <Route path="/payrollsummery" element={<PayrollSummery />} />
+                    <Route path="/misc" element={<Misc />} />
                 </Routes>
                 </SideBar>
               </ProtectedRoute>
