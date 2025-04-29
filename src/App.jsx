@@ -44,7 +44,7 @@ import Misc from './components/report/Misc';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
-axios.defaults.baseURL = 'https://global.swirlapps.in';
+axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
 
 function App() {
  
