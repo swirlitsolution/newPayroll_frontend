@@ -917,14 +917,91 @@ function Misc() {
                 }
                 
             }
+            else if(data.type === 'all'){
+              if(data.register === "advanceRegister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateAdvancePDF()
+                })
+            }
+            if(data.register === "damageRegister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateDamagePDF()
+                })
+            }
+            if(data.register === "employeementCard"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateEmployeementCardPDF()
+                })
+            }
+            if(data.register === "workmanregister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateWorkManRegister()
+                })
+            }
+            if(data.register === "fineRegister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateFineRegister()
+                })
+            }
+            if(data.register === "serviceCertificate"){
+              generateServiceCertificate()
+            }
+           if(data.register === "overTimeRegister"){
+              generateOverTimePDF()
+            }
+            }
+            else if(data.type === 'selected'){
+              if(data.register === "advanceRegister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    generateAdvancePDF()
+                })
+            }
+            if(data.register === "damageRegister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateDamagePDF()
+                })
+            }
+            if(data.register === "employeementCard"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateEmployeementCardPDF()
+                })
+            }
+            if(data.register === "workmanregister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateWorkManRegister()
+                })
+            }
+            if(data.register === "fineRegister"){
+                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
+                    console.log(data)
+                    generateFineRegister()
+                })
+            }
+            if(data.register === "serviceCertificate"){
+              generateServiceCertificate()
+            }
+           if(data.register === "overTimeRegister"){
+              generateOverTimePDF()
+            }
+            }
             
             // getRequest(`/getattendancereport/${month}/${year}/`)
             
             // postRequest(formattedData)
         }
     useEffect(()=>{
-        getRequest('/master/employee/')
-        setEmployees(data)
+        getRequest('/master/employee/').then((res)=>{
+            setEmployees(res.data)
+        })
+        
     },[])
     const SelectEmployee = ({heading,showMaster})=>{
         const handleOnChange = ()=>{
@@ -939,10 +1016,10 @@ function Misc() {
                     const name = row.querySelector('td:nth-child(3)').textContent
                     selected.push({id,empId,name})
                 }
-            })
+              })
             setSelectedEmployee(selected)
             showMaster()
-    }
+          }
         
         return <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full " id="my-modal">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white h-[500px] ">

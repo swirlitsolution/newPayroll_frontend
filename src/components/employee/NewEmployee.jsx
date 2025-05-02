@@ -178,7 +178,7 @@ function NewEmployee(props) {
                             <div className='flex items-center gap-2'>
                                 <Label htmlFor='empid' className='text-right '>EmpId<span className='text-red-500 text-lg'>*</span></Label>
                                 <Label htmlFor='Auto' className=''>Auto</Label>
-                                <Input type="checkbox" id="Auto" onChange={() => setAuto(!auto)} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                                <Input type="checkbox" id="Auto" {...register("Auto")} onChange={() => setAuto(!auto)} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
 
                                 <Input type='text' className='bg-white'  {...register("EmpId")} id='empid' />
                             </div>
