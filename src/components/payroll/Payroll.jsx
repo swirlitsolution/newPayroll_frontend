@@ -149,7 +149,7 @@ const sumBankcolumns = [
     { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
     { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
     { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
-    { field: 'othergrosstotal', headerName: 'Net Amt',renderCell: (params)=>(params.othergrosstotal - (params.pf + params.esic)) },
+    { field: 'othergrosstotal', headerName: 'Net Amt' },
 
 ]
 function Payroll() {
