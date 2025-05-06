@@ -100,7 +100,7 @@ const summarycolumns = [
     {field:'restothr',headerName:'OT Hrs'},
     {field:'restotamt',headerName:'OT Amt'},
     { field: 'allownetamt', headerName: 'Allowance' },
-    { field: 'othergrosstotal', headerName: 'Total',renderCell: (params)=>(params.othergrosstotal - (params.pf + params.esic)) },
+    { field: 'othergrosstotal', headerName: 'Total' },
 ]
 
 const pfcolumns = [
