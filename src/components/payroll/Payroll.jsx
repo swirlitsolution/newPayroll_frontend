@@ -100,7 +100,7 @@ const summarycolumns = [
     {field:'restothr',headerName:'OT Hrs'},
     {field:'restotamt',headerName:'OT Amt'},
     { field: 'allownetamt', headerName: 'Allowance' },
-    { field: 'othergrosstotal', headerName: 'Total' },
+    { field: 'othergrosstotal', headerName: 'Total',renderCell: (params)=>(params.othergrosstotal - (params.pf + params.esic)) },
 ]
 
 const pfcolumns = [
@@ -149,7 +149,7 @@ const sumBankcolumns = [
     { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
     { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
     { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
-    { field: 'balance', headerName: 'Net Amt' },
+    { field: 'othergrosstotal', headerName: 'Net Amt',renderCell: (params)=>(params.othergrosstotal - (params.pf + params.esic)) },
 
 ]
 function Payroll() {

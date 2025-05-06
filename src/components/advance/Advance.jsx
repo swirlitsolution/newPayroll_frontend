@@ -217,13 +217,26 @@ function Advance() {
                         :""
                         }
                         {
-                            advance?.approved?<div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center text-gray-700">
-                           <IndianRupee className="w-5 h-5 mr-2" />
-                            <span className="font-medium">Installment:</span>
-                            </div>
+                            advance?.approved?
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center text-gray-700">
+                                    <IndianRupee className="w-5 h-5 mr-2" />
+                                    <span className="font-medium">Installment:</span>
+                                </div>
                             <span>{advance.installment}</span>
-                        </div>:""
+                        </div>
+                        :""
+                        }
+                        {
+                            advance?.approved?
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center text-gray-700">
+                                    <IndianRupee className="w-5 h-5 mr-2" />
+                                    <span className="font-medium">Balance:</span>
+                                </div>
+                            <span>{advance.balance}</span>
+                        </div>
+                        :""
                         }
                         {
                             advance.rejected?<div className="flex items-center justify-between mb-4">
