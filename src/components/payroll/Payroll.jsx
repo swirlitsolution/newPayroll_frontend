@@ -109,7 +109,7 @@ const pfcolumns = [
     { field: 'employeeData_Name', headerName: 'Name' },
     { field: 'mrpgross', headerName: 'EPF Wages' },
     { field: 'basic', headerName: 'EPF Wages' },
-    { field: 'eps', headerName: 'EPS Wages', renderCell: (params) => params.basic },
+    { field: 'basic', headerName: 'EPS Wages' },
     { field: 'pfaplamt', headerName: 'EDLI Wages' },
     { field: 'pf', headerName: 'PF' },
     {
@@ -130,6 +130,7 @@ const esiccolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Esic', headerName: 'ESIC'},
     { field: 'employeeData_Name', headerName: 'Name' },
+    { field: 'tpayable', headerName: 'Days' },
     { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
     { field: 'esic', headerName: 'ESIC Amt' },
 
