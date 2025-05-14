@@ -114,13 +114,13 @@ const pfcolumns = [
     { field: 'pf', headerName: 'PF', renderCell: (params)=> Math.round(params.pf) },
     {
         field: 'epf', headerName: 'EPF Amt', renderCell: (params) => {
-            const value = Number(params.pfaplamt) * 0.0833; // Ensure pfaplamt is a number
+            const value = Number(params.epfaplamt) * 0.0833; // Ensure pfaplamt is a number
             return isNaN(value) ? '0.00' :Math.round(value); // Format the result to 2 decimal places
         }
     },
     {
         field: 'ppf', headerName: 'PPF Amt', renderCell: (params) => {
-            const value = Math.round(Number(params.pf)) - Math.round(Number(params.pfaplamt) * 0.0833);
+            const value = Math.round(Number(params.pf)) - Math.round(Number(params.epfaplamt) * 0.0833);
             return isNaN(value) ? '0.00' : Math.round(value); // Fallback to '0.00' if the value is invalid
         }
     },
