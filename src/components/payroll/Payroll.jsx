@@ -107,21 +107,21 @@ const pfcolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Uan', headerName: 'UAN' },
     { field: 'employeeData_Name', headerName: 'Name' },
-    { field: 'mrpgross', headerName: 'EPF Wages', renderCell: (params)=> Math.ceil(params.mrpgross) },
-    { field: 'pfaplamt', headerName: 'EPF Wages', renderCell: (params)=> Math.ceil(params.pfaplamt) },
-    { field: 'pfaplamt', headerName: 'EPS Wages', renderCell: (params)=> Math.ceil(params.pfaplamt) },
-    { field: 'pfaplamt', headerName: 'EDLI Wages', renderCell: (params)=> Math.ceil(params.pfaplamt) },
-    { field: 'pf', headerName: 'PF', renderCell: (params)=> Math.ceil(params.pf) },
+    { field: 'mrpgross', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.mrpgross) },
+    { field: 'pfaplamt', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.pfaplamt) },
+    { field: 'pfaplamt', headerName: 'EPS Wages', renderCell: (params)=> Math.round(params.pfaplamt) },
+    { field: 'pfaplamt', headerName: 'EDLI Wages', renderCell: (params)=> Math.round(params.pfaplamt) },
+    { field: 'pf', headerName: 'PF', renderCell: (params)=> Math.round(params.pf) },
     {
         field: 'epf', headerName: 'EPF Amt', renderCell: (params) => {
             const value = Number(params.pfaplamt) * 0.0833; // Ensure pfaplamt is a number
-            return isNaN(value) ? '0.00' :Math.ceil(value); // Format the result to 2 decimal places
+            return isNaN(value) ? '0.00' :Math.round(value); // Format the result to 2 decimal places
         }
     },
     {
         field: 'ppf', headerName: 'PPF Amt', renderCell: (params) => {
-            const value = Math.ceil(Number(params.pf)) - Math.ceil(Number(params.pfaplamt) * 0.0833);
-            return isNaN(value) ? '0.00' : Math.ceil(value); // Fallback to '0.00' if the value is invalid
+            const value = Math.round(Number(params.pf)) - Math.round(Number(params.pfaplamt) * 0.0833);
+            return isNaN(value) ? '0.00' : Math.round(value); // Fallback to '0.00' if the value is invalid
         }
     },
     { field: 'ncp', headerName: 'NCP Day', renderCell: (params) => (params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl) },
