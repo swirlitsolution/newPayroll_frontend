@@ -120,7 +120,7 @@ const pfcolumns = [
     },
     {
         field: 'ppf', headerName: 'PPF Amt', renderCell: (params) => {
-            const value = Number(params.pf) - (Number(params.pfaplamt) * 0.0833);
+            const value = Math.ceil(Number(params.pf)) - Math.ceil(Number(params.pfaplamt) * 0.0833);
             return isNaN(value) ? '0.00' : Math.ceil(value); // Fallback to '0.00' if the value is invalid
         }
     },
