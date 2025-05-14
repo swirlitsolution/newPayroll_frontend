@@ -107,10 +107,10 @@ const pfcolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Uan', headerName: 'UAN' },
     { field: 'employeeData_Name', headerName: 'Name' },
-    { field: 'mrpgross', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.mrpgross) },
-    { field: 'pfaplamt', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.pfaplamt) },
-    { field: 'pfaplamt', headerName: 'EPS Wages', renderCell: (params)=> Math.round(params.pfaplamt) },
-    { field: 'pfaplamt', headerName: 'EDLI Wages', renderCell: (params)=> Math.round(params.pfaplamt) },
+    { field: 'bdaamt', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.bdaamt) },
+    { field: 'epfaplamt', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.epfaplamt) },
+    { field: 'epfaplamt', headerName: 'EPS Wages', renderCell: (params)=> Math.round(params.epfaplamt) },
+    { field: 'epfaplamt', headerName: 'EDLI Wages', renderCell: (params)=> Math.round(params.epfaplamt) },
     { field: 'pf', headerName: 'PF', renderCell: (params)=> Math.round(params.pf) },
     {
         field: 'epf', headerName: 'EPF Amt', renderCell: (params) => {
