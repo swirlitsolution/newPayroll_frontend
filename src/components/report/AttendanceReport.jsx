@@ -4,7 +4,9 @@ import Master from '../master/Master';
 import { useForm,Controller  } from "react-hook-form";
 import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
+import { Label } from "@/components/ui/label"
 import DataGrid from '../custom/DataGrid';
+import { toast } from 'react-toastify';
 
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
@@ -94,8 +96,16 @@ function AttendanceReport(props) {
         const year = splited_date[0]
         const month = splited_date[1]
         
-        getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
+        if(data.all){
+            getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`)
+        }
+        else if(data.Site && data.month !== ""){
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`)
 
+        }
+        else{
+            toast.warning("Select the site and month")
+        }
   
     }
     useEffect(()=>{
@@ -114,7 +124,9 @@ function AttendanceReport(props) {
                 <h3 className="font-bold">{props?.heading.toUpperCase()}</h3>
               </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
-                
+                <Label>All </Label>
+                <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                                
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here

@@ -8,6 +8,7 @@ import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
+import { Input } from '../ui/input';
 
 
  const payrollcolumns = [
@@ -166,8 +167,11 @@ function Payroll() {
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
-        if(data.Site && data.month !== ""){
-            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
+        if(data.all){
+            getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`)
+        }
+        else if(data.Site && data.month !== ""){
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`)
 
         }
         else{
@@ -204,7 +208,9 @@ function Payroll() {
   
         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
-                {/* <Label>Applicable NH </Label><span className='rounded-md bg-slate-300 px-4 py-2'>{nh}</span> */}
+                <Label>All </Label>
+                <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here
