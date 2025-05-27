@@ -40,17 +40,20 @@ import { Input } from '../ui/input';
     }},
     {field:'rate',headerName:'Rate',renderCell:(params)=>{
         return (
-            <td>
+            <tr>
                 <tr className='border-b-2'>
+                 <td>B</td>
                     <td>{params.basicrate}</td>
                 </tr>
                 <tr className='border-b-2'>
+                 <td>Da</td>
                     <td>{params.darate}</td>
                 </tr>
                 <tr className='border-b-2'>
+                 <td>Total</td>
                     <td>{parseFloat(params.basicrate) + parseFloat(params.darate)}</td>
                 </tr>
-            </td>
+            </tr>
         )}},
     {field:'basic',headerName:'Basic'},
     {field:'da',headerName:'DA'},
@@ -281,14 +284,19 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="slip">
-            {loading?"Loading......": rowdata?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?
+            <div className='w-full'>
+            <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"} target='_blank'> all</a>
+                
+                <DataGrid 
               heading="Payroll slip"
               columns={slipcolumns} 
               row={rowdata} 
       
              
 
-              />):(
+              />
+              </div>:(
                 <div>No data available</div>
               )}
             </TabsContent>
