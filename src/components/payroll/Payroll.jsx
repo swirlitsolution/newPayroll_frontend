@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Master from '../master/Master';
 import { Label } from "@/components/ui/label"
 import { useForm,Controller  } from "react-hook-form";
@@ -73,10 +73,11 @@ import { Input } from '../ui/input';
    
 ]
 
+// day =  tpayable + tnhday as per request from nadim sir on 04-09-2025 for the site tata cummins
 const slipcolumns = [
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
-    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
+    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
     {field:'basic',headerName:'Basic'},
     {field:'da',headerName:'DA'},
     {field:'mrpgross',headerName:'Gross'},
@@ -158,8 +159,8 @@ const sumBankcolumns = [
 
 ]
 function Payroll() {
-    const {control,register,setValue, handleSubmit,reset, watch, formState: { errors } } = useForm()
-    const { data, error, loading,getRequest } = usePost('')
+    const {control,register, handleSubmit, watch, formState: { errors } } = useForm()
+    const { data, loading,getRequest } = usePost('')
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
@@ -201,7 +202,16 @@ function Payroll() {
         if(data?.attendance){
             setDownload(true)
             const row = data?.attendance.map(item=>flattenObject(item))
-            setRowdata(row)
+            const sortedData = row.sort((a, b) => {
+                if (a.employeeData_Name < b.employeeData_Name) {
+                    return -1;
+                }
+                else if (a.employeeData_Name > b.employeeData_Name) {
+                    return 1;
+                }
+            }
+            )
+            setRowdata(sortedData)
             console.log("row data is ",rowdata)
         }
     },[data])
@@ -286,8 +296,12 @@ function Payroll() {
             <TabsContent value="slip">
             {loading?"Loading......": rowdata?.length?
             <div className='w-full'>
-            <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"} target='_blank'> all</a>
-                
+            {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"} target='_blank'> all</a> */}
+                {/*
+                for testing only
+                */}
+                 <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"} target='_blank'> all</a>
+               
                 <DataGrid 
               heading="Payroll slip"
               columns={slipcolumns} 

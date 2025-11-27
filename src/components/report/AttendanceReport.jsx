@@ -85,6 +85,7 @@ function AttendanceReport(props) {
     const {register,handleSubmit,control,watch, formState: { errors } } = useForm()
     const { data, loading,getRequest} = usePost("/markattendance/")
     const [download,setDownload] = useState(false)
+    const [attendance,setAttendance] = useState([])
     
     const handleRowClicked = (params)=>{
         console.log(params)
@@ -111,6 +112,16 @@ function AttendanceReport(props) {
     useEffect(()=>{
         if(data?.attendance?.length){
             setDownload(true)
+            const sortedData = data?.attendance.sort((a, b) => {
+                if (a?.employeeData?.Name < b?.employeeData?.Name) {
+                    return -1;
+                }
+                else if (a?.employeeData.Name > b?.employeeData.Name) {
+                    return 1;
+                }
+            }
+            )
+            setAttendance(sortedData)
         }
         else{
             setDownload(false)
@@ -154,6 +165,7 @@ function AttendanceReport(props) {
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
                             <a href={'https://backend.stcassociates.co.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
+                            {/* <a href={'http://127.0.0.1:8000/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a> */}
              
                         </div>
                
@@ -169,7 +181,7 @@ function AttendanceReport(props) {
                ( <DataGrid 
                 heading="Attendance"
                 columns={columns} 
-                row={data?.attendance} 
+                row={attendance} 
                 rowClicked={handleRowClicked}
                 exportlayout="l"
                 />  )

@@ -1,17 +1,17 @@
 
-import { useState, useCallback,useRef } from 'react'
+import { useState, useCallback } from 'react'
 import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Check, FileSpreadsheet, FileSpreadsheetIcon, Upload, X } from "lucide-react"
+import { Check, FileSpreadsheet, Upload, X } from "lucide-react"
 import usePost from '../../hooks/usePost'
-function ImportFile({heading,closeModel,newItem,filename, api}) {
+function ImportFile({heading,closeModel,_newItem,filename, api}) {
     const [sheetData, setSheetData] = useState([])
     const [headers, setHeaders] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [cError, setcError] = useState(null)
     const [submissionStatus, setSubmissionStatus] = useState({})
-    const { data, error, loading,postRequest,putapiRequest } = usePost(api)
+    const { postRequest } = usePost(api)
     const [isSending, setIsSending] = useState(false)
    
     console.log("submition is ",submissionStatus)
@@ -91,11 +91,11 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
     }
     reader.readAsArrayBuffer(file)
   }, [])
-  const sendRowToAPI = async (row) => {
-    // Replace this with your actual API endpoint
+//   const sendRowToAPI = async (row) => {
+//     // Replace this with your actual API endpoint
     
-   postRequest(row)
-  }
+//    postRequest(row)
+//   }
 
   const handleImportClick = async () => {
     setIsSending(true)
@@ -128,6 +128,92 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
 
   setIsSending(false)
   }
+    const generateXlsx = () => {
+        // Sample data for the Excel file
+        const empdata = [
+            {
+                Site: '',
+                Imageurl: '',
+                EmpId: '',
+                Name: '',
+                Father: '',
+                Dob: '',
+                Gender: '',
+                MaritalStatus: '',
+                Department: '',
+                Designation: '',
+                Gang: '',
+                PfApplicable: '',
+                Uan: '',
+                EsicApplicable: '',
+                Esic: '',
+                PRFTax: '',
+                Mobile: '',
+                Email: '',
+                EmpSafetyCard: '',
+                SafetyCardExpiry: '',
+                Address: '',
+                AttendAllow: '',
+                OtAppl: '',
+                MrOtAppl: '',
+                AllowAsPer: '',
+                ReversePF: '',
+                Bank: '',
+                Branch: '',
+                Ifsc: '',
+                Ac: '',
+                Aadhar: '',
+                Pan: '',
+                Otslave: '',
+                Ottype: '',
+                Paymentmode: '',
+                Weekoff: '',
+                Skill: '',
+                Doj: '',
+                Status: '',
+                Doe: '',
+            },
+        ];
+
+        const ratedata = [
+                            {
+                                Aadhar: '',
+                                Name: '',
+                                basic: '',
+                                da: '',
+                                arate: '',
+                                otrate: '',
+                                hra: '',
+                                madical: '',
+                                ExgratiaRetention: '',
+                                LTARetention: '',
+                                LTA: '',
+                                CA: '',
+                                Fooding: '',
+                                Misc: '',
+                                CEA: '',
+                                WashingAllowance: '',
+                                ProfessinalPursuits: '',
+                                SpecialAllowance: '',
+                                IncomeTax: '',
+                                personalpay: '',
+                                petrol: '',
+                                mobile: '',
+                                incentive: '',
+                                fixedamt: '',
+                            },
+                        ]
+
+        // Convert JSON to worksheet
+        const data = filename === "rate.xlsx" ? ratedata : empdata;
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'sample_file_format');
+
+
+        // Export file
+        XLSX.writeFile(workbook, 'sample_data.xlsx');
+    };
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-10" id="my-modal">
             <div className="relative top-20 mx-auto p-2 border w-[85%] shadow-lg rounded-md bg-white">
@@ -204,7 +290,15 @@ function ImportFile({heading,closeModel,newItem,filename, api}) {
                         <FileSpreadsheet className="mx-auto h-12 w-12 text-muted-foreground" />
                         <h3 className="mt-2 text-sm font-semibold text-muted-foreground">No Excel data</h3>
                         <p className="mt-1 text-sm text-muted-foreground">Upload an Excel file to see the data here</p>
-                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href={"https://backend.stcassociates.co.in/media/" + filename}> click here</a> </p>
+                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file {/*<a href={"https://backend.stcassociates.co.in/media/" + filename}> click here</a>*/}
+                        
+                        <button
+                            className="border rounded-lg px-4 py-2 shadow hover:bg-gray-100"
+                            onClick={generateXlsx}
+                            >
+                           Click here
+                            </button>
+                         </p>
                         
                         
                         </div>

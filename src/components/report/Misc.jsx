@@ -8,6 +8,7 @@ import { X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { set } from 'date-fns';
 
 function Misc() {
     const {control,watch, register,handleSubmit, formState: { errors } } = useForm()
@@ -15,8 +16,17 @@ function Misc() {
     const [disabled,setDisabled] = useState(false)
     const [close,setClose] = useState(false)
     const [employees,setEmployees] = useState([])
+    const [afterFilter,setAfterFilter] = useState([])
     const [selectedEmployee,setSelectedEmployee] = useState([])
-    
+    const [wait,setwait] = useState(false)
+    const getEmployeeData = ()=>{
+      toast.warning("Please wait fetching  data...")
+        getRequest('/master/employee/').then((res)=>{
+            setEmployees(res.data)
+            toast.success("Done ! Now select the register")
+        })
+        
+    }
     const handleCard = ()=>{
         setClose(!close)
     }
@@ -62,66 +72,31 @@ function Misc() {
         ];
     
         // Table Rows (sample data based on your image)
-        const rows = [
-          {
-            slno: '1',
-            name: 'SK ARIF',
-            father: '.',
-            employer: 'SUPERVIS',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            last_installment: '- - -',
-            remarks: 'NIL'
-          },
-          {
-            slno: '2',
-            name: 'SK SAIDUL ISLAM',
-            father: '.',
-            employer: 'FITTER-I',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            last_installment: '- - -',
-            remarks: 'NIL'
-          },
-          {
-            slno: '3',
-            name: 'HIMANSHU DULARURU',
-            father: '.',
-            employer: 'SKILLED',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            last_installment: '- - -',
-            remarks: 'NIL'
-          },
-          {
-            slno: '4',
-            name: 'SK NAZRUL ISLAM',
-            father: '.',
-            employer: 'HIGH SKIL',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            last_installment: '- - -',
-            remarks: 'NIL'
-          },
-        ];
+        const rows = []
+        afterFilter.forEach((emp,index)=>{
+         const row = [ 
+          index + 1,
+          emp?.Name,
+          emp.Father || '.',
+          emp?.DesignationDetails?.name || '.',
+          '- - -',
+          '- - -',
+          '- - -',
+          '- - -',
+          '- - -',
+          '- - -',
+          'NIL'
+         ]
+          rows.push(row)
+        })
+
+     
     
         // Add the Table
         doc.autoTable({
           startY: 110,
           head: [columns.map(col => col.header)],
-          body: rows.map(row => columns.map(col => row[col.dataKey])),
+          body:rows,
           styles: {
             fontSize: 8,
             cellPadding: 3,
@@ -183,74 +158,31 @@ function Misc() {
         ];
     
         // Table Rows (sample data based on your image)
-        const rows = [
-          {
-            slno: '1',
-            name: 'SK ARIF',
-            father: '.',
-            employer: 'SUPERVIS',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            total_installment: '- - -',
-            first_installment: '- - -',
-            lasst_installment: '- - -',
-            remarks: 'NIL'
-          },
-          {
-            slno: '2',
-            name: 'SK SAIDUL ISLAM',
-            father: '.',
-            employer: 'FITTER-I',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            total_installment: '- - -',
-            first_installment: '- - -',
-            lasst_installment: '- - -',
-            remarks: 'NIL'
-          },
-          {
-            slno: '3',
-            name: 'HIMANSHU DULARURU',
-            father: '.',
-            employer: 'SKILLED',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            total_installment: '- - -',
-            first_installment: '- - -',
-            lasst_installment: '- - -',
-            remarks: 'NIL'
-          },
-          {
-            slno: '4',
-            name: 'SK NAZRUL ISLAM',
-            father: '.',
-            employer: 'HIGH SKIL',
-            wages: '- - -',
-            advance_given: '- - -',
-            purpose: '- - -',
-            installments: '- - -',
-            installment_repaid: '- - -',
-            total_installment: '- - -',
-            first_installment: '- - -',
-            lasst_installment: '- - -',
-            remarks: 'NIL'
-          },
-        ];
-    
+        const rows = [];
+        afterFilter.forEach((emp,index)=>{
+          const row = [
+            index + 1,
+            emp.Name,
+            emp.Father || '.',
+            emp?.DesignationDetails?.name || '.',
+            '- - -',
+            '- - -',
+             '- - -',
+            '- - -',
+             '- - -',
+            '- - -',
+             '- - -',
+            '- - -',
+              'NIL'
+          ]
+          rows.push(row)
+        })
+
         // Add the Table
         doc.autoTable({
           startY: 110,
           head: [columns.map(col => col.header)],
-          body: rows.map(row => columns.map(col => row[col.dataKey])),
+          body: rows,
           styles: {
             fontSize: 8,
             cellPadding: 3,
@@ -268,73 +200,32 @@ function Misc() {
     
         doc.save('register_of_damage.pdf');
       };
-    const generateEmployeementCardPDF = () => {
+    const generateEmployeementCardPDF = (month) => {
         const doc = new jsPDF('landscape', 'pt', 'A4');
-        const employees = [
-            {
-              name: "AAMIL HASSAN",
-              registerNo: "2375",
-              designation: "HELPER",
-              wageRate: "513.48",
-              wagePeriod: "Monthly",
-              tenure: "06/10/2023",
-              remarks: ""
-            },
-            {
-              name: "SAIF ALI",
-              registerNo: "2376",
-              designation: "SUPERVISOR",
-              wageRate: "650.00",
-              wagePeriod: "Monthly",
-              tenure: "07/10/2023",
-              remarks: ""
-            },
-            {
-              name: "ANAS KHAN",
-              registerNo: "2377",
-              designation: "TECHNICIAN",
-              wageRate: "720.00",
-              wagePeriod: "Monthly",
-              tenure: "08/10/2023",
-              remarks: ""
-            },
-            {
-              name: "MOHAMMAD ZUBAIR",
-              registerNo: "2378",
-              designation: "HELPER",
-              wageRate: "500.00",
-              wagePeriod: "Monthly",
-              tenure: "09/10/2023",
-              remarks: ""
-            },
-            {
-              name: "FAIZAN ALI",
-              registerNo: "2379",
-              designation: "ELECTRICIAN",
-              wageRate: "750.00",
-              wagePeriod: "Monthly",
-              tenure: "10/10/2023",
-              remarks: ""
-            },
-            {
-              name: "SHOAIB AKHTAR",
-              registerNo: "2380",
-              designation: "SUPERVISOR",
-              wageRate: "800.00",
-              wagePeriod: "Monthly",
-              tenure: "11/10/2023",
-              remarks: ""
-            },
-            // 👉 Add more employees if you want
-          ];
+    
         
           const pageWidth = doc.internal.pageSize.getWidth();
           const pageHeight = doc.internal.pageSize.getHeight();
       
           const cardHeight = pageHeight / 2 - 20; // Adjust 20px margin
           const cardWidth = pageWidth - 40; // 20px margin on each side
+       
+
+        if(month){
+         setAfterFilter( employees?.filter((emp)=>{
+          const filtermonth = month.split("-")[1]
+          const filteryear = month.split("-")[0]
+          const dojmonth = emp?.Doj?.split("-")[1]
+          const doyear = emp?.Doj?.split("-")[0]
+          // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
+          return (filtermonth === dojmonth && filteryear === doyear)
+
+        })
+      )
       
-        employees.forEach((employee, index) => {
+      }
+      console.log("total employee",afterFilter.length)
+        afterFilter?.forEach((employee, index) => {
             if (index !== 0 && index % 2 === 0) {
               doc.addPage();
             }
@@ -392,13 +283,13 @@ function Misc() {
             ];
       
             const values = [
-              employee.name,
-              employee.registerNo,
-              employee.designation,
-              employee.wageRate,
-              employee.wagePeriod,
-              employee.tenure,
-              employee.remarks
+              employee.Name,
+              employee.EmpId,
+              employee?.Skill,
+              employee?.rate?.arate || "",
+              "monthly",
+              "",
+              ""
             ];
       
             lines.forEach((line, idx) => {
@@ -408,7 +299,8 @@ function Misc() {
       
             values.forEach((val, idx) => {
               doc.setFont('times', 'bold');
-              doc.text(val || '', 500, bodyStartY + (idx * 15));
+           
+              doc.text(String(val) || '', 500, bodyStartY + (idx * 15));
             });
           });
       
@@ -416,65 +308,63 @@ function Misc() {
       };
     
     const generateWorkManRegister = () => {
-        const employees = [
-          { name: 'AAMIL HASSAN', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'ABHIMANYU PRASAD SINGH', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'ABHISHEK RAJAK', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'ABUDARDA', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'ADITYA KUMAR MAHTO', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'AGUSTI DEO', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'AJAY KUMAR DAS', fatherName: 'SBN0006444', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'AJAY KUMAR DUBEY', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'AJAYA BEHERA', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          { name: 'AJFAR ALI SK.', fatherName: '', natureOfWork: '', groupLetter: '', relayNo: '', certificateDate: '', tokenRef: '', remarks: '' },
-          // ➡️ Add more employee objects as needed
-        ];
+      
+ 
         const doc = new jsPDF('landscape', 'pt', 'a4');
-    
+        // set Margin of page
+      
         // Contractor Info
         doc.setFont('times', 'normal');
         doc.setFontSize(11);
-        doc.text('Name and Address', 20, 30);
-        doc.text('Of Contractor:', 20, 45);
+        doc.text("FORM IX",doc.internal.pageSize.getWidth() / 2,10,{ align: 'center' });
+        doc.text("(see rule 74)",doc.internal.pageSize.getWidth() / 2,20,{ align: 'center' });
+        doc.text('Name and Address', 20, 45);
+        doc.text('Of Contractor:', 20, 55);
     
         doc.setFont('times', 'bold');
-        doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 120, 30);
+        doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 120, 45);
         doc.setFont('times', 'normal');
-        doc.text('502/A Jawaharnagar Road-17', 120, 45);
-        doc.text('Azadnagar Mango Jsr-832110', 120, 60);
+        doc.text('502/A Jawaharnagar Road-17', 120, 55);
+        doc.text('Azadnagar Mango Jsr-832110', 120, 70);
     
         // Title Centered
         doc.setFont('times', 'bold');
         doc.setFontSize(14);
-        doc.text('REGISTER OF ADULT WORKERS', doc.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
+        doc.text('Register of workmen employed by Contractor', doc.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
     
         // Table Headers
         const tableColumn = [
           "Sl. No.",
-          "Name & Address",
+          "Name & Surname of Workman",
+          "Age and Sex",
           "Father's Name",
-          "Nature of Work",
-          "Letter of Group\nAs in Form 11",
-          "No. of Relay\nif Working in Shift",
-          "No. & Date of Certificate if an Adolescent",
-          "Token No. given Ref.\nto the Certificate",
-          "Remarks",
+          "Nature of Employement / Designation",
+          "Permanent Address of Workman \n (Village and Tahsil/Taluka and District)",
+          "Local Address",
+          "Date of Commencement of Work",
+          "Signature \n or \n Thumb Impression ",
+          "Date of Termination ",
+          "Reason for Termination",
+          "Remarks"
         ];
     
         // Table Rows
         const tableRows = [];
     
-        employees.forEach((emp, index) => {
+        afterFilter.forEach((emp, index) => {
           const row = [
             index + 1,
-            emp.name,
-            emp.fatherName || '.',
-            emp.natureOfWork || '.',
-            emp.groupLetter || '.',
-            emp.relayNo || '.',
-            emp.certificateDate || '.',
-            emp.tokenRef || '.',
-            emp.remarks || '.',
+            emp?.Name,
+            emp.Gender || '.',
+            emp.Father || '.',
+            emp?.DesignationDetails?.name || '.',
+            emp?.Address || '.',
+            emp?.Address || '.',
+            `${emp?.Doj?.split("-").reverse().join("/")}` || '.',
+            '.',
+           '.',
+            '.',
+             '.',
           ];
           tableRows.push(row);
         });
@@ -484,6 +374,7 @@ function Misc() {
           head: [tableColumn],
           body: tableRows,
           startY: 80,
+          theme: 'grid',
           styles: {
             font: "times",
             fontSize: 10,
@@ -495,30 +386,17 @@ function Misc() {
           headStyles: {
             fillColor: [255, 255, 255],
             textColor: [0, 0, 0],
+            lineWidth: 0.1,
+            lineColor:[200,200,200],
             fontStyle: "bold",
           },
-          theme: 'grid',
+          
         });
     
         doc.save('register_of_adult_workers.pdf');
       };
     const generateFineRegister = () => {
-      const employees = [
-        { name: 'SK ARIF', designation: 'SUPERVIS', remarks: 'NIL' },
-        { name: 'SK SAIDUL ISLAM', designation: 'FITTER-I', remarks: 'NIL' },
-        { name: 'HIMANSHU DURABUKU', designation: 'SKILLED', remarks: 'NIL' },
-        { name: 'SK NAZRUL ISLAM', designation: 'HIGH SKIL', remarks: 'NIL' },
-        { name: 'RAM KINKAR MANDAL', designation: 'HIGH SKIL', remarks: 'NIL' },
-        { name: 'MD MADHU', designation: 'WELDER-I', remarks: 'NIL' },
-        { name: 'SEKH NASIRUDDIN', designation: 'SKILLED', remarks: 'NIL' },
-        { name: 'MANOJ KUMAR MANDAL', designation: 'SKILLED', remarks: 'NIL' },
-        { name: 'NIRAJ KUMAR', designation: 'SKILLED', remarks: 'NIL' },
-        { name: 'SK MADUL ISLAM-2', designation: 'SEMISKILL', remarks: 'NIL' },
-        { name: 'MIRZA AIM ALI', designation: 'FITTER-I', remarks: 'NIL' },
-        { name: 'NASIMUL HAQUE.', designation: 'UNSKILLE', remarks: 'NIL' },
-        { name: 'MD HASAN SK.', designation: 'SKILLED', remarks: 'NIL' },
-        { name: 'SK SABUR ALI', designation: 'UNSKILLE', remarks: 'NIL' },
-      ];
+  
         const doc = new jsPDF('landscape', 'pt', 'a4');
     
         doc.setFont('times', 'normal');
@@ -571,12 +449,12 @@ function Misc() {
     
         const tableRows = [];
     
-        employees.forEach((emp, index) => {
+        afterFilter.forEach((emp, index) => {
           const row = [
             (index + 1).toString().padStart(2, '0'),
-            emp.name,
-            '.',
-            emp.designation,
+            emp.Name,
+            emp?.Father || '---',
+            emp?.DesignationDetails?.name,
             '---',
             '---',
             '---',
@@ -611,63 +489,7 @@ function Misc() {
         doc.save('fine_register.pdf');
       };
       const generateServiceCertificate = () => {
-        const employees = [
-          {
-            name: "AAMIL HASSAN",
-            registerNo: "2375",
-            designation: "HELPER",
-            wageRate: "513.48",
-            wagePeriod: "Monthly",
-            tenure: "06/10/2023",
-            remarks: ""
-          },
-          {
-            name: "SAIF ALI",
-            registerNo: "2376",
-            designation: "SUPERVISOR",
-            wageRate: "650.00",
-            wagePeriod: "Monthly",
-            tenure: "07/10/2023",
-            remarks: ""
-          },
-          {
-            name: "ANAS KHAN",
-            registerNo: "2377",
-            designation: "TECHNICIAN",
-            wageRate: "720.00",
-            wagePeriod: "Monthly",
-            tenure: "08/10/2023",
-            remarks: ""
-          },
-          {
-            name: "MOHAMMAD ZUBAIR",
-            registerNo: "2378",
-            designation: "HELPER",
-            wageRate: "500.00",
-            wagePeriod: "Monthly",
-            tenure: "09/10/2023",
-            remarks: ""
-          },
-          {
-            name: "FAIZAN ALI",
-            registerNo: "2379",
-            designation: "ELECTRICIAN",
-            wageRate: "750.00",
-            wagePeriod: "Monthly",
-            tenure: "10/10/2023",
-            remarks: ""
-          },
-          {
-            name: "SHOAIB AKHTAR",
-            registerNo: "2380",
-            designation: "SUPERVISOR",
-            wageRate: "800.00",
-            wagePeriod: "Monthly",
-            tenure: "11/10/2023",
-            remarks: ""
-          },
-          // 👉 Add more employees if you want
-        ];
+      
         const doc = new jsPDF('portrait', 'pt', 'a4');
         
         const pageWidth = doc.internal.pageSize.getWidth();
@@ -676,7 +498,7 @@ function Misc() {
         const cardHeight = pageHeight / 2 - 20; // Adjust 20px margin
         const cardWidth = pageWidth - 40; // 20px margin on each side
     
-        employees.forEach((employee, index) => {
+        afterFilter.forEach((emp, index) => {
           if (index !== 0 && index % 2 === 0) {
             doc.addPage();
           }
@@ -703,12 +525,12 @@ function Misc() {
         const details = [
           ['Name and Address of Contractor', 'GLOBAL AC SYSTEM JSR PVT LTD\n502/A Jawaharnagar Road-17\nAzadnagar Mango Jsr-832110'],
           ['Name and Address of Establishment in/under which contract is carried on', 'HINDALCO INDUSTRIES LTD'],
-          ['Nature and Location of Work', 'HVAC AMC'],
+          ['Nature and Location of Work', emp?.SiteDetails?.name || ''],
           ['Name and address of Principal Employer', 'VOLTAS LIMITED'],
-          ['Name and Address of the Workman', 'SK ARIF.'],
-          ['Age or Date of Birth', '15/10/2024'],
+          ['Name and Address of the Workman', emp.Name],
+          ['Age or Date of Birth', emp?.Dob.split("-").reverse().join("/") || '.'],
           ['Identification Marks', '.'],
-          ['Father\'s / Husband\'s Name', '.'],
+          ['Father\'s / Husband\'s Name', emp.Father || '.'],
         ];
     
         let startY = positionY + 100;
@@ -729,9 +551,9 @@ function Misc() {
           "Rate of Wages (with Particulars of Unit in case of Piece Work)",
           "Remarks",
         ];
-    
+        
         const tableRows = [
-          ["01", "01/09/2024 - 15/10/2024", "SUPERVISOR (N.D)", "676.44", ""],
+          ["01", emp?.Doj.split("-").reverse().join("-"), emp?.DesignationDetails?.name,emp?.rate?.arate, ""],
         ];
     
         doc.autoTable({
@@ -827,26 +649,28 @@ function Misc() {
           "Remarks"
         ];
     
-        const tableRows = [
-          ["01", "SK ARIF.", ".", "Male", "SUPERVIS", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["02", "SK.SAIDUL ISLAM", ".", "Male", "FITTER-I", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["03", "HIMANSHU DURABURU", ".", "Male", "SKILLED", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["04", "SK.NAZRUL ISLAM", ".", "Male", "HIGH SKIL", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["05", "RAM KINKAR MANDAL", ".", "Male", "HIGH SKIL", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["06", "MD. MADHU", ".", "Male", "WELDER-I", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["07", "SEKH NASRUDDIN", ".", "Male", "SKILLED", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["08", "MANOJ KUMAR MANDAL", ".", "Male", "SKILLED", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["09", "NIRAJ KUMAR", ".", "Male", "SKILLED", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["10", "SK MADUL ISLAM-2", ".", "Male", "SEMISKILL", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["11", "MIRZA AJIM ALI", ".", "Male", "FITTER-I", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["12", "NASMUL HAQUE", ".", "Male", "UNSKILLE", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["13", "MD.HASAN SK", ".", "Male", "SKILLED", "---", "---", "---", "---", "---", "---", "NIL"],
-          ["14", "SK SABUR ALI", ".", "Male", "UNSKILLE", "---", "---", "---", "---", "---", "---", "NIL"],
-        ];
-    
+       
+    const rows = []
+        afterFilter.forEach((emp,index)=>{
+          const row = [
+            index + 1,
+            emp.Name,
+            emp?.Father || '.',
+            emp?.Gender || '.',
+            emp?.DesignationDetails?.name || '.',
+            '- - -',
+            '- - -',
+            '- - -',
+            '- - -',
+            '- - -',
+            '- - -',
+            'NIL'
+          ]
+          rows.push(row)
+        })
         doc.autoTable({
           head: [tableColumn],
-          body: tableRows,
+          body: rows,
           startY: 150,
           styles: {
             font: 'times',
@@ -866,131 +690,105 @@ function Misc() {
     
         doc.save('overtime_register.pdf');
       };
+
+    const filterEmployee = (data)=>{
+      setwait(true)
+      toast.info("Preparing data for your Report...")
+      if(data.month){
+        const filtermonth = data.month.split("-")[1]
+        const filteryear = data.month.split("-")[0]
+        console.log("selected employee = ",selectedEmployee)
+        if(data.type === 'all'){
+          setAfterFilter( employees?.filter((emp)=>{
+            const dojmonth = emp?.Doj?.split("-")[1]
+            const doyear = emp?.Doj?.split("-")[0]
+     
+           
+              // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
+              return (filtermonth === dojmonth && filteryear === doyear)
+
+          })
+        )
+        setwait(false)
+        }
+        else if(data.type === 'sitewise'){
+            setAfterFilter( 
+              employees?.filter((emp)=>{
+              const dojmonth = emp?.Doj?.split("-")[1]
+              const doyear = emp?.Doj?.split("-")[0]
+                // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
+                return (emp.SiteDetails.name === data.Site && filtermonth === dojmonth && filteryear === doyear)
+
+              })
+            )
+            setwait(false)
+        }
+        else if(data.type === 'selected'){
+          console.log("selected employee = ",afterFilter)
+          setAfterFilter( 
+            afterFilter?.filter((emp)=>{
+              const dojmonth = emp?.Doj?.split("-")[1]
+              const doyear = emp?.Doj?.split("-")[0]
+              // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
+          
+              return (filtermonth === dojmonth && filteryear === doyear)
+            })
+          )
+          setwait(false)
+        }
+      }
+      else{
+         if(data.type === 'all'){
+          setAfterFilter(employees)
+          setwait(false)
+        }
+        else if(data.type === 'sitewise'){
+            setAfterFilter( 
+              employees?.filter((emp)=>{
+      
+                // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
+                return emp.SiteDetails.name === data.Site 
+
+              })
+            )
+            setwait(false)
+        }
+        else{
+          console.log("selected employee = ",afterFilter,afterFilter.length)
+        }
+      }
+    }
     const onSubmit = (data)=>{
-            console.log(data)
+            console.log("data is ",data)
+            filterEmployee(data)
+            const site = data.site;
             const month = data.month.split('-')[1]
             const year = data.month.split('-')[0]
-            if(data.type === 'sitewise'){
-                if(data.Site){
-                    const site = data.Site
-                    if(data.register === "advanceRegister"){
-                        getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                            console.log(data)
-                            generateAdvancePDF()
-                        })
-                    }
-                    if(data.register === "damageRegister"){
-                        getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                            console.log(data)
-                            generateDamagePDF()
-                        })
-                    }
-                    if(data.register === "employeementCard"){
-                        getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                            console.log(data)
-                            generateEmployeementCardPDF()
-                        })
-                    }
-                    if(data.register === "workmanregister"){
-                        getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                            console.log(data)
-                            generateWorkManRegister()
-                        })
-                    }
-                    if(data.register === "fineRegister"){
-                        getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                            console.log(data)
-                            generateFineRegister()
-                        })
-                    }
-                    if(data.register === "serviceCertificate"){
-                      generateServiceCertificate()
-                    }
-                   if(data.register === "overTimeRegister"){
-                      generateOverTimePDF()
-                    }
-                    
-                }
-                else
-                {
-                    toast.error("Please select site")
-                }
-                
+            
+              
+            if(data.register === "advanceRegister"){
+                generateAdvancePDF()
             }
-            else if(data.type === 'all'){
-              if(data.register === "advanceRegister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateAdvancePDF()
-                })
+            else if(data.register === "damageRegister"){
+                generateDamagePDF()
             }
-            if(data.register === "damageRegister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateDamagePDF()
-                })
+            else if(data.register === "employeementCard"){
+                generateEmployeementCardPDF()
             }
-            if(data.register === "employeementCard"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateEmployeementCardPDF()
-                })
+            else if(data.register === "workmanregister"){
+                generateWorkManRegister()
             }
-            if(data.register === "workmanregister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateWorkManRegister()
-                })
+            else if(data.register === "fineRegister"){
+                generateFineRegister()
             }
-            if(data.register === "fineRegister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateFineRegister()
-                })
-            }
-            if(data.register === "serviceCertificate"){
+            else if(data.register === "serviceCertificate"){
               generateServiceCertificate()
             }
-           if(data.register === "overTimeRegister"){
+            else if(data.register === "overTimeRegister"){
               generateOverTimePDF()
             }
-            }
-            else if(data.type === 'selected'){
-              if(data.register === "advanceRegister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    generateAdvancePDF()
-                })
-            }
-            if(data.register === "damageRegister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateDamagePDF()
-                })
-            }
-            if(data.register === "employeementCard"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateEmployeementCardPDF()
-                })
-            }
-            if(data.register === "workmanregister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateWorkManRegister()
-                })
-            }
-            if(data.register === "fineRegister"){
-                getRequest(`/getattendancereport/${month}/${year}/${site}/`).then((res)=>{
-                    console.log(data)
-                    generateFineRegister()
-                })
-            }
-            if(data.register === "serviceCertificate"){
-              generateServiceCertificate()
-            }
-           if(data.register === "overTimeRegister"){
-              generateOverTimePDF()
-            }
+            else {
+              toast.warning("Please select any register to generate")
             }
             
             // getRequest(`/getattendancereport/${month}/${year}/`)
@@ -998,9 +796,7 @@ function Misc() {
             // postRequest(formattedData)
         }
     useEffect(()=>{
-        getRequest('/master/employee/').then((res)=>{
-            setEmployees(res.data)
-        })
+       getEmployeeData()
         
     },[])
     const SelectEmployee = ({heading,showMaster})=>{
@@ -1008,6 +804,7 @@ function Misc() {
             const table = document.querySelector('table')
             const checkboxes = table.querySelectorAll('input[type="checkbox"]')
             const selected = []
+            const selectedId = []
             checkboxes.forEach((checkbox) => {
                 const id = checkbox.id
                 if (checkbox.checked) {
@@ -1015,8 +812,10 @@ function Misc() {
                     const empId = row.querySelector('td:nth-child(2)').textContent
                     const name = row.querySelector('td:nth-child(3)').textContent
                     selected.push({id,empId,name})
+                    selectedId.push(empId)
                 }
               })
+            setAfterFilter( employees?.filter(emp=> selectedId.includes(emp.EmpId)))
             setSelectedEmployee(selected)
             showMaster()
           }
@@ -1133,7 +932,7 @@ function Misc() {
                         <Input type="radio" id="overTimeRegister" {...register("register")} value="overTimeRegister"   className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <label htmlFor='overTimeRegister' className="block mb-2 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">Over Time Register</label>
                         
-                        <Button type="submit" className='col-span-2'>Submit</Button>
+                        <Button type="submit" className='col-span-2' disabled={wait}>{wait?"wait ...":"Submit"}</Button>
                         
             
                 </div>

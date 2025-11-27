@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, useGridApiContext, gridExpandedSortedRowIdsSelector } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid';
 import { Plus, Upload, Download } from "lucide-react";
 import {
   Menubar,
@@ -7,7 +7,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useRequest from "../../hooks/useRequest";
 import ImportFile from "./ImportFile";
@@ -95,10 +95,10 @@ const columns = [
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
-  const { data, error, loading } = useRequest("/master/employee/");
+  const { data, loading } = useRequest("/master/employee/");
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({
+  const [paginationModel] = useState({
     page: 0, // Current page index
     pageSize: 5, // Default page size
   });
@@ -428,6 +428,7 @@ function Employeelist() {
           }}
           newItem={true}
           api="/master/employee/"
+          filename="sample_employee_master.xlsx"
         />
       )}
       {rateImport && (
@@ -438,6 +439,7 @@ function Employeelist() {
             setRateImport(false);
           }}
           newItem={false}
+          filename="rate.xlsx"
           api="/master/rate/"
         />
       )}

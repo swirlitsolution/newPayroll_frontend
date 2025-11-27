@@ -41,6 +41,7 @@ import NewSiteConfig from './components/settings/NewSiteConfig';
 import Mis from './components/report/Mis';
 import PayrollSummery from './components/report/PayrollSummery';
 import Misc from './components/report/Misc';
+import Company from './components/settings/company';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
@@ -72,6 +73,7 @@ function App() {
                     <Route path="/taxslave" element={<TaxSlave />} />
                     <Route path="/taxslave/:id" element={<EditTaxSlave />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/company" element={<Company />} />
                     <Route path="/manageuser" element={<UserManagement />} />
                     <Route path="/nh" element={<Nh />} />
                     <Route path="/transfer" element={<EmployeeTransfer />} />

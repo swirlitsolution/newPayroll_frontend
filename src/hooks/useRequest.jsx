@@ -134,7 +134,7 @@ const useRequest = (url) => {
             })
           }
           if(err.response.status === 400){
-            var error = err.response.data
+            error = err.response.data
             Object.keys(error).map((key)=>{
               toast.warning(`${key} ${error[key]}`)
             })
