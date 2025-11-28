@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import { Label } from "@/components/ui/label"
 import DataGrid from '../custom/DataGrid';
 import { toast } from 'react-toastify';
+import Company from '../settings/company';
 
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
@@ -14,7 +15,6 @@ const columns = [
     {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData.SiteDetails.name},
     {field:'Department',headerName:'Department',renderCell:(params)=>params.employeeData.DepartmentDetails.name},
     {field:'Designation',headerName:'Designation',renderCell:(params)=>params.employeeData.DesignationDetails.name},
-    {field:'Gang',headerName:'Gang',renderCell:(params)=>params.employeeData.GangDetails.name},
     {field:'day1',headerName:'1',renderCell:(params)=>{
         return <span>{params.day1}{params.otday1?("/"+params.otday1):""}</span>}},
     {field:'day2',headerName:'2',renderCell:(params)=>{
@@ -134,7 +134,15 @@ function AttendanceReport(props) {
               <div className=' text-center'>
                 <h3 className="font-bold">{props?.heading.toUpperCase()}</h3>
               </div>
-                <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
+             
+               
+             
+            </div>
+          </div>
+         
+          <div className='flex flex-col gap-2 w-full items-center'>
+           <Company />
+            <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
                 <Label>All </Label>
                 <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                                 
@@ -158,24 +166,20 @@ function AttendanceReport(props) {
                 <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         
                 <Button type='submit' >Ok</Button>
-                </form>
-                {
+            </form>
+               {
                     download?
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
                             <a href={'https://backend.stcassociates.co.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
-                            {/* <a href={'http://127.0.0.1:8000/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a> */}
+                            <a href={'https://backend.stcassociates.co.in/attendance/combine/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a>
              
                         </div>
                
                     </div>
                     :""
                    }
-            </div>
-          </div>
-         
-          <div className='flex gap-2 w-full'>
               <div className="  w-[100%] ">
               {loading?"Loading......": data?.attendance?.length? 
                ( <DataGrid 

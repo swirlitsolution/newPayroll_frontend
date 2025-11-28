@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { set } from 'date-fns';
+import Company from '../settings/company';
 
 function Misc() {
     const {control,watch, register,handleSubmit, formState: { errors } } = useForm()
@@ -873,7 +874,9 @@ function Misc() {
   return (
     <div>
     {close?<SelectEmployee heading="Misc" showMaster={handleCard} />:""}
-       <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
+    <div className='w-full flex flex-col justify-between'>
+      <Company />
+         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
            
         
             <div className='w-full flex justify-center mt-2'>
@@ -938,6 +941,8 @@ function Misc() {
                 </div>
             </div>
         </form>
+    </div>
+    
     </div>
   )
 }

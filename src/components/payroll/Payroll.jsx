@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
 import { Input } from '../ui/input';
+import Company from '../settings/company';
 
 
  const payrollcolumns = [
@@ -74,24 +75,7 @@ import { Input } from '../ui/input';
 ]
 
 // day =  tpayable + tnhday as per request from nadim sir on 04-09-2025 for the site tata cummins
-const slipcolumns = [
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
-    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
-    {field:'basic',headerName:'Basic'},
-    {field:'da',headerName:'DA'},
-    {field:'mrpgross',headerName:'Gross'},
-    {field:'advance',headerName:'Advance'},
-    {field:'deduction',headerName:'Deduction'},
-    {field:'mrpnetamt',headerName:'Net Amt'},
-    {field:'view',headerName:'View',renderCell:(params)=>{
-        return <a href={'https://backend.stcassociates.co.in/slip/'+params.id+'/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
-    }},
-    {field:'download',headerName:'Download',renderCell:(params)=>{
-        return <a href={'https://backend.stcassociates.co.in/downloadslip/'+params.id+'/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
-    }},
-   
-]
+
 
 
 
@@ -164,7 +148,26 @@ function Payroll() {
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
+    const [odisha,setOdisha] = useState(false)
     const { flattenObject } = useFlattendObject()
+    const slipcolumns = [
+    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
+    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
+    {field:'basic',headerName:'Basic'},
+    {field:'da',headerName:'DA'},
+    {field:'mrpgross',headerName:'Gross'},
+    {field:'advance',headerName:'Advance'},
+    {field:'deduction',headerName:'Deduction'},
+    {field:'mrpnetamt',headerName:'Net Amt'},
+    {field:'view',headerName:'View',renderCell:(params)=>{
+        return <a href={'https://backend.stcassociates.co.in/slip/'+params.id+'/'+(odisha?"odisha":"jharkhand")+"/"} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
+    }},
+    {field:'download',headerName:'Download',renderCell:(params)=>{
+        return <a href={'https://backend.stcassociates.co.in/downloadslip/'+params.id+'/'+(odisha?"odisha":"jharkhand")+"/"} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
+    }},
+   
+]
     const onSubmit = (data)=>{
         console.log(data)
         console.log("attendance data",data)
@@ -217,8 +220,8 @@ function Payroll() {
     },[data])
   return (
     <div>
-    
-  
+        
+        <Company />
         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
                 <Label>All </Label>
@@ -295,13 +298,17 @@ function Payroll() {
             </TabsContent>
             <TabsContent value="slip">
             {loading?"Loading......": rowdata?.length?
-            <div className='w-full'>
-            {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"} target='_blank'> all</a> */}
+            <div className='w-full '>
+                <div className="flex justify-center gap-4 flex-row p-2">
+                      {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a> */}
                 {/*
                 for testing only
                 */}
-                 <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"} target='_blank'> all</a>
-               
+
+                 <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a>
+                <Input type="checkbox" id="state" onClick={()=>setOdisha(!odisha)}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                <label htmlFor='state'>Odisha</label>
+                </div>
                 <DataGrid 
               heading="Payroll slip"
               columns={slipcolumns} 

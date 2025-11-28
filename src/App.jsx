@@ -65,7 +65,7 @@ function App() {
                     <Route path="/newemployee" element={<NewEmployee heading="Add new employee" />} />
                     <Route path="/employee/:id" element={<EditEmployee heading="Edit employee" />} />
                     <Route path="/attendance" element={<Attendance heading="Attendance" />} />
-                    <Route path="/attendancereport" element={<AttendanceReport heading="Report" />} />
+                    <Route path="/attendancereport" element={<AttendanceReport heading="Attendance Report" />} />
                     <Route path="/permitreport" element={<PermitReport heading="Permit By Report" />} />
                     <Route path="/processattendance" element={<ProcessAttendance heading="Process Attendance" delete={false} />} />
                     <Route path="/adminprocessattendance" element={<ProcessAttendance heading="Process Attendance" delete={true} />} />
