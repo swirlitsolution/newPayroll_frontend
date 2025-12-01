@@ -153,11 +153,11 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
     doc.text(`${data?.name}`, 30, y + 60);
     doc.text(`${data?.address || ""}`, 30, y + 75);
 
-    doc.text("Name and Address of Establishment in/under which", 300, y + 45);
-    doc.text("Contract is Carried On", 300, y + 58);
-    doc.text(`${data?.contractEstablishment}`, 300, y + 73);
-    doc.text("Name & Address of the Principal Employer", 300, y + 88);
-    doc.text(`${data?.principleEmployer}`, 300, y + 103);
+    doc.text("Name and Address of Establishment in/under which", 330, y + 45);
+    doc.text("Contract is Carried On", 330, y + 58);
+    doc.text(`${data?.contractEstablishment}`, 330, y + 73);
+    doc.text("Name & Address of the Principal Employer", 330, y + 88);
+    doc.text(`${data?.principleEmployer}`, 330, y + 103);
 
     let lineY = y + 135;
 
@@ -165,20 +165,20 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
     lineY += 15;
     doc.text(`Name of the work man:`, 30, lineY);
     doc.text(`${emp?.employeeData_Name}`,180,lineY)
-    doc.text(`UAN No.:`, 300, lineY);
-    doc.text(`${emp.employeeData_Uan}`,350,lineY)
+    doc.text(`UAN No.:`, 330, lineY);
+    doc.text(`${emp.employeeData_Uan}`,380,lineY)
 
     lineY += 15;
     doc.text(`Father Name:`, 30, lineY);
        doc.text(`${emp.employeeData_Father}`,180,lineY)
-    doc.text(`ESIC No.:`, 300, lineY);
-    doc.text(` ${emp.employeeData_Esic}`,350,lineY)
+    doc.text(`ESIC No.:`, 330, lineY);
+    doc.text(` ${emp.employeeData_Esic}`,380,lineY)
 
     lineY += 15;
     doc.text(`Payment Month:`, 30, lineY);
-    doc.text(`${emp.month}`,180,lineY)
-    doc.text(`A/C No.:`, 300, lineY);
-    doc.text(` ${emp.employeeData_Ac}`,182,lineY)
+    doc.text(`${monthname[emp.month]} - ${emp.year}`,180,lineY)
+    doc.text(`A/C No.:`, 330, lineY);
+    doc.text(` ${emp.employeeData_Ac}`,380,lineY)
 
     lineY += 15;
     doc.text(`Workman No.:`, 30, lineY);

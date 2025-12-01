@@ -165,7 +165,7 @@ function Payroll() {
     {field:'deduction',headerName:'Deduction'},
     {field:'mrpnetamt',headerName:'Net Amt'},
     {field:'view',headerName:'View',renderCell:(params)=>{
-        return <WageSlipPDF employees={[params]} odisha={odisha} company={company} />
+        return <WageSlipPDF employees={[params]} odisha={odisha} data={company} />
     }},
  
 ]
@@ -365,7 +365,7 @@ function Payroll() {
                 <Input type="checkbox" id="state" onClick={()=>setOdisha(!odisha)}  className='w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
 
                 <label htmlFor='state' className="cursor-pointer">Odisha</label>
-                <WageSlipPDF employees={rowdata} odisha={odisha} company={company} />
+                <WageSlipPDF employees={rowdata} odisha={odisha} data={company} />
                 </div>
                 <DataGrid 
               heading="Payroll slip"
