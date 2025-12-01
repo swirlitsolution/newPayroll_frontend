@@ -10,7 +10,9 @@ import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
 import { Input } from '../ui/input';
 import Company from '../settings/company';
-
+import WageSlipPDF from './WagesSlip';
+import useRequest from '../../hooks/useRequest';
+import axios from 'axios';
 
  const payrollcolumns = [
     {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
@@ -143,13 +145,15 @@ const sumBankcolumns = [
 
 ]
 function Payroll() {
-    const {control,register, handleSubmit, watch, formState: { errors } } = useForm()
+    const {control,register,token, handleSubmit, watch, formState: { errors } } = useForm()
     const { data, loading,getRequest } = usePost('')
+    const [company,setCompany] = useState(null)
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
     const [odisha,setOdisha] = useState(false)
     const { flattenObject } = useFlattendObject()
+    const [leave,setLeave] = useState(null)
     const slipcolumns = [
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
@@ -161,24 +165,88 @@ function Payroll() {
     {field:'deduction',headerName:'Deduction'},
     {field:'mrpnetamt',headerName:'Net Amt'},
     {field:'view',headerName:'View',renderCell:(params)=>{
-        return <a href={'https://backend.stcassociates.co.in/slip/'+params.id+'/'+(odisha?"odisha":"jharkhand")+"/"} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
+        return <WageSlipPDF employees={[params]} odisha={odisha} company={company} />
     }},
-    {field:'download',headerName:'Download',renderCell:(params)=>{
-        return <a href={'https://backend.stcassociates.co.in/downloadslip/'+params.id+'/'+(odisha?"odisha":"jharkhand")+"/"} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
-    }},
-   
+ 
 ]
+    const leaveData = async(year)=>{
+        getRequest(`/leave/?year=${year}`).then((response)=>{
+            setLeave(response.data.leaveregister)
+        }).catch((error)=>{
+        })  
+    }
+    const companydata = async ()=>{
+        getRequest('/api/get/company/details').then((response)=>{
+          
+            setCompany(response.data)
+        }).catch((error)=>{
+            console.log(error)
+        })
+            
+    }
     const onSubmit = (data)=>{
-        console.log(data)
-        console.log("attendance data",data)
+     
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
+        leaveData(year)
         if(data.all){
-            getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`)
+            getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`).then((response)=>{
+        
+                     if(response?.data?.attendance){
+                        setDownload(true)
+                        const row = response?.data?.attendance.map(item=>flattenObject(item))
+                        const sortedData = row.sort((a, b) => {
+                            if (a.employeeData_Name < b.employeeData_Name) {
+                                return -1;
+                            }
+                            else if (a.employeeData_Name > b.employeeData_Name) {
+                                return 1;
+                            }
+                        }
+                        )
+                        const leavefilteredData = sortedData.map((item)=>{
+                            const leavedetails = leave?.filter((leaveitem)=>leaveitem.employee.EmpId === item.employeeData_EmpId)
+                           
+                            item.leavedetails = leavedetails
+                            return item
+                        })
+                        setRowdata(leavefilteredData)
+                       
+                    }
+                }).catch((error)=>{
+                    console.log(error)
+                })
         }
         else if(data.Site && data.month !== ""){
-            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`)
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`).then((response)=>{
+              
+                     if(response?.data?.attendance){
+                        setDownload(true)
+                        const row = response?.data?.attendance.map(item=>flattenObject(item))
+                        const sortedData = row.sort((a, b) => {
+                            if (a.employeeData_Name < b.employeeData_Name) {
+                                return -1;
+                            }
+                            else if (a.employeeData_Name > b.employeeData_Name) {
+                                return 1;
+                            }
+                        }
+                        )
+                             const leavefilteredData = sortedData.map((item)=>{
+                            const leavedetails = leave?.filter((leaveitem)=>leaveitem.employee.EmpId === item.employeeData_EmpId)
+                       
+                            item.leavedetails = leavedetails
+                            return item
+                        })
+                        setRowdata(leavefilteredData)
+                    }
+                    else{
+                        console.log("no data found")
+                    }
+                }).catch((error)=>{
+                    console.log(error)
+                })
 
         }
         else{
@@ -201,23 +269,11 @@ function Payroll() {
         })
     }
     useEffect(()=>{
-        console.log("get request",data)
-        if(data?.attendance){
-            setDownload(true)
-            const row = data?.attendance.map(item=>flattenObject(item))
-            const sortedData = row.sort((a, b) => {
-                if (a.employeeData_Name < b.employeeData_Name) {
-                    return -1;
-                }
-                else if (a.employeeData_Name > b.employeeData_Name) {
-                    return 1;
-                }
-            }
-            )
-            setRowdata(sortedData)
-            console.log("row data is ",rowdata)
-        }
-    },[data])
+    
+        companydata()
+     
+   
+    },[])
   return (
     <div>
         
@@ -299,15 +355,17 @@ function Payroll() {
             <TabsContent value="slip">
             {loading?"Loading......": rowdata?.length?
             <div className='w-full '>
-                <div className="flex justify-center gap-4 flex-row p-2">
+                <div className="flex justify-center items-center gap-4 flex-row p-2">
                       {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a> */}
                 {/*
                 for testing only
                 */}
+                
+                 {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a> */}
+                <Input type="checkbox" id="state" onClick={()=>setOdisha(!odisha)}  className='w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
 
-                 <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a>
-                <Input type="checkbox" id="state" onClick={()=>setOdisha(!odisha)}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
-                <label htmlFor='state'>Odisha</label>
+                <label htmlFor='state' className="cursor-pointer">Odisha</label>
+                <WageSlipPDF employees={rowdata} odisha={odisha} company={company} />
                 </div>
                 <DataGrid 
               heading="Payroll slip"
