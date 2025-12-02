@@ -79,9 +79,6 @@ import axios from 'axios';
 // day =  tpayable + tnhday as per request from nadim sir on 04-09-2025 for the site tata cummins
 
 
-
-
-
 const summarycolumns = [
     { field: 'EmpId', headerName: 'EmpId', width: '80px', renderCell: (params) => params.employeeData_EmpId },
     { field: 'Name', headerName: 'Name', renderCell: (params) => params.employeeData_Name },
@@ -155,20 +152,20 @@ function Payroll() {
     const { flattenObject } = useFlattendObject()
     const [leave,setLeave] = useState(null)
     const slipcolumns = [
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
-    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
-    {field:'basic',headerName:'Basic'},
-    {field:'da',headerName:'DA'},
-    {field:'mrpgross',headerName:'Gross'},
-    {field:'advance',headerName:'Advance'},
-    {field:'deduction',headerName:'Deduction'},
-    {field:'mrpnetamt',headerName:'Net Amt'},
-    {field:'view',headerName:'View',renderCell:(params)=>{
-        return <WageSlipPDF employees={[params]} odisha={odisha} data={company} />
-    }},
- 
-]
+                            {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+                            {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
+                            {field:'basic',headerName:'Basic'},
+                            {field:'da',headerName:'DA'},
+                            {field:'mrpgross',headerName:'Gross'},
+                            {field:'advance',headerName:'Advance'},
+                            {field:'deduction',headerName:'Deduction'},
+                            {field:'mrpnetamt',headerName:'Net Amt'},
+                            {field:'view',headerName:'View',renderCell:(params)=>{
+                                return <WageSlipPDF employees={[params]} odisha={odisha} data={company} />
+                            }},
+                            {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
+                        
+                        ]
     const leaveData = async(year)=>{
         getRequest(`/leave/?year=${year}`).then((response)=>{
             setLeave(response.data.leaveregister)

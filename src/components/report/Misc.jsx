@@ -20,6 +20,7 @@ function Misc() {
     const [afterFilter,setAfterFilter] = useState([])
     const [selectedEmployee,setSelectedEmployee] = useState([])
     const [wait,setwait] = useState(false)
+    const [company,setCompany] = useState(null)
     const getEmployeeData = ()=>{
       toast.warning("Please wait fetching  data...")
         getRequest('/master/employee/').then((res)=>{
@@ -27,6 +28,15 @@ function Misc() {
             toast.success("Done ! Now select the register")
         })
         
+    }
+    const companydata = async ()=>{
+        getRequest('/api/get/company/details').then((response)=>{
+          
+            setCompany(response.data)
+        }).catch((error)=>{
+            console.log(error)
+        })
+            
     }
     const handleCard = ()=>{
         setClose(!close)
@@ -44,18 +54,19 @@ function Misc() {
         // Contractor and Employer Information
         doc.setFontSize(10);
         doc.text('Name & Address of Contractor:', 20, 30);
-        doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 20, 45);
-        doc.text('502/A Jawaharnagar Road-17', 20, 60);
-        doc.text('Adityapur Mango Jsr-831010', 20, 75);
+        doc.text(`${company?.name}`, 20, 45);
+        doc.text(`${company?.address}`, 20, 60);
+        doc.text('', 20, 75);
     
         doc.text('Name & Address of the Establishment ', 650, 30);
         doc.text('Under which Contract is carried on:', 650, 40);
-        doc.text('HINDALCO INDUSTRIES LTD', 650, 50);
+        doc.text(`${company?.contractEstablishment}`, 650, 50);
     
         doc.text('Name & Address of Principal Employer:', 650, 60);
-        doc.text('VOLTAS LIMITED', 650, 75);
+        doc.text(`${company?.principleEmployer}`, 650, 75);
     
         doc.text('Name & Location of Work:', 20, 95);
+        doc.text(`${company?.workNature}`,20,100);
     
         // Table Columns
         const columns = [
@@ -90,8 +101,6 @@ function Misc() {
          ]
           rows.push(row)
         })
-
-     
     
         // Add the Table
         doc.autoTable({
@@ -128,19 +137,18 @@ function Misc() {
         // Contractor and Employer Information
         doc.setFontSize(10);
         doc.text('Name & Address of Contractor:', 20, 30);
-        doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 20, 45);
-        doc.text('502/A Jawaharnagar Road-17', 20, 60);
-        doc.text('Adityapur Mango Jsr-831010', 20, 75);
+        doc.text(`${company?.name}`, 20, 45);
+        doc.text(`${company?.address}`, 20, 60);
     
         doc.text('Name & Address of the Establishment ', 650, 30);
         doc.text('Under which Contract is carried on:', 650, 40);
-        doc.text('HINDALCO INDUSTRIES LTD', 650, 50);
+        doc.text(`${company?.contractEstablishment}`, 650, 50);
     
         doc.text('Name & Address of Principal Employer:', 650, 60);
-        doc.text('VOLTAS LIMITED', 650, 75);
+        doc.text(`${company?.principleEmployer}`, 650, 75);
     
         doc.text('Name & Location of Work:', 20, 95);
-    
+        doc.test(`${company?.workNature}`,20,100);
         // Table Columns
         const columns = [
           { header: 'Sl.No.', dataKey: 'slno' },
@@ -250,21 +258,21 @@ function Misc() {
             doc.setFont('times', 'normal');
             doc.text('Name & Address of Contractor:', 30, positionY + 40);
             doc.setFont('times', 'bold');
-            doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 30, positionY + 60);
+            doc.text(`${company?.name}`, 30, positionY + 60);
             doc.setFont('times', 'normal');
-            doc.text('502/A Jawaharnagar Road-17', 30, positionY + 80);
-            doc.text('Azadnagar Mango Jsr-832110', 30, positionY + 100);
+            doc.text(`${company?.address}`, 30, positionY + 80);
+            // doc.text('Azadnagar Mango Jsr-832110', 30, positionY + 100);
       
             // Employer Details
             doc.setFont('times', 'normal');
             doc.text('Name & Address of the Establishment ', 650, positionY + 40, { align: 'left' });
             doc.text('Under which contract is carried on:', 650, positionY + 50, { align: 'left' });
             doc.setFont('times', 'bold');
-            doc.text('HINDALCO INDUSTRIES LTD', 650, positionY + 60, { align: 'left' });
+            doc.text(`${company?.contractEstablishment}`, 650, positionY + 60, { align: 'left' });
             doc.setFont('times', 'normal');
             doc.text('Name & Address of Principal Employer', 650, positionY + 80, { align: 'left' });
             doc.setFont('times', 'bold');
-            doc.text('VOLTAS LIMITED', 650, positionY + 100, { align: 'left' });
+            doc.text(`${company?.principleEmployer}`, 650, positionY + 100, { align: 'left' });
       
             // Middle Line Separator
             doc.setLineWidth(0.5);
@@ -323,10 +331,10 @@ function Misc() {
         doc.text('Of Contractor:', 20, 55);
     
         doc.setFont('times', 'bold');
-        doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 120, 45);
+        doc.text(`${company?.name}`, 120, 45);
         doc.setFont('times', 'normal');
-        doc.text('502/A Jawaharnagar Road-17', 120, 55);
-        doc.text('Azadnagar Mango Jsr-832110', 120, 70);
+        doc.text(`${company?.address}`, 120, 55);
+        // doc.text('Azadnagar Mango Jsr-832110', 120, 70);
     
         // Title Centered
         doc.setFont('times', 'bold');
@@ -406,12 +414,12 @@ function Misc() {
         // Left Header
         doc.text('Name & Address of Contractor:', 20, 30);
         doc.setFont('times', 'bold');
-        doc.text('GLOBAL AC SYSTEM JSR PVT LTD', 20, 45);
+        doc.text(`${company?.name}`, 20, 45);
         doc.setFont('times', 'normal');
-        doc.text('502/A Jawaharnagar Road-17', 20, 60);
-        doc.text('Azadnagar Mango Jsr-832110', 20, 75);
+        doc.text(`${company?.address}`, 20, 60);
+        // doc.text('Azadnagar Mango Jsr-832110', 20, 75);
         doc.text('Name & Location of Work', 20, 90);
-    
+        doc.text(`${company?.workNature}`,20,105);
         // Center Header
         doc.setFont('times', 'bold');
         doc.setFontSize(12);
@@ -426,11 +434,11 @@ function Misc() {
         doc.setFont('times', 'normal');
         doc.text('Name & Address of the Establishment Under which Contract is carried on', pageWidth - 320, 30);
         doc.setFont('times', 'bold');
-        doc.text('HINDALCO INDUSTRIES LTD', pageWidth - 320, 45);
+        doc.text(`${company?.contractEstablishment}`, pageWidth - 320, 45);
         doc.setFont('times', 'normal');
         doc.text('Name & Address of Principal Employer', pageWidth - 320, 60);
         doc.setFont('times', 'bold');
-        doc.text('VOLTAS LIMITED', pageWidth - 320, 75);
+        doc.text(`${company?.principleEmployer}`, pageWidth - 320, 75);
     
         // Table
         const tableColumn = [
@@ -508,24 +516,24 @@ function Misc() {
           // 🖍️ Draw Border for each card
           doc.setLineWidth(1.2);
           doc.rect(20, positionY, cardWidth, cardHeight);
-        doc.setFont('times', 'normal');
-        doc.setFontSize(10);
+          doc.setFont('times', 'normal');
+          doc.setFontSize(10);
     
-        // Top Header Center
-        doc.setFont('times', 'bold');
-        doc.setFontSize(12);
-        doc.text('FORM XV', doc.internal.pageSize.getWidth() / 2,positionY + 40, { align: 'center' });
-        doc.setFont('times', 'normal');
-        doc.setFontSize(10);
-        doc.text('(See Rule 77)', doc.internal.pageSize.getWidth() / 2, positionY + 55, { align: 'center' });
-        doc.setFont('times', 'bold');
-        doc.text('Service Certificate', doc.internal.pageSize.getWidth() / 2, positionY + 70, { align: 'center' });
-    
+          // Top Header Center
+          doc.setFont('times', 'bold');
+          doc.setFontSize(12);
+          doc.text('FORM XV', doc.internal.pageSize.getWidth() / 2,positionY + 40, { align: 'center' });
+          doc.setFont('times', 'normal');
+          doc.setFontSize(10);
+          doc.text('(See Rule 77)', doc.internal.pageSize.getWidth() / 2, positionY + 55, { align: 'center' });
+          doc.setFont('times', 'bold');
+          doc.text('Service Certificate', doc.internal.pageSize.getWidth() / 2, positionY + 70, { align: 'center' });
+      
        
         // Contractor and Employee Details
         const details = [
-          ['Name and Address of Contractor', 'GLOBAL AC SYSTEM JSR PVT LTD\n502/A Jawaharnagar Road-17\nAzadnagar Mango Jsr-832110'],
-          ['Name and Address of Establishment in/under which contract is carried on', 'HINDALCO INDUSTRIES LTD'],
+          ['Name and Address of Contractor', `${company?.name}\n ${company?.address}`],
+          ['Name and Address of Establishment in/under which contract is carried on', `${company?.contractEstablishment}`],
           ['Nature and Location of Work', emp?.SiteDetails?.name || ''],
           ['Name and address of Principal Employer', 'VOLTAS LIMITED'],
           ['Name and Address of the Workman', emp.Name],
@@ -607,12 +615,12 @@ function Misc() {
     
         // Contractor & Establishment Details
         const leftDetails = [
-          ['Name & Address of Contractor', 'GLOBAL AC SYSTEM JSR PVT LTD\n502/A Jawaharnagar Road-17\nAzadnagar Mango Jsr-832110'],
+          ['Name & Address of Contractor', `${company?.name}\n${company?.address}`],
           ['Name & Location of Work', ''],
         ];
         const rightDetails = [
-          ['Name & Address of the Establishment', 'HINDALCO INDUSTRIES LTD'],
-          ['Name & Address of Principal Employer', 'VOLTAS LIMITED'],
+          ['Name & Address of the Establishment', `${company?.contractEstablishment}`],
+          ['Name & Address of Principal Employer', `${company?.principleEmployer}`],
         ];
     
         let startY = 100;
@@ -774,7 +782,7 @@ function Misc() {
                 generateDamagePDF()
             }
             else if(data.register === "employeementCard"){
-                generateEmployeementCardPDF()
+                generateEmployeementCardPDF(month)
             }
             else if(data.register === "workmanregister"){
                 generateWorkManRegister()
@@ -798,7 +806,7 @@ function Misc() {
         }
     useEffect(()=>{
        getEmployeeData()
-        
+        companydata()
     },[])
     const SelectEmployee = ({heading,showMaster})=>{
         const handleOnChange = ()=>{

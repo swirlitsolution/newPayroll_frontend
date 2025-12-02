@@ -45,7 +45,7 @@ function PayrollSummery() {
     console.log("payroll summary", { site, month, year });
     useEffect(() => {
         if (site && month && year) {
-            getRequest(`/getattendancereport/${month}/${year}/${site}/`);
+            getRequest(`/getattendancereport/${month}/${year}/${site}/sitewise/`);
         }
     }, [site, month, year]);
   
