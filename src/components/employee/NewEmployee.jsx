@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select"
 import Master from '../master/Master';
 import usePost from '../../hooks/usePost';
+import { toast } from 'react-toastify';
 
 function NewEmployee(props) {
 
@@ -72,7 +73,7 @@ function NewEmployee(props) {
         }
     }
     const onSubmit = (data) => {
-    
+
         postRequest(data)
     }
     const getNextEmpId = async () => {
@@ -97,6 +98,34 @@ function NewEmployee(props) {
             console.log("done");
         }
     }
+
+
+    // Function to check if the Aadhar exists
+    const handleAadharChange = async (e) => {
+        const aadhar = e.target.value;
+
+        if (aadhar && aadhar.length === 12) { // Validate Aadhar number length
+            try {
+                const response = await axios.get(`/master/employee/`, {
+                    params: { aadhar }, // Query params
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include Authorization header
+                    },
+                });
+
+                if (response?.data) {
+                    // Show warning using toast
+                    toast.error("Employee with the provided Aadhar already exists.");
+                }
+            } catch (err) {
+                console.error("Error checking Aadhar:", err);
+                toast.error("Error checking Aadhar. Please try again.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                });
+            }
+        }
+    };
 
     // useEffect(()=>{
     //     if(loading===false){
@@ -140,7 +169,7 @@ function NewEmployee(props) {
                                             <Master
                                                 api="/master/site/"
                                                 onValueChange={(newValue) => onChange(newValue || null)}
-                                                value={value} name='site' add={true} mandatoryLabel={true}/>
+                                                value={value} name='site' add={true} mandatoryLabel={true} />
                                         );
                                     }}
                                 />
@@ -149,7 +178,7 @@ function NewEmployee(props) {
                             <div className='flex items-center gap-2'>
                                 <Label htmlFor='empid' className='text-right '>EmpId<span className='text-red-500 text-lg'>*</span></Label>
                                 <Label htmlFor='Auto' className=''>Auto</Label>
-                                <Input type="checkbox" id="Auto" onChange={() => setAuto(!auto)} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                                <Input type="checkbox" id="Auto" {...register("Auto")} onChange={() => setAuto(!auto)} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
 
                                 <Input type='text' className='bg-white'  {...register("EmpId")} id='empid' />
                             </div>
@@ -231,7 +260,7 @@ function NewEmployee(props) {
                                             <Master
                                                 api="/master/department/"
                                                 onValueChange={(newValue) => onChange(newValue || null)}
-                                                value={value} name='department' add={true} mandatoryLabel={true}/>
+                                                value={value} name='department' add={true} mandatoryLabel={true} />
                                         );
                                     }}
                                 />
@@ -284,7 +313,7 @@ function NewEmployee(props) {
                             <Label htmlFor='safetyexpiry' className='text-left'>Safety Card expiry</Label>
                             <Input type="date" id="safetyexpiry" {...register("SafetyCardExpiry")} className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                             <Label htmlFor='aadhar' className='text-left'>Aadhar<span className='text-red-500 text-lg'>*</span></Label>
-                            <Input type="text" id="aadhar" {...register("Aadhar")} className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                            <Input type="text" id="aadhar" {...register("Aadhar")} onChange={handleAadharChange} className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                             <Label htmlFor='pan' className='text-left'>Pan</Label>
                             <Input type="text" id="pan" {...register("Pan")} className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
 

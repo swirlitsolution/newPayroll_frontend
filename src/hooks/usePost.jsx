@@ -13,7 +13,7 @@ function usePost(url) {
     const postRequest = async (payload) => {
         setLoading(true);
         setError(null);
-        console.log("data to save",payload)
+       
         try {
           const response = await axios.post(url, payload,
             {
@@ -23,7 +23,8 @@ function usePost(url) {
                 withCredentials: false
             }
           );
-          console.log("post response",response)
+       
+       
           if(response.status === 201){
             toast.success(response.data.success)
             setData(response.data);
@@ -40,9 +41,15 @@ function usePost(url) {
           }
           
           if(response.status===200){
-            console.log(response.data)
-            toast.success("Processed Successfully")
-          setData(response.data);
+          
+            if(response.data.warning){
+              toast.warning(response.data.warning)
+            }
+            else{
+              toast.success("Processed Successfully")
+              setData(response.data);
+            }
+           
       
           
           }
@@ -73,7 +80,7 @@ function usePost(url) {
       const putRequest = async (payload) => {
         setLoading(true);
         setError(null);
-        console.log("data to save",payload)
+  
         try {
           const response = await axios.put(url, payload,
             {
@@ -83,7 +90,7 @@ function usePost(url) {
                 withCredentials: false
             }
           );
-          console.log("post response",response)
+         
           if(response.status === 201){
             toast.success(response.data.success)
           }
@@ -94,7 +101,7 @@ function usePost(url) {
             toast.warning(response.data.exists)
           }
           if(response.status===200){
-            console.log(response.data)
+        
 
           setData(response.data);
       
@@ -126,7 +133,7 @@ function usePost(url) {
       const putapiRequest = async (api,payload) => {
         setLoading(true);
         setError(null);
-        console.log("data to save",payload)
+
         try {
           const response = await axios.put(api, payload,
             {
@@ -136,7 +143,7 @@ function usePost(url) {
                 withCredentials: false
             }
           );
-          console.log("post response",response)
+
           if(response.status === 201){
             toast.success(response.data.success)
           }
@@ -147,8 +154,8 @@ function usePost(url) {
             toast.warning(response.data.exists)
           }
           if(response.status===200){
-            console.log(response.data)
-
+      
+            toast.success(response.data.Saved)
           setData(response.data);
       
           return response
@@ -189,7 +196,7 @@ function usePost(url) {
                 withCredentials: false
             }
           );
-          console.log("get response",response)
+    
           if(response.status === 404){
             toast.warning("Requested source not found !")
           }
@@ -200,7 +207,7 @@ function usePost(url) {
             toast.success(response.data.success)
           }
           if(response.status===200){
-            console.log(response.data)
+            
 
           setData(response.data);
       
@@ -230,7 +237,7 @@ function usePost(url) {
           setLoading(false);
         }
       };
-      return { data, error, loading,getRequest,postRequest,putRequest,putapiRequest }
+      return { data, error, token,loading,getRequest,postRequest,putRequest,putapiRequest }
 }
 
 export default usePost

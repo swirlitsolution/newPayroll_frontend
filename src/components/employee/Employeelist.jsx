@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, useGridApiContext, gridExpandedSortedRowIdsSelector } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid';
 import { Plus, Upload, Download } from "lucide-react";
 import {
   Menubar,
@@ -7,105 +7,104 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useRequest from "../../hooks/useRequest";
 import ImportFile from "./ImportFile";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
+const columns = [
+  { field: "EmpId", headerName: "EmpId", width: 80 },
+  { field: "Name", headerName: "Name", width: 180 },
+  { field: "Father", headerName: "Father", width: 180 },
+  {
+    field: "SiteDetails_name",
+    headerName: "Site",
+    width: 180,
+  },
+  {
+    field: "DepartmentDetails_name",
+    headerName: "Department",
+    width: 180
+  },
+  {
+    field: "DesignationDetails_name",
+    headerName: "Designation",
+    width: 180,
+  },
+  {
+    field: "GangDetails_name",
+    headerName: "Gang",
+    width: 180,
+  },
+  { field: "Email", headerName: "Email", width: 220 },
+  { field: "Gender", headerName: "Gender", width: 220 },
+  { field: "MaritalStatus", headerName: "Married", width: 220 },
+  { field: "PfApplicable", headerName: "PfApplicable", width: 220 },
+  { field: "Uan", headerName: "Uan", width: 220 },
+  { field: "EsicApplicable", headerName: "EsicApplicable", width: 220 },
+  { field: "Esic", headerName: "Esic", width: 220 },
+  { field: "PRFTax", headerName: "PRFTax", width: 220 },
+  { field: "Mobile", headerName: "Mobile", width: 220 },
+  { field: "EmpSafetyCard", headerName: "EmpSafetyCard", width: 220 },
+  { field: "SafetyCardExpiry", headerName: "SafetyCardExpiry", width: 220 },
+  { field: "Address", headerName: "Gender", width: 220 },
+  { field: "AttendAllow", headerName: "AttendAllow", width: 220 },
+  { field: "OtAppl", headerName: "OtAppl", width: 220 },
+  { field: "MrOtAppl", headerName: "MrOtAppl", width: 220 },
+  { field: "ReversePF", headerName: "ReversePF", width: 220 },
+  { field: "Bank", headerName: "Bank", width: 220 },
+  { field: "Branch", headerName: "Branch", width: 220 },
+  { field: "Ifsc", headerName: "Ifsc", width: 220 },
+  { field: "Ac", headerName: "Ac", width: 220 },
+  { field: "Aadhar", headerName: "Aadhar", width: 220 },
+  { field: "Pan", headerName: "Pan", width: 220 },
+  { field: "Otslave", headerName: "Otslave", width: 220 },
+  { field: "Ottype", headerName: "Ottype", width: 220 },
+  { field: "Paymentmode", headerName: "Paymentmode", width: 220 },
+  { field: "Weekoff", headerName: "Weekoff", width: 220 },
+  { field: "Skill", headerName: "Skill", width: 220 },
+  { field: "Status", headerName: "Status", width: 220 },
+  { field: "Doe", headerName: "Doe", width: 220 },
+  { field: "rate_basic", headerName: "basic", width: 220 },
+  { field: "rate_da", headerName: "da", width: 220 },
+  { field: "rate_arate", headerName: "arate", width: 220 },
+  { field: "rate_otrate", headerName: "otrate", width: 220 },
+  { field: "rate_hra", headerName: "hra", width: 220 },
+  { field: "rate_madical", headerName: "madical", width: 220 },
+  { field: "rate_ExgratiaRetention", headerName: "ExgratiaRetention", width: 220 },
+  { field: "rate_LTARetention", headerName: "LTARetention", width: 220 },
+  { field: "rate_LTA", headerName: "LTA", width: 220 },
+  { field: "rate_CA", headerName: "CA", width: 220 },
+  { field: "rate_Fooding", headerName: "Fooding", width: 220 },
+  { field: "rate_Misc", headerName: "Misc", width: 220 },
+  { field: "rate_CEA", headerName: "CEA", width: 220 },
+  { field: "rate_WashingAllowance", headerName: "WashingAllowance", width: 220 },
+  { field: "rate_ProfessionalPursuits", headerName: "ProfessionalPursuits", width: 220 },
+  { field: "rate_SpecialAllowance", headerName: "SpecialAllowance", width: 220 },
+  { field: "rate_IncomeTax", headerName: "IncomeTax", width: 220 },
+  { field: "rate_personalpay", headerName: "personalpay", width: 220 },
+  { field: "rate_petrol", headerName: "petrol", width: 220 },
+  { field: "rate_mobile", headerName: "mobile", width: 220 },
+  { field: "rate_incentive", headerName: "incentive", width: 220 },
+  { field: "rate_fixedamt", headerName: "fixedamt", width: 220 },
+
+];
 
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
-  const { data, error, loading } = useRequest("/master/employee/");
+  const { data, loading } = useRequest("/master/employee/");
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({
+  const [paginationModel] = useState({
     page: 0, // Current page index
     pageSize: 5, // Default page size
   });
 
   // Define the columns you want to show on the UI
-  const columns = [
-    { field: "id", headerName: "TrnId", width: 80 },
-    { field: "EmpId", headerName: "EmpId", width: 80 },
-    { field: "Name", headerName: "Name", width: 180 },
-    { field: "Father", headerName: "Father", width: 180 },
-    {
-      field: "SiteDetails_name",
-      headerName: "Site",
-      width: 180,
-    },
-    {
-      field: "DepartmentDetails_name",
-      headerName: "Department",
-      width: 180
-    },
-    {
-      field: "DesignationDetails_name",
-      headerName: "Designation",
-      width: 180,
-    },
-    {
-      field: "GangDetails_name",
-      headerName: "Gang",
-      width: 180,
-    },
-    { field: "Email", headerName: "Email", width: 220 },
-    { field: "Gender", headerName: "Gender", width: 220 },
-    { field: "MaritalStatus", headerName: "Married", width: 220 },
-    { field: "PfApplicable", headerName: "PfApplicable", width: 220 },
-    { field: "Uan", headerName: "Uan", width: 220 },
-    { field: "EsicApplicable", headerName: "EsicApplicable", width: 220 },
-    { field: "Esic", headerName: "Esic", width: 220 },
-    { field: "PRFTax", headerName: "PRFTax", width: 220 },
-    { field: "Mobile", headerName: "Mobile", width: 220 },
-    { field: "EmpSafetyCard", headerName: "EmpSafetyCard", width: 220 },
-    { field: "SafetyCardExpiry", headerName: "SafetyCardExpiry", width: 220 },
-    { field: "Address", headerName: "Gender", width: 220 },
-    { field: "AttendAllow", headerName: "AttendAllow", width: 220 },
-    { field: "OtAppl", headerName: "OtAppl", width: 220 },
-    { field: "MrOtAppl", headerName: "MrOtAppl", width: 220 },
-    { field: "ReversePF", headerName: "ReversePF", width: 220 },
-    { field: "Bank", headerName: "Bank", width: 220 },
-    { field: "Branch", headerName: "Branch", width: 220 },
-    { field: "Ifsc", headerName: "Ifsc", width: 220 },
-    { field: "Ac", headerName: "Ac", width: 220 },
-    { field: "Aadhar", headerName: "Aadhar", width: 220 },
-    { field: "Pan", headerName: "Pan", width: 220 },
-    { field: "Otslave", headerName: "Otslave", width: 220 },
-    { field: "Ottype", headerName: "Ottype", width: 220 },
-    { field: "Paymentmode", headerName: "Paymentmode", width: 220 },
-    { field: "Weekoff", headerName: "Weekoff", width: 220 },
-    { field: "Skill", headerName: "Skill", width: 220 },
-    { field: "Status", headerName: "Status", width: 220 },
-    { field: "Doe", headerName: "Doe", width: 220 },
-    { field: "rate_basic", headerName: "basic", width: 220 },
-    { field: "rate_da", headerName: "da", width: 220 },
-    { field: "rate_arate", headerName: "arate", width: 220 },
-    { field: "rate_otrate", headerName: "otrate", width: 220 },
-    { field: "rate_hra", headerName: "hra", width: 220 },
-    { field: "rate_madical", headerName: "madical", width: 220 },
-    { field: "rate_ExgratiaRetention", headerName: "ExgratiaRetention", width: 220 },
-    { field: "rate_LTARetention", headerName: "LTARetention", width: 220 },
-    { field: "rate_LTA", headerName: "LTA", width: 220 },
-    { field: "rate_CA", headerName: "CA", width: 220 },
-    { field: "rate_Fooding", headerName: "Fooding", width: 220 },
-    { field: "rate_Misc", headerName: "Misc", width: 220 },
-    { field: "rate_CEA", headerName: "CEA", width: 220 },
-    { field: "rate_WashingAllowance", headerName: "WashingAllowance", width: 220 },
-    { field: "rate_ProfessionalPursuits", headerName: "ProfessionalPursuits", width: 220 },
-    { field: "rate_SpecialAllowance", headerName: "SpecialAllowance", width: 220 },
-    { field: "rate_IncomeTax", headerName: "IncomeTax", width: 220 },
-    { field: "rate_personalpay", headerName: "personalpay", width: 220 },
-    { field: "rate_petrol", headerName: "petrol", width: 220 },
-    { field: "rate_mobile", headerName: "mobile", width: 220 },
-    { field: "rate_incentive", headerName: "incentive", width: 220 },
-    { field: "rate_fixedamt", headerName: "fixedamt", width: 220 },
-
-  ];
-
+  
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Dob: false,
     Imageurl: false,
@@ -184,30 +183,25 @@ function Employeelist() {
 
   useEffect(() => {
     if (data?.length > 0) {
-      const filteredRows = data.map((row) => flattenObject(row));
+      const filteredRows = data.map((row, index) => ({
+        ...flattenObject(row),
+        id: row.id || index,
+      }));
       setRows(filteredRows);
     }
   }, [data]);
 
+  const allData = data?.length;
+  console.log("allData", allData)
+
 
   const handleRowClicked = (params) => {
     if(params.field == "Name"){
+      console.log("params", params)
     navigate(`/employee/${params.id}`, { id: params.id });
     }
     
   };
-
-  // const handlePaginationModelChange = (model) => {
-  //   setPaginationModel(model);
-
-  //   // Calculate the current page data
-  //   const startIndex = model.page * model.pageSize;
-  //   const endIndex = startIndex + model.pageSize;
-  //   const currentPageData = rows.slice(startIndex, endIndex);
-
-  //   console.log("Current Page Data:", currentPageData);
-  // };
-
 
   // const generatePDF = () => {
   //   // Initialize jsPDF with landscape orientation
@@ -293,9 +287,9 @@ function Employeelist() {
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
-  
+
     const headers = visibleColumns.map((col) => col.headerName);
-  
+
     // Filter rows based on pagination
     // const startIndex = paginationModel.page * paginationModel.pageSize;
     // const endIndex = startIndex + paginationModel.pageSize;
@@ -304,15 +298,15 @@ function Employeelist() {
     const dataRows = rows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
-  
+
     const doc = new jsPDF("landscape");
     doc.text("Employee List", 14, 10);
-  
+
     const columnStyles = {};
     visibleColumns.forEach((col, index) => {
       columnStyles[index] = { cellWidth: "auto" };
     });
-  
+
     doc.autoTable({
       startY: 25,
       head: [headers],
@@ -333,7 +327,7 @@ function Employeelist() {
       },
       tableWidth: "auto",
     });
-  
+
     doc.save(`EmployeeList_Page_${paginationModel.page + 1}.pdf`);
   };
 
@@ -343,9 +337,9 @@ function Employeelist() {
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
     );
-  
+
     const headers = visibleColumns.map((col) => col.headerName);
-  
+
     // Filter rows based on pagination
     // const startIndex = paginationModel.page * paginationModel.pageSize;
     // const endIndex = startIndex + paginationModel.pageSize;
@@ -353,11 +347,11 @@ function Employeelist() {
     const dataRows = rows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
-  
+
     const ws = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Employee List");
-  
+
     XLSX.writeFile(wb, `EmployeeList_Page_${paginationModel.page + 1}.xlsx`);
   };
 
@@ -434,6 +428,7 @@ function Employeelist() {
           }}
           newItem={true}
           api="/master/employee/"
+          filename="sample_employee_master.xlsx"
         />
       )}
       {rateImport && (
@@ -444,6 +439,7 @@ function Employeelist() {
             setRateImport(false);
           }}
           newItem={false}
+          filename="rate.xlsx"
           api="/master/rate/"
         />
       )}

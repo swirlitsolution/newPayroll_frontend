@@ -134,7 +134,7 @@ const useRequest = (url) => {
             })
           }
           if(err.response.status === 400){
-            var error = err.response.data
+            error = err.response.data
             Object.keys(error).map((key)=>{
               toast.warning(`${key} ${error[key]}`)
             })
@@ -227,7 +227,9 @@ const useRequest = (url) => {
           if(response.status===200){
           setData(response.data);
           toast.success("Update Successfully")
+           return response
           }
+         
         } catch (err) {
           console.error(err)
           if(err.status === 400){

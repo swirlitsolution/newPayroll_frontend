@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from '../ui/input'
 import Master from '../master/Master';
 import { useForm,Controller  } from "react-hook-form";
 import usePost from '../../hooks/usePost';
 import { Button } from '../ui/button';
+import { Label } from "@/components/ui/label"
 import DataGrid from '../custom/DataGrid';
+import { toast } from 'react-toastify';
+import Company from '../settings/company';
 
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
@@ -12,7 +15,6 @@ const columns = [
     {field:'Site',headerName:'Site',renderCell:(params)=>params.employeeData.SiteDetails.name},
     {field:'Department',headerName:'Department',renderCell:(params)=>params.employeeData.DepartmentDetails.name},
     {field:'Designation',headerName:'Designation',renderCell:(params)=>params.employeeData.DesignationDetails.name},
-    {field:'Gang',headerName:'Gang',renderCell:(params)=>params.employeeData.GangDetails.name},
     {field:'day1',headerName:'1',renderCell:(params)=>{
         return <span>{params.day1}{params.otday1?("/"+params.otday1):""}</span>}},
     {field:'day2',headerName:'2',renderCell:(params)=>{
@@ -80,9 +82,10 @@ const columns = [
     {field:'tot',headerName:'OT'},
 ]
 function AttendanceReport(props) {
-    const {register,handleSubmit,control, formState: { errors } } = useForm()
+    const {register,handleSubmit,control,watch, formState: { errors } } = useForm()
     const { data, loading,getRequest} = usePost("/markattendance/")
-
+    const [download,setDownload] = useState(false)
+    const [attendance,setAttendance] = useState([])
     
     const handleRowClicked = (params)=>{
         console.log(params)
@@ -94,10 +97,36 @@ function AttendanceReport(props) {
         const year = splited_date[0]
         const month = splited_date[1]
         
-        getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
+        if(data.all){
+            getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`)
+        }
+        else if(data.Site && data.month !== ""){
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`)
 
+        }
+        else{
+            toast.warning("Select the site and month")
+        }
   
     }
+    useEffect(()=>{
+        if(data?.attendance?.length){
+            setDownload(true)
+            const sortedData = data?.attendance.sort((a, b) => {
+                if (a?.employeeData?.Name < b?.employeeData?.Name) {
+                    return -1;
+                }
+                else if (a?.employeeData.Name > b?.employeeData.Name) {
+                    return 1;
+                }
+            }
+            )
+            setAttendance(sortedData)
+        }
+        else{
+            setDownload(false)
+        }
+    },[data])
     return (
       <div className="flex flex-col overflow-x-hidden overflow-y-auto gap-2 mt-2">
           <div className="bg-white rounded-lg shadow p-2 border-2">
@@ -105,8 +134,18 @@ function AttendanceReport(props) {
               <div className=' text-center'>
                 <h3 className="font-bold">{props?.heading.toUpperCase()}</h3>
               </div>
-                <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
-                
+             
+               
+             
+            </div>
+          </div>
+         
+          <div className='flex flex-col gap-2 w-full items-center'>
+        
+            <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
+                <Label>All </Label>
+                <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                                
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here
@@ -127,17 +166,26 @@ function AttendanceReport(props) {
                 <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         
                 <Button type='submit' >Ok</Button>
-                </form>
-            </div>
-          </div>
-         
-          <div className='flex gap-2 w-full'>
+            </form>
+               {
+                    download?
+                    <div className='border-2 rounded-md'>
+                        <h3 className=' bg-slate-200 font-bold'>Download</h3>
+                        <div className='flex gap-2 px-2'>
+                            <a href={'https://backend.stcassociates.co.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
+                            <a href={'https://backend.stcassociates.co.in/attendance/combine/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a>
+             
+                        </div>
+               
+                    </div>
+                    :""
+                   }
               <div className="  w-[100%] ">
               {loading?"Loading......": data?.attendance?.length? 
                ( <DataGrid 
                 heading="Attendance"
                 columns={columns} 
-                row={data?.attendance} 
+                row={attendance} 
                 rowClicked={handleRowClicked}
                 exportlayout="l"
                 />  )

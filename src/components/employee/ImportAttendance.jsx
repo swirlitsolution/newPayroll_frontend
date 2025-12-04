@@ -209,7 +209,7 @@ function ImportAttendance({heading,closeModel,newItem, api}) {
                         <FileSpreadsheet className="mx-auto h-12 w-12 text-muted-foreground" />
                         <h3 className="mt-2 text-sm font-semibold text-muted-foreground">No Excel data</h3>
                         <p className="mt-1 text-sm text-muted-foreground">Upload an Excel file to see the data here</p>
-                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href="https://global.swirlapps.in/media/attendance.xlsx"> click here</a> </p>
+                        <p className="mt-1 text-sm text-muted-foreground text-center">To download sample file <a href="https://backend.stcassociates.co.in/media/attendance.xlsx"> click here</a> </p>
                         
                         
                         </div>
