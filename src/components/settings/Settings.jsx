@@ -9,7 +9,7 @@ function Settings() {
       "heading":"Company",
       "paragraph":"View and update company details",
       "className":"bg-green-100 text-green-400",
-      "renderComponent":"/company",
+      "renderComponent":"/companies",
       "icon":"BriefcaseBusiness"
     },
     {

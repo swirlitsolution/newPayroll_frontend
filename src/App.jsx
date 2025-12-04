@@ -42,6 +42,8 @@ import Mis from './components/report/Mis';
 import PayrollSummery from './components/report/PayrollSummery';
 import Misc from './components/report/Misc';
 import Company from './components/settings/company';
+import Companies from './components/settings/Companies';
+import ShortCutModal from './components/settings/ShortCutModal';
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
@@ -51,6 +53,7 @@ function App() {
  
   return (
     <AuthProvider>
+    <ShortCutModal />
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -74,6 +77,7 @@ function App() {
                     <Route path="/taxslave/:id" element={<EditTaxSlave />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/company" element={<Company />} />
+                    <Route path="/companies" element={<Companies />} />
                     <Route path="/manageuser" element={<UserManagement />} />
                     <Route path="/nh" element={<Nh />} />
                     <Route path="/transfer" element={<EmployeeTransfer />} />

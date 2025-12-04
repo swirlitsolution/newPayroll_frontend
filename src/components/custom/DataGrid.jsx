@@ -200,7 +200,7 @@ function DataGrid({
       const tableColumnHeaders = columns.map((col) => col.headerName);
 
       // Process table rows dynamically
-      const tableRows = tableData.map((item) =>
+      const tableRows = tableData?.map((item) =>
         columns.map((col) => {
           let cellValue;
 
@@ -330,14 +330,14 @@ function DataGrid({
             </tr>
           </thead>
           <tbody>
-            {tableData.length === 0 ? (
+            {tableData?.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + (checkBoxSelection ? 2 : 1)} className="text-center py-3">
+                <td colSpan={columns?.length + (checkBoxSelection ? 2 : 1)} className="text-center py-3">
                   No data available
                 </td>
               </tr>
             ) : (
-              tableData.map((item, index) => (
+              tableData?.map((item, index) => (
                 <tr
                   key={index}
                   onClick={rowClicked ? () => rowClicked(item) : undefined}

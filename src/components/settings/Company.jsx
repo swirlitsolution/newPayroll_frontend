@@ -4,15 +4,27 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { Label } from "@/components/ui/label"
 import useRequest from '../../hooks/useRequest'
+import { useSearchParams } from 'react-router-dom'
 
 
 
 function Company() {
     const {register, handleSubmit,setValue, formState: { errors } } = useForm()
-    const { data, error, loading, onlypatchRequest} = useRequest(`/api/get/company/details`)  
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const id = searchParams.get("id")
+
+    const { data, error, loading, onlypatchRequest,onlypostRequest} = useRequest(`/api/get/company/details/${id}/`)  
+    
     const onSubmit = (formdata)=>{
             console.log("updating details",formdata)
-            onlypatchRequest('api/update/company/details',formdata)
+            if(id){
+                onlypatchRequest(`api/update/company/details/${id}/`,formdata)
+            }
+            else{
+                onlypostRequest('api/create/company/details',formdata)
+            }
+            
         }
      useEffect(()=>{
             setValue('name',data?.name)

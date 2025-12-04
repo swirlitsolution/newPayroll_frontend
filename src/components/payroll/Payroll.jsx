@@ -173,7 +173,7 @@ function Payroll() {
         })  
     }
     const companydata = async ()=>{
-        getRequest('/api/get/company/details').then((response)=>{
+        getRequest('api/select/company/').then((response)=>{
           
             setCompany(response.data)
         }).catch((error)=>{
@@ -273,8 +273,7 @@ function Payroll() {
     },[])
   return (
     <div>
-        
-        <Company />
+  
         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
                 <Label>All </Label>

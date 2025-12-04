@@ -22,7 +22,7 @@ function Misc() {
     const [wait,setwait] = useState(false)
     const [company,setCompany] = useState(null)
     const getEmployeeData = ()=>{
-      toast.warning("Please wait fetching  data...")
+        toast.warning("Please wait fetching  data...")
         getRequest('/master/employee/').then((res)=>{
             setEmployees(res.data)
             toast.success("Done ! Now select the register")
@@ -30,7 +30,7 @@ function Misc() {
         
     }
     const companydata = async ()=>{
-        getRequest('/api/get/company/details').then((response)=>{
+        getRequest('api/select/company/').then((response)=>{
           
             setCompany(response.data)
         }).catch((error)=>{
@@ -706,7 +706,7 @@ function Misc() {
       if(data.month){
         const filtermonth = data.month.split("-")[1]
         const filteryear = data.month.split("-")[0]
-        console.log("selected employee = ",selectedEmployee)
+        
         if(data.type === 'all'){
           setAfterFilter( employees?.filter((emp)=>{
             const dojmonth = emp?.Doj?.split("-")[1]
@@ -883,7 +883,7 @@ function Misc() {
     <div>
     {close?<SelectEmployee heading="Misc" showMaster={handleCard} />:""}
     <div className='w-full flex flex-col justify-between'>
-      <Company />
+  
          <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
            
         

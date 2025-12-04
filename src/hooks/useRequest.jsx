@@ -227,7 +227,9 @@ const useRequest = (url) => {
           if(response.status===200){
           setData(response.data);
           toast.success("Update Successfully")
+           return response
           }
+         
         } catch (err) {
           console.error(err)
           if(err.status === 400){

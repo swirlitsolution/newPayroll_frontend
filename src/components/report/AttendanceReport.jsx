@@ -141,7 +141,7 @@ function AttendanceReport(props) {
           </div>
          
           <div className='flex flex-col gap-2 w-full items-center'>
-           <Company />
+        
             <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
                 <Label>All </Label>
                 <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
