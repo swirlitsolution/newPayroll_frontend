@@ -9,10 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
 import { Input } from '../ui/input';
-import Company from '../settings/company';
 import WageSlipPDF from './WagesSlip';
-import useRequest from '../../hooks/useRequest';
-import axios from 'axios';
+import CompanyData from '../settings/CompanyData';
 
  const payrollcolumns = [
     {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
@@ -314,6 +312,9 @@ function Payroll() {
       
             </div>
         </form>
+        <div>
+        {/* <CompanyData company={company} /> */}
+        </div>
         <div className='w-full mt-2'>
         <Tabs defaultValue="payroll" className="w-full">
             <TabsList className="flx gap-2">
