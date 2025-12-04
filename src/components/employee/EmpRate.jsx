@@ -97,6 +97,9 @@ function EmpRate(props) {
                         <Input type="text" id="Fooding" {...register("Fooding")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='Misc' className='text-left'>Misc</Label>
                         <Input type="text" id="Misc" {...register("Misc")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                        <Label htmlFor='CEA' className='text-left'>CEA</Label>
+                        <Input type="text" id="CEA" {...register("CEA")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+
                         <Label htmlFor='WashingAllowance' className='text-left'>Washing Allowance</Label>
                         <Input type="text" id="WashingAllowance" {...register("WashingAllowance")}  className='w-full  bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                         <Label htmlFor='ProfessionalPursuits' className='text-left'>Professional Pursuits</Label>

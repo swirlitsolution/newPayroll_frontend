@@ -175,7 +175,7 @@ function SyncData({ heading, closeModel }) {
 
             try {
                 const res = await axios.patch(
-                    `https://global.swirlapps.in/importrate/${data[i].EmpId}/`,
+                    `https://backend.stcassociates.co.in/importrate/${data[i].EmpId}/`,
                     payload, // The payload is the second parameter
                     {
                         headers: {

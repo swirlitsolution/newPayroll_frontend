@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect } from 'react'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import useRequest from '../../hooks/useRequest'
 
 function PayrollParameter() {
-    const {control,register, handleSubmit,setValue,reset, watch, formState: { errors } } = useForm()
+    const {register, handleSubmit,setValue, formState: { errors } } = useForm()
     const { data, error, loading, postRequest} = useRequest(`/parameter/`)  
     const onSubmit = (formdata)=>{
         console.log(formdata)

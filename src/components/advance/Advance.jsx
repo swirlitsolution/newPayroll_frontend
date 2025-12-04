@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Button } from '../ui/button'
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '../ui/input'
-import { Loader2, Plus } from 'lucide-react'
+import { CheckCheck, CrossIcon, IndianRupee, Loader2, Plus, X } from 'lucide-react'
 import useRequest from '../../hooks/useRequest'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ChevronDown, DollarSign, Calendar, CheckCircle, XCircle, Clock } from 'lucide-react'
@@ -15,6 +15,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { AuthContext } from '../../AuthContext';
   
 const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
@@ -32,6 +33,8 @@ function Advance() {
     const [isSubmitting,setIsSubmitting] = useState(false)
     const [newForm,setNewForm] = useState(false)
     const [advanceData,setAdvanceData] = useState(null)
+    
+   
     const handleStatusChange = (id,remarks,status)=>{
         if(status === "approved"){
             onlypatchRequest("/master/advance/"+id+"/",{status})
@@ -67,6 +70,51 @@ function Advance() {
         const status = advance.approved?"approved":advance.rejected?"rejected":"pending"
         const StatusIcon = statusIcons[status]
         const [reject,setReject] = useState(false)
+        const [deduction,setDeduction] = useState(false)
+        const {user} = useContext(AuthContext);
+       const handledeductionchange = (e)=>{
+        setDeduction(e.target.checked)
+        if(!e.target.checked){
+            onlyputRequest("/advancededuction/"+advance.id+"/",{installment:0,deduction:e.target.checked})
+        }
+           
+            
+        }
+        const Deductionamtcomponent = ()=>{
+            const deductionamt = useRef(null)
+            const [deductionfrom,setDeductionFrom] = useState(null)
+            const handledeductionsubmit = (id,deductionamount)=>{
+                if(deductionamt.current.value === ""){
+                    toast.warning("Please enter deduction amount")
+                }
+                else{
+                    onlyputRequest("/advancededuction/"+id+"/",{installment:deductionamount,deductionfrom:deductionfrom,deduction:true})
+                }
+            }
+            return <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-10" id="my-modal">
+                        <div className="relative top-20 mx-auto p-2 border w-[80%] shadow-lg rounded-md bg-white">
+                        <div className="p-2 space-y-4"  />
+                        <div className='flex flex-col  gap-4 text-start'>
+                            <label>Deduction From</label>
+                            <select name="deductionfrom" id="deductionfrom" onChange={(e)=>setDeductionFrom(e.target.value)} className='w-full p-2 border rounded-md'>
+                                <option value="">Select Deduction From</option>
+                                <option value="payroll">PAYROLL</option>
+                                <option value="ot">OT</option>
+                            </select>
+                            <label>Installment Amount</label>
+                            <Input type="text" ref={deductionamt} />
+                            
+                            <div className='flex justify-between w-full'>
+                            <Button onClick={()=>handledeductionsubmit(advance.id,deductionamt.current.value)}>Submit</Button>
+                            <Button variant="destructive" onClick={()=>setDeduction(false)}>Close</Button>
+                            </div>
+                        </div>
+                            
+                        </div>
+                    </div>
+        }
+    
+        
         const RejectComponent = ()=>{
             const remarksRef = useRef(null)
 
@@ -77,7 +125,7 @@ function Advance() {
                             <label>Remarks</label>
                             <Input type="text" ref={remarksRef} />
                             <div className='flex justify-between w-full'>
-                            <Button onClick={()=>onStatusChange(advance.id,remarksRef.current.value,"rejected")}>Submit</Button>
+                            <Button onClick={()=>onStatusChange(advance.id,remarksRef.current.value)}>Submit</Button>
                             <Button variant="destructive" onClick={()=>setReject(false)}>Close</Button>
                             </div>
                         </div>
@@ -95,6 +143,7 @@ function Advance() {
             className={isExpanded?" row-span-3":""}
             >
             {reject?<RejectComponent />:""}
+            {deduction?<Deductionamtcomponent />:""}
             <Card className="mb-4 overflow-hidden">
                 <CardContent className="p-0">
                 <div 
@@ -107,7 +156,7 @@ function Advance() {
                         <AvatarFallback>{advance?.employeedata?.Name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <h3 className="font-semibold text-lg">{advance?.employeedata?.Name}</h3>
+                        <h3 className="font-semibold text-lg">{advance?.employeedata?.Name} - {advance?.employeedata?.EmpId}</h3>
                         <p className="text-sm text-gray-500">{new Date(advance.applydate).toLocaleDateString()}</p>
                     </div>
                     </div>
@@ -155,6 +204,39 @@ function Advance() {
                             </div>
                             <span>{new Date(advance.approoveddate).toLocaleDateString()}</span>
                         </div>:""
+                        }
+                        {
+                          user.is_superuser?  advance?.approved?<div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center text-gray-700">
+                           {advance?.deduction? <CheckCheck className="w-5 h-5 mr-2" />:<X className='w-5 h-5 mr-2 text-red-600' />}
+                            <span className="font-medium">Deduction:</span>
+                            </div>
+                            <Input type="checkbox" id="deduction" onChange={handledeductionchange}  checked={advance?.deduction} className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                            
+                        </div>:""
+                        :""
+                        }
+                        {
+                            advance?.approved?
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center text-gray-700">
+                                    <IndianRupee className="w-5 h-5 mr-2" />
+                                    <span className="font-medium">Installment:</span>
+                                </div>
+                            <span>{advance.installment}</span>
+                        </div>
+                        :""
+                        }
+                        {
+                            advance?.approved?
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center text-gray-700">
+                                    <IndianRupee className="w-5 h-5 mr-2" />
+                                    <span className="font-medium">Balance:</span>
+                                </div>
+                            <span>{advance.balance}</span>
+                        </div>
+                        :""
                         }
                         {
                             advance.rejected?<div className="flex items-center justify-between mb-4">

@@ -4,6 +4,8 @@ import DataGrid from '../custom/DataGrid'
 import {Plus, Upload } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+
+
 const columns = [
     {field:'id',headerName:'Id'},
     {field:'username',headerName:'Username',renderCell:(params)=>params.userdata.username},
@@ -11,6 +13,8 @@ const columns = [
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employeedata.Name},
     {field:'Site',headerName:'Site',renderCell:(params)=>params.employeedata.SiteDetails.name}
 ]
+
+
 function UserManagement() {
     const {data, error, loading, getRequest } = useRequest("/api/user/profile/list/")
     const navigate = useNavigate();

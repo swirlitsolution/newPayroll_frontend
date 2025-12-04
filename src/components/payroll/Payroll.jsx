@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Master from '../master/Master';
 import { Label } from "@/components/ui/label"
 import { useForm,Controller  } from "react-hook-form";
@@ -8,9 +8,11 @@ import DataGrid from '../custom/DataGrid';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
+import { Input } from '../ui/input';
+import WageSlipPDF from './WagesSlip';
+import CompanyData from '../settings/CompanyData';
 
-
-export const payrollcolumns = [
+ const payrollcolumns = [
     {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
     {field:'employeeData_Name',headerName:'Name'},
     {field:'employeeData_SiteDetails_name',headerName:'Site'},
@@ -39,17 +41,20 @@ export const payrollcolumns = [
     }},
     {field:'rate',headerName:'Rate',renderCell:(params)=>{
         return (
-            <td>
+            <tr>
                 <tr className='border-b-2'>
+                 <td>B</td>
                     <td>{params.basicrate}</td>
                 </tr>
                 <tr className='border-b-2'>
+                 <td>Da</td>
                     <td>{params.darate}</td>
                 </tr>
                 <tr className='border-b-2'>
+                 <td>Total</td>
                     <td>{parseFloat(params.basicrate) + parseFloat(params.darate)}</td>
                 </tr>
-            </td>
+            </tr>
         )}},
     {field:'basic',headerName:'Basic'},
     {field:'da',headerName:'DA'},
@@ -57,6 +62,8 @@ export const payrollcolumns = [
     {field:'attallow',headerName:'Other Cash'},
     {field:'tiscoothr',headerName:'OT Hrs'},
     {field:'mrpotamt',headerName:'OT Amt'},
+    {field:'mrpallownetamt',headerName:'Other Allowance'},
+
     {field:'mrpgross',headerName:'Gross'},
     {field:'pf',headerName:'PF'},
     {field:'esic',headerName:'ESIC'},
@@ -67,26 +74,7 @@ export const payrollcolumns = [
    
 ]
 
-const slipcolumns = [
-    {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
-    {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
-    {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.tpayable},
-    {field:'basic',headerName:'Basic'},
-    {field:'da',headerName:'DA'},
-    {field:'mrpgross',headerName:'Gross'},
-    {field:'advance',headerName:'Advance'},
-    {field:'deduction',headerName:'Deduction'},
-    {field:'mrpnetamt',headerName:'Net Amt'},
-    {field:'view',headerName:'View',renderCell:(params)=>{
-        return <a href={'https://global.swirlapps.in/slip/'+params.id+'/'} target="_blank" className=" p-1 bg-indigo-600 m-2 text-white">View</a>
-    }},
-    {field:'download',headerName:'Download',renderCell:(params)=>{
-        return <a href={'https://global.swirlapps.in/downloadslip/'+params.id+'/'} target="_blank" className=" p-1 bg-orange-600 m-2 text-white">Download</a>
-    }},
-   
-]
-
-
+// day =  tpayable + tnhday as per request from nadim sir on 04-09-2025 for the site tata cummins
 
 
 const summarycolumns = [
@@ -95,52 +83,31 @@ const summarycolumns = [
     { field: 'day', headerName: 'Worked', width: '90px', renderCell: (params) => params.tpayable },
     { field: 'rate', headerName: 'Rate', renderCell: (params) => params.arate },
     { field: 'aamt', headerName: 'Actual Amt', renderCell: (params) => params.aamt.toFixed(2) },
-    { field: 'hraamt', headerName: 'HRA' },
-    { field: 'madical', headerName: 'Medical' },
-    { field: 'exgratiaretention', headerName: 'ExGratia Retention' },
-    { field: 'lta', headerName: 'LTA' },
-    { field: 'foodingamt', headerName: 'Fooding' },
-    { field: 'caamt', headerName: 'CA' },
-    { field: 'miscamt', headerName: 'MISc' },
-    { field: 'cea', headerName: 'CEA' },
-    { field: 'washingallowance', headerName: 'Washing' },
-    { field: 'professinalpursuites', headerName: 'PRF Pursuits' },
-    { field: 'specialallowance', headerName:'Spcl Allow'},
-    { field: 'incometax', headerName: 'Income Tax' },
-    { field: 'personalpay', headerName: 'Personal Pay' },
-    { field: 'petrol', headerName: 'Petrol' },
-    { field: 'mobile', headerName: 'Mobile' },
-    { field: 'incentive', headerName: 'Incentive' },
-    { field: 'fixedamt', headerName: 'Fixed Amt' },
-    { field: 'othr', headerName: 'OT Hrs' },
-    { field: 'otherotamt', headerName: 'OT Amt' },
-    { field: 'othergrosstotal', headerName: 'Total'},
-    { field: 'pf', headerName: 'PF' },
-    { field: 'esic', headerName: 'ESIC' },
-    { field: 'advance', headerName: 'Advance' },
-    { field: 'mrpgross', headerName: 'MRP' },
-    { field: 'balance', headerName: 'Net Amt' },
+    {field:'restothr',headerName:'OT Hrs'},
+    {field:'restotamt',headerName:'OT Amt'},
+    { field: 'allownetamt', headerName: 'Allowance' },
+    { field: 'othergrosstotal', headerName: 'Total' },
 ]
 
 const pfcolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Uan', headerName: 'UAN' },
     { field: 'employeeData_Name', headerName: 'Name' },
-    { field: 'mrpgross', headerName: 'EPF Wages' },
-    { field: 'basic', headerName: 'EPF Wages' },
-    { field: 'eps', headerName: 'EPS Wages', renderCell: (params) => params.basic },
-    { field: 'pfaplamt', headerName: 'EDLI Wages' },
-    { field: 'pf', headerName: 'PF' },
+    { field: 'bdaamt', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.bdaamt) },
+    { field: 'epfaplamt', headerName: 'EPF Wages', renderCell: (params)=> Math.round(params.epfaplamt) },
+    { field: 'epfaplamt', headerName: 'EPS Wages', renderCell: (params)=> Math.round(params.epfaplamt) },
+    { field: 'epfaplamt', headerName: 'EDLI Wages', renderCell: (params)=> Math.round(params.epfaplamt) },
+    { field: 'pf', headerName: 'PF', renderCell: (params)=> Math.round(params.pf) },
     {
         field: 'epf', headerName: 'EPF Amt', renderCell: (params) => {
-            const value = Number(params.pfaplamt) * 0.0833; // Ensure pfaplamt is a number
-            return value.toFixed(2); // Format the result to 2 decimal places
+            const value = Number(params.epfaplamt) * 0.0833; // Ensure pfaplamt is a number
+            return isNaN(value) ? '0.00' :Math.round(value); // Format the result to 2 decimal places
         }
     },
     {
         field: 'ppf', headerName: 'PPF Amt', renderCell: (params) => {
-            const value = Number(params.pf) - (Number(params.pfaplamt) * 0.0833);
-            return isNaN(value) ? '0.00' : value.toFixed(2); // Fallback to '0.00' if the value is invalid
+            const value = Math.round(Number(params.pf)) - Math.round(Number(params.epfaplamt) * 0.0833);
+            return isNaN(value) ? '0.00' : Math.round(value); // Fallback to '0.00' if the value is invalid
         }
     },
     { field: 'ncp', headerName: 'NCP Day', renderCell: (params) => (params.tholiday + params.tsunday + params.tel + params.tcl + params.tfl) },
@@ -149,6 +116,7 @@ const esiccolumns = [
     { field: 'employeeData_EmpId', headerName: 'EmpId', width: '80px' },
     { field: 'employeeData_Esic', headerName: 'ESIC'},
     { field: 'employeeData_Name', headerName: 'Name' },
+    { field: 'tpayable', headerName: 'Days' },
     { field: 'mrpgross', headerName: 'ESIC_Cont_Amt' },
     { field: 'esic', headerName: 'ESIC Amt' },
 
@@ -168,24 +136,112 @@ const sumBankcolumns = [
     { field: 'mrpgross', headerName: 'Bank', renderCell: (params) => params.employeeData_Bank },
     { field: 'ifsc', headerName: 'IFSC', renderCell: (params) => params.employeeData_Ifsc },
     { field: 'ac', headerName: 'Ac/No', renderCell: (params) => params.employeeData_Ac },
-    { field: 'balance', headerName: 'Net Amt' },
+    { field: 'othergrosstotal', headerName: 'Net Amt' },
 
 ]
 function Payroll() {
-    const {control,register,setValue, handleSubmit,reset, watch, formState: { errors } } = useForm()
-    const { data, error, loading,getRequest } = usePost('')
+    const {control,register,token, handleSubmit, watch, formState: { errors } } = useForm()
+    const { data, loading,getRequest } = usePost('')
+    const [company,setCompany] = useState(null)
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
+    const [odisha,setOdisha] = useState(false)
     const { flattenObject } = useFlattendObject()
+    const [leave,setLeave] = useState(null)
+    const slipcolumns = [
+                            {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+                            {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
+                            {field:'basic',headerName:'Basic'},
+                            {field:'da',headerName:'DA'},
+                            {field:'mrpgross',headerName:'Gross'},
+                            {field:'advance',headerName:'Advance'},
+                            {field:'deduction',headerName:'Deduction'},
+                            {field:'mrpnetamt',headerName:'Net Amt'},
+                            {field:'view',headerName:'View',renderCell:(params)=>{
+                                return <WageSlipPDF employees={[params]} odisha={odisha} data={company} />
+                            }},
+                            {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
+                        
+                        ]
+    const leaveData = async(year)=>{
+        getRequest(`/leave/?year=${year}`).then((response)=>{
+            setLeave(response.data.leaveregister)
+        }).catch((error)=>{
+        })  
+    }
+    const companydata = async ()=>{
+        getRequest('api/select/company/').then((response)=>{
+          
+            setCompany(response.data)
+        }).catch((error)=>{
+            console.log(error)
+        })
+            
+    }
     const onSubmit = (data)=>{
-        console.log(data)
-        console.log("attendance data",data)
+     
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
-        if(data.Site && data.month !== ""){
-            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/`)
+        leaveData(year)
+        if(data.all){
+            getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`).then((response)=>{
+        
+                     if(response?.data?.attendance){
+                        setDownload(true)
+                        const row = response?.data?.attendance.map(item=>flattenObject(item))
+                        const sortedData = row.sort((a, b) => {
+                            if (a.employeeData_Name < b.employeeData_Name) {
+                                return -1;
+                            }
+                            else if (a.employeeData_Name > b.employeeData_Name) {
+                                return 1;
+                            }
+                        }
+                        )
+                        const leavefilteredData = sortedData.map((item)=>{
+                            const leavedetails = leave?.filter((leaveitem)=>leaveitem.employee.EmpId === item.employeeData_EmpId)
+                           
+                            item.leavedetails = leavedetails
+                            return item
+                        })
+                        setRowdata(leavefilteredData)
+                       
+                    }
+                }).catch((error)=>{
+                    console.log(error)
+                })
+        }
+        else if(data.Site && data.month !== ""){
+            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`).then((response)=>{
+              
+                     if(response?.data?.attendance){
+                        setDownload(true)
+                        const row = response?.data?.attendance.map(item=>flattenObject(item))
+                        const sortedData = row.sort((a, b) => {
+                            if (a.employeeData_Name < b.employeeData_Name) {
+                                return -1;
+                            }
+                            else if (a.employeeData_Name > b.employeeData_Name) {
+                                return 1;
+                            }
+                        }
+                        )
+                             const leavefilteredData = sortedData.map((item)=>{
+                            const leavedetails = leave?.filter((leaveitem)=>leaveitem.employee.EmpId === item.employeeData_EmpId)
+                       
+                            item.leavedetails = leavedetails
+                            return item
+                        })
+                        setRowdata(leavefilteredData)
+                    }
+                    else{
+                        console.log("no data found")
+                    }
+                }).catch((error)=>{
+                    console.log(error)
+                })
 
         }
         else{
@@ -208,21 +264,19 @@ function Payroll() {
         })
     }
     useEffect(()=>{
-        console.log("get request",data)
-        if(data?.attendance){
-            setDownload(true)
-            const row = data?.attendance.map(item=>flattenObject(item))
-            setRowdata(row)
-            console.log("row data is ",rowdata)
-        }
-    },[data])
+    
+        companydata()
+     
+   
+    },[])
   return (
     <div>
-    
   
         <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className='w-full border-2 flex gap-4 md:flex-row sm:flex-col sm:justify-start sm:items-start md:items-center sm:p-2 md:justify-center'>
-                {/* <Label>Applicable NH </Label><span className='rounded-md bg-slate-300 px-4 py-2'>{nh}</span> */}
+                <Label>All </Label>
+                <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+                
                 <Controller
                         name="Site"
                         defaultValue="" // Initial value can be set here
@@ -247,8 +301,8 @@ function Payroll() {
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
-                            <a href={'https://global.swirlapps.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
-                            <a href={'https://global.swirlapps.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
+                            <a href={'https://backend.stcassociates.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
+                            <a href={'https://backend.stcassociates.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
 
                         </div>
                
@@ -258,6 +312,9 @@ function Payroll() {
       
             </div>
         </form>
+        <div>
+        {/* <CompanyData company={company} /> */}
+        </div>
         <div className='w-full mt-2'>
         <Tabs defaultValue="payroll" className="w-full">
             <TabsList className="flx gap-2">
@@ -293,14 +350,29 @@ function Payroll() {
               )}
             </TabsContent>
             <TabsContent value="slip">
-            {loading?"Loading......": rowdata?.length?(<DataGrid 
+            {loading?"Loading......": rowdata?.length?
+            <div className='w-full '>
+                <div className="flex justify-center items-center gap-4 flex-row p-2">
+                      {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a> */}
+                {/*
+                for testing only
+                */}
+                
+                 {/* <a href={'https://backend.stcassociates.co.in/bulkdownloadslip/'+watch('Site')+'/'+watch('month')+"/"+ watch('all') +"/"+(odisha?"odisha":"jharkhand")+"/"} target='_blank'> all</a> */}
+                <Input type="checkbox" id="state" onClick={()=>setOdisha(!odisha)}  className='w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
+
+                <label htmlFor='state' className="cursor-pointer">Odisha</label>
+                <WageSlipPDF employees={rowdata} odisha={odisha} data={company} />
+                </div>
+                <DataGrid 
               heading="Payroll slip"
               columns={slipcolumns} 
               row={rowdata} 
       
              
 
-              />):(
+              />
+              </div>:(
                 <div>No data available</div>
               )}
             </TabsContent>

@@ -173,9 +173,9 @@ function EditEmployee(props) {
                                                 onValueChange={(newValue) => onChange(newValue || null)}
                                                 value={value} name='site' add={true}  mandatoryLabel = {true}/>
                                
-                           );
-                            }}
-                        />
+                                            );
+                                    }}
+                                />
 
                             </div>
                             <div className='flex items-center gap-2'>
