@@ -44,16 +44,22 @@ import Misc from './components/report/Misc';
 import Company from './components/settings/company';
 import Companies from './components/settings/Companies';
 import ShortCutModal from './components/settings/ShortCutModal';
+import { Provider } from 'react-redux';
+import store from './Redux/Store';
+
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000';
 axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
+// Create a client
 
 function App() {
  
   return (
+    
     <AuthProvider>
     <ShortCutModal />
+    <Provider store={store}>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -108,7 +114,9 @@ function App() {
             />
           </Routes>
       </Router>
+    </Provider>
     </AuthProvider>
+  
   );
 }
 

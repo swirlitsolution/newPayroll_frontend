@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, useGridApiRef } from '@mui/x-data-grid';
 import { Plus, Upload, Download } from "lucide-react";
 import {
   Menubar,
@@ -9,11 +9,14 @@ import {
 } from "@/components/ui/menubar";
 import  { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import useRequest from "../../hooks/useRequest";
 import ImportFile from "./ImportFile";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
+import { useQuery } from '@tanstack/react-query';
+import { fetchEmployees } from '../../Redux/api/Employee';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilterModel } from '../../Redux/Slices/FilterSlice';
 const columns = [
   { field: "EmpId", headerName: "EmpId", width: 80 },
   { field: "Name", headerName: "Name", width: 180 },
@@ -95,16 +98,18 @@ const columns = [
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
-  const { data, loading } = useRequest("/master/employee/");
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
+   const dispatch = useDispatch();
+  const filterModel = useSelector(state => state.filter.filterModel);
   const [paginationModel] = useState({
     page: 0, // Current page index
     pageSize: 5, // Default page size
   });
 
   // Define the columns you want to show on the UI
-  
+
+
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Dob: false,
     Imageurl: false,
@@ -162,7 +167,13 @@ function Employeelist() {
     rate_fixedamt: false
   })
 
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["employees"],
+    queryFn: fetchEmployees,
+    staleTime: 1000 * 60 * 5, // cache 5 minutes
+  });
 
+  
   const flattenObject = (obj, parentKey = '') => {
     let result = {};
 
@@ -182,7 +193,7 @@ function Employeelist() {
   };
 
   useEffect(() => {
-    if (data?.length > 0) {
+    if (!isLoading && data) {
       const filteredRows = data.map((row, index) => ({
         ...flattenObject(row),
         id: row.id || index,
@@ -191,9 +202,9 @@ function Employeelist() {
     }
   }, [data]);
 
-  const allData = data?.length;
-  console.log("allData", allData)
+  if (isLoading) return 'Loading...'
 
+  if (error) return 'An error has occurred: ' + error.message
 
   const handleRowClicked = (params) => {
     if(params.field == "Name"){
@@ -202,87 +213,25 @@ function Employeelist() {
     }
     
   };
-
-  // const generatePDF = () => {
-  //   // Initialize jsPDF with landscape orientation
-  //   const doc = new jsPDF("landscape");
-
-  //   // Get the visible columns
-  //   const visibleColumns = columns.filter(
-  //     (col) => columnVisibilityModel[col.field] !== false
-  //   );
-
-  //   // Prepare headers and rows
-  //   const headers = visibleColumns.map((col) => col.headerName);
-  //   const dataRows = rows.map((row) =>
-  //     visibleColumns.map((col) => row[col.field] || "")
-  //   );
-
-  //   // Add title
-  //   doc.text("Employee List", 14, 10);
-
-  //   // Calculate dynamic column widths
-  //   const columnStyles = {};
-  //   visibleColumns.forEach((col, index) => {
-  //     columnStyles[index] = { cellWidth: 'auto' }; // Automatically adjust the width
-  //   });
-
-  //   // Add the table
-  //   doc.autoTable({
-  //     startY: 25,
-  //     head: [headers],
-  //     body: dataRows,
-  //     styles: {
-  //       fontSize: 8, // Font size for table content
-  //       cellPadding: 3, // Padding for cells
-  //     },
-  //     headStyles: {
-  //       fillColor: [22, 160, 133], // Custom header color
-  //       fontSize: 8,
-  //       halign: "center", // Center align header text
-  //     },
-  //     columnStyles, // Dynamic column width
-  //     theme: "grid", // Table theme
-  //     bodyStyles: {
-  //       halign: "left", // Align text in data cells
-  //     },
-  //     tableWidth: "auto", // Automatically adjust table width
-  //   });
-
-  //   // Save the PDF
-  //   doc.save("EmployeeList.pdf");
-  // };
-
-  // const generateExcel = () => {
-  //   // Get the visible columns
-  //   const visibleColumns = columns.filter(
-  //     (col) => columnVisibilityModel[col.field] !== false
-  //   );
-
-  //   // Prepare headers and rows
-  //   const headers = visibleColumns.map((col) => col.headerName);
-  //   const dataRows = rows.map((row) =>
-  //     visibleColumns.map((col) => row[col.field] || "")
-  //   );
-
-  //   // Create a worksheet from data
-  //   const ws = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
-
-  //   // Create a workbook
-  //   const wb = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(wb, ws, "Employee List");
-
-  //   // Set custom styles (this is optional, Excel styling capabilities are limited in comparison to PDF)
-  //   const wscols = visibleColumns.map(() => ({ wpx: 100 })); // Set default column width
-
-  //   ws["!cols"] = wscols; // Apply column width
-  //   ws["!rows"] = dataRows.length; // Set the number of rows
-
-  //   // Export to Excel (download the file)
-  //   XLSX.writeFile(wb, "EmployeeList.xlsx");
-  // };
-
-
+ const onFilter = (Allrows) => {
+    if (!filterModel || !filterModel.items || filterModel.items.length === 0) {
+      console.log("Allrows", Allrows)
+      return Allrows;
+    }
+    else{
+      console.log("Filtering")
+      return Allrows.filter((row) => {
+        return filterModel.items.every((filter) => {
+          const value = row[filter.field];
+          if (filter.operator === 'contains') {
+            return String(value).toLowerCase().includes(String(filter.value).toLowerCase());
+          }
+          // Add more operator conditions as needed
+          return true;
+        });
+    })
+  }
+  }
   const generatePDF = () => {
     const visibleColumns = columns.filter(
       (col) => columnVisibilityModel[col.field] !== false
@@ -294,8 +243,8 @@ function Employeelist() {
     // const startIndex = paginationModel.page * paginationModel.pageSize;
     // const endIndex = startIndex + paginationModel.pageSize;
     // const currentPageRows = rows.slice(startIndex, endIndex);
-  
-    const dataRows = rows.map((row) =>
+    const currentRows = onFilter(rows);
+    const dataRows = currentRows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
 
@@ -331,7 +280,6 @@ function Employeelist() {
     doc.save(`EmployeeList_Page_${paginationModel.page + 1}.pdf`);
   };
 
-  
   const generateExcel = () => {
   
     const visibleColumns = columns.filter(
@@ -343,8 +291,9 @@ function Employeelist() {
     // Filter rows based on pagination
     // const startIndex = paginationModel.page * paginationModel.pageSize;
     // const endIndex = startIndex + paginationModel.pageSize;
-
-    const dataRows = rows.map((row) =>
+   
+    const currentRows = onFilter(rows);
+    const dataRows = currentRows.map((row) =>
       visibleColumns.map((col) => row[col.field] || "")
     );
 
@@ -408,14 +357,14 @@ function Employeelist() {
             <Upload /> Rate Import
           </div>
 
-          <div
+          {/* <div
             className="flex gap-2 bg-gray-50 rounded-lg shadow p-2 hover:bg-gray-200 cursor-pointer"
             onClick={() => {
               navigate("/sync");
             }}
           >
             Sync
-          </div>
+          </div> */}
         </span>
       </div>
 
@@ -444,16 +393,14 @@ function Employeelist() {
         />
       )}
 
-      {loading ? (
-        <div className="flex justify-center items-center">
-          Loading...
-        </div>
-      ) : rows.length ? (
+
         <div style={{ height: 600, width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
             checkboxSelection={true}
+            filterModel={filterModel || undefined}
+            onFilterModelChange={(newModel) => dispatch(setFilterModel(newModel))}
             columnVisibilityModel={columnVisibilityModel}
             slots={{
               toolbar: CustomToolbar,
@@ -465,9 +412,6 @@ function Employeelist() {
           />
         </div>
 
-      ) : (
-        <div>No data available</div>
-      )}
     </div>
   );
 }

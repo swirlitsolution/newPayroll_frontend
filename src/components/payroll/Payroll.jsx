@@ -11,6 +11,7 @@ import useFlattendObject from '../../hooks/useFlattendObject';
 import { Input } from '../ui/input';
 import WageSlipPDF from './WagesSlip';
 import CompanyData from '../settings/CompanyData';
+import ReportHeader from '../report/ReportHeader';
 
  const payrollcolumns = [
     {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
@@ -313,7 +314,7 @@ function Payroll() {
             </div>
         </form>
         <div>
-        {/* <CompanyData company={company} /> */}
+        <ReportHeader />
         </div>
         <div className='w-full mt-2'>
         <Tabs defaultValue="payroll" className="w-full">

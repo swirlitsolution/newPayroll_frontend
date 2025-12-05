@@ -10,11 +10,13 @@ export const AuthProvider = ({ children }) => {
     let userdata = null
     if(usertoken){
         userdata = jwtDecode(usertoken)
+        axios.defaults.headers = {
+            'Authorization': `Bearer ${usertoken}`,
+            }
     }
   
     const [user, setUser] = useState(userdata);
 
-    // const [csrf,setCsrf] = useState('')
     const [token,setToken] = useState(cookies.get('access'))
     useEffect(() => {
         const ncookies = new Cookies()
@@ -53,16 +55,7 @@ export const AuthProvider = ({ children }) => {
         };
         fetchUser();
     }, [token]);
-    // const getcsrftoken= async ()=>{
-    //     const csrfres = await axios.get('http://backend.leadingconstruction.co.in/getcsrf/', { }, {
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`
-    //         },
-    //         withCredentials: true
-    //     });
-    //     console.log("csrf_token is ",csrfres)
-    //     setCsrf(csrfres.token)
-    // }
+
     const login = async (username, password) => {
         try{
             const res = await axios.post('/api/token/', { username, password }, {
@@ -74,7 +67,9 @@ export const AuthProvider = ({ children }) => {
                 cookies.set('refress', res.data.refresh);
                 setUser(res.data);
                 setToken(res.data.access)
-                
+                axios.defaults.headers = {
+                'Authorization': `Bearer ${res.data.access}`,
+                }
                
             }
             else if(res.status === 401){

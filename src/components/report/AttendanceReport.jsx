@@ -7,8 +7,7 @@ import { Button } from '../ui/button';
 import { Label } from "@/components/ui/label"
 import DataGrid from '../custom/DataGrid';
 import { toast } from 'react-toastify';
-import Company from '../settings/company';
-
+import ReportHeader from './ReportHeader';
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name', renderCell:(params)=>params.employeeData.Name},
@@ -86,7 +85,6 @@ function AttendanceReport(props) {
     const { data, loading,getRequest} = usePost("/markattendance/")
     const [download,setDownload] = useState(false)
     const [attendance,setAttendance] = useState([])
-    
     const handleRowClicked = (params)=>{
         console.log(params)
 
@@ -141,7 +139,7 @@ function AttendanceReport(props) {
           </div>
          
           <div className='flex flex-col gap-2 w-full items-center'>
-        
+            
             <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
                 <Label>All </Label>
                 <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
@@ -167,6 +165,7 @@ function AttendanceReport(props) {
         
                 <Button type='submit' >Ok</Button>
             </form>
+            <ReportHeader />
                {
                     download?
                     <div className='border-2 rounded-md'>
@@ -181,16 +180,16 @@ function AttendanceReport(props) {
                     :""
                    }
               <div className="  w-[100%] ">
-              {loading?"Loading......": data?.attendance?.length? 
-               ( <DataGrid 
-                heading="Attendance"
-                columns={columns} 
-                row={attendance} 
-                rowClicked={handleRowClicked}
-                exportlayout="l"
-                />  )
-                :(
-              <div>No data available</div>)}
+                {loading?"Loading......": data?.attendance?.length? 
+                ( <DataGrid 
+                    heading="Attendance"
+                    columns={columns} 
+                    row={attendance} 
+                    rowClicked={handleRowClicked}
+                    exportlayout="l"
+                    />  )
+                    :(
+                <div>No data available</div>)}
               </div>
           </div>
       </div>

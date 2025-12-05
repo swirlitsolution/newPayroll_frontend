@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, FileSpreadsheet, Upload, X } from "lucide-react"
 import usePost from '../../hooks/usePost'
-function ImportFile({heading,closeModel,_newItem,filename, api}) {
+function ImportFile({heading,closeModel,newItem,filename, api}) {
     const [sheetData, setSheetData] = useState([])
     const [headers, setHeaders] = useState([])
     const [isLoading, setIsLoading] = useState(false)
