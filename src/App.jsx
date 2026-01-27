@@ -49,7 +49,7 @@ import store from './Redux/Store';
 
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-axios.defaults.baseURL = 'http://10.96.109.145:8000';
+axios.defaults.baseURL = 'http://10.87.46.145:8000';
 // axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
 // Create a client
 

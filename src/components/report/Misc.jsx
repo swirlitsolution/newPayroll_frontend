@@ -18,6 +18,7 @@ import EmployeeMentCard from './EmployeeMentCard';
 import FineRegister from './FineRegister';
 import ServiceCertificate from './ServiceCertificate';
 import OvertimeRegister from './OvertimeRegister';
+import FormB from './FormB';
 import ReportHeader from './ReportHeader';
 
 function Misc() {
@@ -322,8 +323,10 @@ function Misc() {
                     employee={employees}  month={formdata?.month} />
                   <ServiceCertificate company={company} 
                     employee={employees}  month={formdata?.month} />
-                  <OvertimeRegister company={company} 
+                  <OvertimeRegister company={company} format={formdata?.format}
                     employee={employees} month={formdata?.month} />
+                  {/* <FormB company={company} 
+                    employee={employees} month={formdata?.month} /> */}
                 </div>
             </div>
         </div>

@@ -1,9 +1,37 @@
-import React from 'react'
-import { Button } from '../ui/button'
+import React, { useRef } from 'react'
+import { useReactToPrint } from 'react-to-print';
+import NewWindowPortal from './NewWindowPortal';
 import jsPDF from 'jspdf';
+import OdishAdvanceRegister from './OdishAdvanceRegister';
+const monthdata = {
+  "01":"Jan",
+  "02":"Feb",
+  "03":"Mar",
+  "04":"Apr",
+  "05":"May",
+  "06":"Jun",
+  "07":"Jul",
+  "08":"Aug",
+  "09":"Sept",
+  "10":"Oct",
+  "11":"Nov",
+  "12":"Dec",
+}
 
 function OvertimeRegister(props) {
-    const generateOverTimePDF = () => {
+    const contentRef = useRef();
+    const reactToPrintFn = useReactToPrint({ contentRef });
+     const [showPreview, setShowPreview] = React.useState(false);
+     console.log(props)
+        const GeneratePDF = ()=>{
+          if(props?.format == "odishaformat"){
+            setShowPreview(true);
+          }
+          else{
+            return generateOverTimePDF()
+          }
+        }
+         const generateOverTimePDF = () => {
             const doc = new jsPDF('portrait', 'pt', 'a4');
         
             doc.setFont('times', 'normal');
@@ -72,7 +100,7 @@ function OvertimeRegister(props) {
         
            
         const rows = []
-            props.employee.forEach((emp,index)=>{
+            props?.employee?.forEach((emp,index)=>{
               const row = [
                 index + 1,
                 emp.Name,
@@ -112,7 +140,27 @@ function OvertimeRegister(props) {
             doc.save('overtime_register.pdf');
           };
   return (
-    <div className='w-full'><Button type="submit" onClick={generateOverTimePDF} className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' disabled={props?.wait}>{props?.wait?"wait ...":"OverTime Register"}</Button></div>
+    <div>
+       {
+        showPreview &&(
+          <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
+              {/* Ye poora component ab nayi window mein dikhega */}
+            <div className="p-5 w-full">
+                <OdishAdvanceRegister company={props.company} employee={props.employee} month={props.month} /> 
+            </div>
+            </NewWindowPortal>
+        )
+      }
+        {
+      props.company && (
+        <div className='w-full flex flex-col'>
+            
+            <button className=' mr-5 bg-black p-2 self-end w-24 text-white' onClick={GeneratePDF}>overtime</button>
+           
+        </div>
+      )
+    }
+    </div>
   )
 }
 
