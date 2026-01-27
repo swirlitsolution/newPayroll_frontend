@@ -49,8 +49,8 @@ import store from './Redux/Store';
 
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-// axios.defaults.baseURL = 'http://127.0.0.1:8000';
-axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
+axios.defaults.baseURL = 'http://10.96.109.145:8000';
+// axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
 // Create a client
 
 function App() {
@@ -58,8 +58,9 @@ function App() {
   return (
     
     <AuthProvider>
-    <ShortCutModal />
+    
     <Provider store={store}>
+    <ShortCutModal />
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />

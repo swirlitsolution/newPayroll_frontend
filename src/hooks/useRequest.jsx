@@ -299,7 +299,6 @@ const useRequest = (url) => {
       useEffect(() => {
         const cookies = new Cookies();
         const token = cookies.get('access');
-        console.log("emloyee token",token)
        // const source = axios.CancelToken.source(); // Create a cancel token
 
         const fetchData = async () => {
@@ -312,7 +311,7 @@ const useRequest = (url) => {
               },
               // Attach the cancel token
             });
-            console.log(response.data)
+          
             setData(response.data); // Axios automatically parses the response as JSON
           } catch (err) {
             if (axios.isCancel(err)) {
@@ -327,7 +326,7 @@ const useRequest = (url) => {
     
         fetchData();
         const source = axios.CancelToken.source();
-    console.log(data,loading,error)
+ 
       return ()=>{
         source.cancel()
       }

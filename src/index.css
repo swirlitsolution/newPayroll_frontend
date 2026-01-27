@@ -17,7 +17,35 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* Print Settings */
+@media print {
+  @page {
+    size: landscape; /* Wide report ke liye zaroori */
+    margin: 5mm;
+  }
+  body{
+    display: block;
+  }
+  .print-container {
+    width: 100%;
+    font-size: 8px; /* Taaki saare columns fit ho jayein */
+  }
+}
+.vertical-text {
+  writing-mode: vertical-rl; /* Text ko upar se niche (vertical) likhta hai */
+  transform: rotate(180deg); /* Rotate karta hai taaki niche se upar read ho (Standard PDF look) */
+  white-space: wrap;
+  font-size: 8px;
+  text-align: start;
+  height: 80px; /* Is height ko aap header ki zarurat ke hisab se badha sakte hain */
 
+}
+/* Screen Preview Scroll */
+.preview-scroll {
+  overflow-x: auto; /* Client screen par scroll karke dekh sakega */
+  background: #f4f4f4;
+  padding: 20px;
+}
 a {
   font-weight: 500;
   color: #646cff;

@@ -1,28 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import usePost from '../../hooks/usePost'
 import { useDispatch, useSelector } from 'react-redux';
-import { setCompany } from '../../Redux/Slices/CompanySlice';
+import {  setCompany } from '../../Redux/Slices/CompanySlice';
+import { useCompanyQuery } from '../../hooks/useCompanyQuery';
 function ReportHeader() {
     
-    const { data, loading,getRequest } = usePost('')
     const dispatch = useDispatch();
     const {company} = useSelector(state => state.Company);
-    console.log("all state ",useSelector(state=>state))
-    const companydata = async ()=>{
-        getRequest('api/select/company/').then((response)=>{
-            // setCompany(response.data)
-            dispatch(setCompany(response.data))
-        }).catch((error)=>{
-            console.log(error)
-        })
-            
-    }
+    const { companyData, isLoading } = useCompanyQuery(); // get current selected company data
+    
     useEffect(()=>{
-        if(!company){
-            companydata()
-        }
-        
-    },[])
+       
+        dispatch(setCompany(companyData));
+    
+    },[companyData])
+    if (isLoading) return  <p>Loading ....</p>
   return (
     <div>
         <div className="p-4 bg-white shadow-md rounded-md mb-4">
@@ -42,13 +33,14 @@ function ReportHeader() {
                     </div>
                     <div className='w-full flex justify-between'>
                         <div className="text-start  w-[50%]">
-                            <h2 className="text-lg font-semibold">Name & Address of Principal Employer   :</h2>
-                            <p className="text-sm text-gray-600">{company?.principleEmployer}</p>
-                        </div>
-                        <div className="text-end  w-[50%]">
                             <h2 className="text-lg font-semibold">Name & Location of Work  </h2>
                             <p className="text-sm text-gray-600">{company?.workNature}</p>
                         </div>
+                        <div className="text-end  w-[50%]">
+                            <h2 className="text-lg font-semibold">Name & Address of Principal Employer   :</h2>
+                            <p className="text-sm text-gray-600">{company?.principleEmployer}</p>
+                        </div>
+                        
                     </div>
                     
                 </div>

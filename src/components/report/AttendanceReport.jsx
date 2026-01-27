@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label"
 import DataGrid from '../custom/DataGrid';
 import { toast } from 'react-toastify';
 import ReportHeader from './ReportHeader';
+import NewWindowPortal from './NewWindowPortal';
+import CombineMasterRoll from './CombineMasterRoll';
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name', renderCell:(params)=>params.employeeData.Name},
@@ -82,9 +84,12 @@ const columns = [
 ]
 function AttendanceReport(props) {
     const {register,handleSubmit,control,watch, formState: { errors } } = useForm()
+    const [showPreview, setShowPreview] = useState(false);
     const { data, loading,getRequest} = usePost("/markattendance/")
     const [download,setDownload] = useState(false)
     const [attendance,setAttendance] = useState([])
+    const [month,setMonth] = useState("")
+    const [year,setYear] = useState("")
     const handleRowClicked = (params)=>{
         console.log(params)
 
@@ -94,6 +99,8 @@ function AttendanceReport(props) {
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
+        setMonth(month)
+        setYear(year)
         
         if(data.all){
             getRequest(`/getattendancereport/${month}/${year}/none/${data.all}/`)
@@ -172,13 +179,26 @@ function AttendanceReport(props) {
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
                             <a href={'https://backend.stcassociates.co.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
-                            <a href={'https://backend.stcassociates.co.in/attendance/combine/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a>
-             
+                            {/* <a href={'https://backend.stcassociates.co.in/attendance/combine/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a> */}
+                            <button 
+                                    onClick={() => setShowPreview(true)}
+                                    className="bg-green-600 text-white p-3 rounded"
+                                >
+                                    Combine
+                                </button>
                         </div>
                
                     </div>
                     :""
                    }
+                {showPreview && (
+                    <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
+                    {/* Ye poora component ab nayi window mein dikhega */}
+                    <div className="p-5 w-full">
+                        <CombineMasterRoll attendanceData={attendance} month={month} year={year}/> 
+                    </div>
+                    </NewWindowPortal>
+                )}
               <div className="  w-[100%] ">
                 {loading?"Loading......": data?.attendance?.length? 
                 ( <DataGrid 

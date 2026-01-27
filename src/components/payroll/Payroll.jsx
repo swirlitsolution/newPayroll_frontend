@@ -10,8 +10,11 @@ import { toast } from 'react-toastify';
 import useFlattendObject from '../../hooks/useFlattendObject';
 import { Input } from '../ui/input';
 import WageSlipPDF from './WagesSlip';
-import CompanyData from '../settings/CompanyData';
 import ReportHeader from '../report/ReportHeader';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCompany } from '../../Redux/Slices/CompanySlice';
+import { useCompanyQuery } from '../../hooks/useCompanyQuery';
+
 
  const payrollcolumns = [
     {field:'employeeData_EmpId',headerName:'EmpId',width:'80px'},
@@ -143,15 +146,18 @@ const sumBankcolumns = [
 function Payroll() {
     const {control,register,token, handleSubmit, watch, formState: { errors } } = useForm()
     const { data, loading,getRequest } = usePost('')
-    const [company,setCompany] = useState(null)
     const [nh,setNh] = useState(0)
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
     const [odisha,setOdisha] = useState(false)
     const { flattenObject } = useFlattendObject()
     const [leave,setLeave] = useState(null)
+    const dispatch = useDispatch()
+    const {company} = useSelector((state)=>state.Company)
+    const { companyData, isLoading } = useCompanyQuery();
     const slipcolumns = [
                             {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
+                             {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
                             {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>params.employeeData_SiteDetails_name=="TATA CUMMINS"?(params.tpayable + params.tnhday):params.tpayable},
                             {field:'basic',headerName:'Basic'},
                             {field:'da',headerName:'DA'},
@@ -162,7 +168,7 @@ function Payroll() {
                             {field:'view',headerName:'View',renderCell:(params)=>{
                                 return <WageSlipPDF employees={[params]} odisha={odisha} data={company} />
                             }},
-                            {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
+                           
                         
                         ]
     const leaveData = async(year)=>{
@@ -171,15 +177,7 @@ function Payroll() {
         }).catch((error)=>{
         })  
     }
-    const companydata = async ()=>{
-        getRequest('api/select/company/').then((response)=>{
-          
-            setCompany(response.data)
-        }).catch((error)=>{
-            console.log(error)
-        })
-            
-    }
+
     const onSubmit = (data)=>{
      
         const splited_date = data.month.split("-")
@@ -265,11 +263,11 @@ function Payroll() {
         })
     }
     useEffect(()=>{
-    
-        companydata()
-     
-   
+        if (!company) {
+        dispatch(setCompany(companyData));
+    }
     },[])
+    if (isLoading) return  <p>Loading ....</p>
   return (
     <div>
   
