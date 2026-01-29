@@ -27,10 +27,10 @@ const leaveCheckListcolumns = [
     {field:'Nov',headerName:'Nov'},
     {field:'Dec',headerName:'Dec'},
     {field:'total',headerName:'Total Attn'},
-    {field:'el',headerName:'EL'},
-    {field:'cl',headerName:'CL'},
-    {field:'fl',headerName:'FL'},
-    {field:'leave',headerName:'Total'},
+    {field:'elbalance',headerName:'EL'},
+    {field:'clbalance',headerName:'CL'},
+    {field:'flbalance',headerName:'FL'},
+    {field:'leave',headerName:'Total',renderCell:(params)=>params.elbalance + params.clbalance + params.flbalance},
     {field:'Remarks',headerName:'Remarks', width:"100px"},
 ]
 
@@ -39,20 +39,20 @@ const leavebankcolumns = [
     {field:'ac',headerName:'Bank A/C',renderCell:(params)=>params.employee.Ac},
     {field:'bank',headerName:'Bank Name',renderCell:(params)=>params.employee.Bank},
     {field:'branch',headerName:'Bank Branch',renderCell:(params)=>params.employee.Branch},
-    {field:'net',headerName:'Net Amount',renderCell:(params)=>Math.ceil((params.rate.basic + params.rate.da) * params.leave)},
+    {field:'net',headerName:'Net Amount',renderCell:(params)=>Math.ceil((params.rate.basic + params.rate.da) * (params.elbalance + params.clbalance + params.flbalance))},
  
 ]
 const leavepaycolumns = [
     {field:'Name',headerName:'Name',renderCell:(params)=>params.employee.Name},
     {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employee.EmpId},
     {field:'Designation',headerName:'Designation',renderCell:(params)=>params.employee.DesignationDetails.Name},
-    {field:'leave',headerName:'Total'},
+    {field:'leave',headerName:'Total',renderCell:(params)=>params.elbalance + params.clbalance + params.flbalance},
     {field:'unit',headerName:'Units Work Done'},
     {field:'Basic',headerName:'Basic',renderCell:(params)=>(params.rate.basic).toFixed(2)},
     {field:'Da',headerName:'Da',renderCell:(params)=>(params.rate.da).toFixed(2)},
     {field:'overtime',headerName:'Over Time'},
     {field:'othercash',headerName:'Earned Other cash Payment'},
-    {field:'Total',headerName:'Total',renderCell:(params)=>Math.ceil((params.rate.basic + params.rate.da) * params.leave)},
+    {field:'Total',headerName:'Total',renderCell:(params)=>Math.ceil((params.rate.basic + params.rate.da) * (params.elbalance + params.clbalance + params.flbalance))},
     {field:'Pf',headerName:'PF'},
     {field:'Esic',headerName:'ESIC'},
     {field:'Others',headerName:'Others'},
