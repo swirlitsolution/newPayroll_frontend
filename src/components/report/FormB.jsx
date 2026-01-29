@@ -1,5 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print';
+import { Button } from '../ui/button';
+import NewWindowPortal from './NewWindowPortal';
 
 const monthdata = {
   "01": "January",
@@ -44,6 +46,7 @@ const formatNumber = (value) => {
 };
 
 function FormB(props) {
+  const [showPreview, setShowPreview] = useState(false);
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
 
@@ -132,6 +135,9 @@ function FormB(props) {
 
   return (
     <div>
+        {showPreview && (
+             <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
+                 <div className="p-5 w-full h-full overflow-auto bg-white">
       {props.company && (
         <div className='w-full flex flex-col bg-white'>
           <button className='mr-5 bg-black p-2 self-end w-24 text-white mb-4' onClick={reactToPrintFn}>
@@ -310,6 +316,16 @@ function FormB(props) {
           </div>
         </div>
       )}
+                </div>
+            </NewWindowPortal>
+        )}
+        <Button 
+            onClick={()=>setShowPreview(true)} 
+            className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' 
+            disabled={props?.wait}
+        >
+            {props?.wait ? "wait ..." : "Form B Register"}
+        </Button>
     </div>
   );
 }

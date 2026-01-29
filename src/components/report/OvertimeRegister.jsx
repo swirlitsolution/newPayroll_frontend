@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print';
 import NewWindowPortal from './NewWindowPortal';
 import jsPDF from 'jspdf';
+import { Button } from '../ui/button';
 import OdishAdvanceRegister from './OdishAdvanceRegister';
 const monthdata = {
   "01":"Jan",
@@ -154,9 +155,7 @@ function OvertimeRegister(props) {
         {
       props.company && (
         <div className='w-full flex flex-col'>
-            
-            <button className=' mr-5 bg-black p-2 self-end w-24 text-white' onClick={GeneratePDF}>overtime</button>
-           
+            <Button type="submit" onClick={GeneratePDF} className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' disabled={props?.wait}>{props?.wait?"wait ...":"Overtime"}</Button>
         </div>
       )
     }
