@@ -321,9 +321,9 @@ function Misc() {
               />
               <DamageRegister company={company}
                 employee={employees} month={formdata?.month} wait={wait} />
-              <WorkManRegister company={company}
+              <WorkManRegister company={company} format={formdata?.format}
                 employee={employees} month={formdata?.month} wait={wait} />
-              <EmployeeMentCard company={company}
+              <EmployeeMentCard company={company}  format={formdata?.format}
                 employee={employees} month={formdata?.month} wait={wait} />
               <FineRegister company={company}
                 employee={employees} month={formdata?.month} wait={wait} />
@@ -331,16 +331,16 @@ function Misc() {
                 employee={employees} month={formdata?.month} wait={wait} />
               <OvertimeRegister company={company} format={formdata?.format}
                 employee={employees} month={formdata?.month} wait={wait} />
-              <FormB company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+              {/* <FormB company={company}
+                employee={employees} month={formdata?.month} wait={wait} /> */}
               <OdishaFormB company={company}
                 employee={employees} month={formdata?.month} wait={wait} />
               <OdishaFormD company={company}
                 employee={employees} month={formdata?.month} wait={wait} />
-              <OdishaWorkmanRegister company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
-              <EmployeeCardJoda company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+              {/* <OdishaWorkmanRegister company={company}
+                employee={employees} month={formdata?.month} wait={wait} /> */}
+              {/* <EmployeeCardJoda company={company}
+                employee={employees} month={formdata?.month} wait={wait} /> */}
             </div>
           </div>
         </div>

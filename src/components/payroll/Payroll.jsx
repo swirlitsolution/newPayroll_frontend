@@ -14,6 +14,8 @@ import ReportHeader from '../report/ReportHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompany } from '../../Redux/Slices/CompanySlice';
 import { useCompanyQuery } from '../../hooks/useCompanyQuery';
+import OdishaFormB from '../report/odishaformb';
+import MinimumRate from '../report/MinimumRate';
 
 
  const payrollcolumns = [
@@ -150,11 +152,13 @@ function Payroll() {
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
     const [odisha,setOdisha] = useState(false)
+    const [site,setSite] = useState('')
     const { flattenObject } = useFlattendObject()
     const [leave,setLeave] = useState(null)
     const dispatch = useDispatch()
     const {company} = useSelector((state)=>state.Company)
     const { companyData, isLoading } = useCompanyQuery();
+    console.log("payroll data", rowdata)
     const slipcolumns = [
                             {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
                              {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
@@ -213,6 +217,7 @@ function Payroll() {
                 })
         }
         else if(data.Site && data.month !== ""){
+            setSite(data.Site)
             getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`).then((response)=>{
               
                      if(response?.data?.attendance){
@@ -302,7 +307,8 @@ function Payroll() {
                         <div className='flex gap-2 px-2'>
                             <a href={'https://backend.stcassociates.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
                             <a href={'https://backend.stcassociates.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
-
+                            <OdishaFormB company={company}
+                            employee={rowdata} month={watch('month')} site={site} wait={loading} />
                         </div>
                
                     </div>
@@ -326,6 +332,7 @@ function Payroll() {
                 <TabsTrigger value="esic">ESIC</TabsTrigger>
             </TabsList>
             <TabsContent value="payroll">
+             <MinimumRate site={site} />
             {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll"
               columns={payrollcolumns} 

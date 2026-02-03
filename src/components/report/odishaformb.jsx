@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print';
 import { Button } from '../ui/button';
 import NewWindowPortal from './NewWindowPortal';
+import MinimumRate from './MinimumRate';
 
 const monthdata = {
   "01": "Jan",
@@ -18,11 +19,13 @@ const monthdata = {
   "12": "Dec",
 }
 
+
 function OdishaFormB(props) {
   const [showPreview, setShowPreview] = useState(false);
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
-  console.log(props)
+
+
   return (
     <div>
       {showPreview && (
@@ -31,47 +34,8 @@ function OdishaFormB(props) {
             {props.company && (
               <div className='w-full flex flex-col'>
                 <div ref={contentRef} className='p-2'>
-                  {/* Top Table: Rate of Minimum Wages */}
-                  <div className='flex justify-center mb-4'>
-                    <table className='border-collapse border border-black text-xs'>
-                      <thead>
-                        <tr>
-                          <th colSpan={5} className='border border-black p-1 text-center font-bold'>Rate of Minimum Wages and Since the Date</th>
-                        </tr>
-                        <tr>
-                          <th className='border border-black p-1'></th>
-                          <th className='border border-black p-1 font-semibold'>Highly Skilled</th>
-                          <th className='border border-black p-1 font-semibold'>Skilled</th>
-                          <th className='border border-black p-1 font-semibold'>Semi-Skilled</th>
-                          <th className='border border-black p-1 font-semibold'>Un-Skilled</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className='border border-black p-1 font-semibold'>Minimum Basic</td>
-                          <td className='border border-black p-1 text-center'>981.00</td>
-                          <td className='border border-black p-1 text-center'>893.00</td>
-                          <td className='border border-black p-1 text-center'>760.00</td>
-                          <td className='border border-black p-1 text-center'>674.00</td>
-                        </tr>
-                        <tr>
-                          <td className='border border-black p-1 font-semibold'>DA</td>
-                          <td className='border border-black p-1 text-center'></td>
-                          <td className='border border-black p-1 text-center'></td>
-                          <td className='border border-black p-1 text-center'></td>
-                          <td className='border border-black p-1 text-center'></td>
-                        </tr>
-                        <tr>
-                          <td className='border border-black p-1 font-semibold'>Over Time</td>
-                          <td className='border border-black p-1 text-center'>0.00</td>
-                          <td className='border border-black p-1 text-center'>0.00</td>
-                          <td className='border border-black p-1 text-center'>0.00</td>
-                          <td className='border border-black p-1 text-center'>0.00</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
+                
+              
                   {/* Establishment Details */}
                   <div className='flex flex-wrap gap-x-8 gap-y-2 text-xs font-semibold mb-2 items-center'>
                     <div className='flex gap-2'>
@@ -96,7 +60,7 @@ function OdishaFormB(props) {
                       <span>Monthly</span>
                     </div>
                   </div>
-
+                 
                   {/* Main Data Table */}
                   <table className='w-full border-collapse border border-black text-[10px]'>
                     <thead>
@@ -146,20 +110,20 @@ function OdishaFormB(props) {
                           <tr key={index}>
                             <td className='border border-black p-1 text-center'>{index + 1}</td>
                             <td className='border border-black p-1 font-semibold'>
-                              {emp.Name} <br />
-                              <span className='font-normal text-[8px]'>{emp.DesignationDetails?.name || ''}</span>
+                              {emp.employeeData_Name} <br />
+                              {/* <span className='font-normal text-[8px]'>{emp.employeeData_DesignationDetails_name || ''}</span> */}
                             </td>
-                            <td className='border border-black p-1 text-right'>{emp.rateOfWages || '0.00'}</td>
-                            <td className='border border-black p-1 text-center'>{emp.daysWorked || '0.00'}</td>
-                            <td className='border border-black p-1 text-center'>{emp.otHours || ''}</td>
+                            <td className='border border-black p-1 text-right'>{emp.employeeData_rate_basic || '0.00'}</td>
+                            <td className='border border-black p-1 text-center'>{emp.tpayable || '0.00'}</td>
+                            <td className='border border-black p-1 text-center'>{emp.tiscoothr || ''}</td>
 
                             <td className='border border-black p-1 text-right'>{emp.basic || '0.00'}</td>
                             <td className='border border-black p-1 text-right'>0.00</td>
-                            <td className='border border-black p-1 text-right'>0.00</td>
+                            <td className='border border-black p-1 text-right'>{emp.da || '0.00'}</td>
+                            <td className='border border-black p-1 text-right'>{emp.mrpotamt || '0.00'}</td>
                             <td className='border border-black p-1 text-right'></td>
                             <td className='border border-black p-1 text-right'></td>
-                            <td className='border border-black p-1 text-right'></td>
-                            <td className='border border-black p-1 text-right font-bold'>{emp.totalEarnings || '0.00'}</td>
+                            <td className='border border-black p-1 text-right font-bold'>{emp.mrpgross || '0.00'}</td>
 
                             <td className='border border-black p-1 text-right'>{emp.pf || '0.00'}</td>
                             <td className='border border-black p-1 text-right'>{emp.esic || '0.00'}</td>
@@ -168,9 +132,9 @@ function OdishaFormB(props) {
                             <td className='border border-black p-1 text-right'></td>
                             <td className='border border-black p-1 text-right'></td>
                             <td className='border border-black p-1 text-right'></td>
-                            <td className='border border-black p-1 text-right font-bold'>{emp.totalDeductions || '0.00'}</td>
+                            <td className='border border-black p-1 text-right font-bold'>{emp.deduction || '0.00'}</td>
 
-                            <td className='border border-black p-1 text-right font-bold'>{emp.netPayment || '0.00'}</td>
+                            <td className='border border-black p-1 text-right font-bold'>{emp.mrpnetamt || '0.00'}</td>
                             <td className='border border-black p-1 text-right'>{emp.employerShare || '0.00'}</td>
                             <td className='border border-black p-1 text-center'></td>
                             <td className='border border-black p-1 text-center'></td>

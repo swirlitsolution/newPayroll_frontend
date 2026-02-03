@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import jsPDF from 'jspdf';
+import EmployeeCardJoda from './employeecardjoda';
+import NewWindowPortal from './NewWindowPortal';
 
 function EmployeeMentCard(props) {
+   const [showPreview, setShowPreview] = useState(false);
+   const generatePdf = () => {
+    if(props?.format == "odishaformat"){
+      setShowPreview(true);
+    }
+    else{
+      return generateEmployeementCardPDF()
+    }
+   }
+  
     const generateEmployeementCardPDF = () => {
             const doc = new jsPDF('landscape', 'pt', 'A4');
         
@@ -96,7 +108,15 @@ function EmployeeMentCard(props) {
               doc.save('employment_cards.pdf');
           };
   return (
-    <div><Button type="submit" onClick={generateEmployeementCardPDF} className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' disabled={props?.wait}>{props?.wait?"wait ...":"Employeement Card"}</Button></div>
+    <div>
+     {showPreview && (
+                    <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
+                        <EmployeeCardJoda company={props?.company} wait={props?.wait} 
+                employee={props?.employee} month={props?.month}  />
+                    </NewWindowPortal>
+                )}
+    
+    <Button type="submit" onClick={generatePdf} className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' disabled={props?.wait}>{props?.wait?"wait ...":"Employeement Card"}</Button></div>
   )
 }
 

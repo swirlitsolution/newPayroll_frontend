@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import jsPDF from 'jspdf';
+import NewWindowPortal from './NewWindowPortal';
+import OdishaWorkmanRegister from './odishaworkmanregister';
 
 function WorkManRegister(props) {
+  const [showPreview, setShowPreview] = useState(false);
+  const GeneratePDF = ()=>{
+    if(props?.format == "odishaformat"){
+      setShowPreview(true);
+    }
+    else{
+      return generateWorkManRegister()
+    }
+  }
     const generateWorkManRegister = () => {
           
      
@@ -91,9 +102,16 @@ function WorkManRegister(props) {
         
             doc.save('register_of_adult_workers.pdf');
           };
+        
   return (
-    <div><Button type="submit" onClick={generateWorkManRegister} className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' disabled={props?.wait}>{props?.wait?"wait ...":"WorkMan Register"}</Button></div>
+    <div>
+    {showPreview && (
+                    <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
+                       <OdishaWorkmanRegister company={props.company} format={props.format} employee={props.employee} />
+                    </NewWindowPortal>
+                )}
+    <Button type="submit" onClick={GeneratePDF} className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white' disabled={props?.wait}>{props?.wait?"wait ...":"WorkMan Register"}</Button></div>
   )
-}
 
+}
 export default WorkManRegister

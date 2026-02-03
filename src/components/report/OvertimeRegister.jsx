@@ -3,7 +3,7 @@ import { useReactToPrint } from 'react-to-print';
 import NewWindowPortal from './NewWindowPortal';
 import jsPDF from 'jspdf';
 import { Button } from '../ui/button';
-import OdishAdvanceRegister from './OdishAdvanceRegister';
+import OdishaOverTimeRegister from './OdishaOverTimeRegister';
 const monthdata = {
   "01":"Jan",
   "02":"Feb",
@@ -147,7 +147,7 @@ function OvertimeRegister(props) {
           <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
               {/* Ye poora component ab nayi window mein dikhega */}
             <div className="p-5 w-full">
-                <OdishAdvanceRegister company={props.company} employee={props.employee} month={props.month} /> 
+                <OdishaOverTimeRegister company={props.company} employee={props.employee} month={props.month} /> 
             </div>
             </NewWindowPortal>
         )
