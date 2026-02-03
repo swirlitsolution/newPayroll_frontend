@@ -304,7 +304,7 @@ function Payroll() {
                     download?
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
-                        <div className='flex gap-4 px-2'>
+                        <div className='flex gap-4 px-2 py-2'>
                             <Button asChild className="bg-black text-white hover:bg-gray-800">
                                 <a href={'https://backend.stcassociates.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
                             </Button>

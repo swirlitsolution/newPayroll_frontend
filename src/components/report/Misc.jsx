@@ -333,8 +333,8 @@ function Misc() {
                 employee={employees} month={formdata?.month} wait={wait} />
               {/* <FormB company={company}
                 employee={employees} month={formdata?.month} wait={wait} /> */}
-              <OdishaFormB company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+              {/* <OdishaFormB company={company}
+                employee={employees} month={formdata?.month} wait={wait} /> */}
               <OdishaFormD company={company}
                 employee={employees} month={formdata?.month} wait={wait} />
               {/* <OdishaWorkmanRegister company={company}
