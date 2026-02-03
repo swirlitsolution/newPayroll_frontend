@@ -304,9 +304,13 @@ function Payroll() {
                     download?
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
-                        <div className='flex gap-2 px-2'>
-                            <a href={'https://backend.stcassociates.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
-                            <a href={'https://backend.stcassociates.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
+                        <div className='flex gap-4 px-2'>
+                            <Button asChild className="bg-black text-white hover:bg-gray-800">
+                                <a href={'https://backend.stcassociates.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
+                            </Button>
+                            <Button asChild className="bg-black text-white hover:bg-gray-800">
+                                <a href={'https://backend.stcassociates.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
+                            </Button>
                             <OdishaFormB company={company}
                             employee={rowdata} month={watch('month')} site={site} wait={loading} />
                         </div>
@@ -332,7 +336,7 @@ function Payroll() {
                 <TabsTrigger value="esic">ESIC</TabsTrigger>
             </TabsList>
             <TabsContent value="payroll">
-             <MinimumRate site={site} />
+            
             {loading?"Loading......": rowdata?.length?(<DataGrid 
               heading="Payroll"
               columns={payrollcolumns} 

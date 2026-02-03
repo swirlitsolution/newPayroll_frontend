@@ -35,29 +35,35 @@ function OdishaFormB(props) {
               <div className='w-full flex flex-col'>
                 <div ref={contentRef} className='p-2'>
                 
-              
+                 <MinimumRate site={props?.site} />
                   {/* Establishment Details */}
-                  <div className='flex flex-wrap gap-x-8 gap-y-2 text-xs font-semibold mb-2 items-center'>
-                    <div className='flex gap-2'>
-                      <span>Name of Establishment</span>
-                      <span className='uppercase'>{props.company?.name || 'GLOBAL AC SYSTEM JSR PVT LT'}</span>
+                  <div className='flex flex-col gap-y-1 text-xs font-semibold mb-2'>
+                    <div className='flex justify-between items-center'>
+                        <div className='flex gap-2'>
+                          <span>Name of Establishment</span>
+                          <span className='uppercase'>{props.company?.name || 'GLOBAL AC SYSTEM JSR PVT LT'}</span>
+                        </div>
+                        <div className='flex gap-2'>
+                          <span>Name of Owner</span>
+                          <span className='uppercase'>{props.company?.principleEmployer || 'VOLTAS LIMITED'}</span>
+                        </div>
+                        <div className='flex gap-2'>
+                          <span>LIN</span>
+                          <span>1-9143-2709-7</span>
+                        </div>
                     </div>
-                    <div className='flex gap-2'>
-                      <span>Name of Owner</span>
-                      <span className='uppercase'>{props.company?.principleEmployer || 'VOLTAS LIMITED'}</span>
-                    </div>
-                    <div className='flex gap-2'>
-                      <span>LIN</span>
-                      <span>1-9143-2709-7</span>
-                    </div>
-                    <div className='flex gap-2 ml-auto'>
-                      <span>Wages From</span>
-                      <span>01-{props.month?.split("-")[1]}-{props.month?.split("-")[0]}</span>
-                      <span>To Date</span>
-                      <span>31-{props.month?.split("-")[1]}-{props.month?.split("-")[0]}</span>
-                    </div>
-                    <div className='w-full text-center'>
-                      <span>Monthly</span>
+                    <div className='relative flex items-center justify-center w-full'>
+                        <div className='absolute left-0 flex gap-4'>
+                            <div className='flex gap-2'>
+                              <span>Wages From</span>
+                              <span>01-{props.month?.split("-")[1]}-{props.month?.split("-")[0]}</span>
+                            </div>
+                            <div className='flex gap-2'>
+                              <span>To Date</span>
+                              <span>31-{props.month?.split("-")[1]}-{props.month?.split("-")[0]}</span>
+                            </div>
+                        </div>
+                        <span>Monthly</span>
                     </div>
                   </div>
                  
@@ -156,7 +162,7 @@ function OdishaFormB(props) {
       )}
       <Button
         onClick={() => setShowPreview(true)}
-        className='w-full bg-gray-200 outline-4 text-black hover:bg-black hover:text-white'
+        className='bg-black text-white hover:bg-gray-800'
         disabled={props?.wait}
       >
         {props?.wait ? "wait ..." : "Odisha Form B"}

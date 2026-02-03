@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import useRequest from '../../hooks/useRequest'
 import axios from 'axios';
 
 
@@ -9,7 +8,6 @@ const formatNumber = (value) => {
   return (parseFloat(value) || 0).toFixed(2);
 };
 function MinimumRate(props) {
-    const [data,setData] = React.useState([])
      const [rateData,setRateData] = React.useState({})
    
      useEffect(() => {
@@ -22,39 +20,34 @@ function MinimumRate(props) {
          }
          if (props.site) {
              
-                       const getrate = async ()=>{
+                      const getrate = async ()=>{
                         const response = await axios.get('/master/categoryrate/', {
                           headers: {
                             'Content-Type': 'application/json',
                           },
-                          // Attach the cancel token
                         });
-                   
-                    const cat = ['UN-SKILLED','SKILLED','SEMI-SKILLED','HIGH-SKILLED','OTHER']
-                   const siterate = response.data.filter(item => item.SiteDetails?.name === props.site);
-             
-                   cat.forEach(c=>{
-                       const filtered = siterate.map((item) => {
-                          if(item.category === c){
-                         category[c] = {
-                           basic: filtered[0].basic,
-                           da: filtered[0].da
-                         }
-                       }
-                       });
-                       
-                     })
-                    }
+                        const cat = ['UN-SKILLED','SKILLED','SEMI-SKILLED','HIGH-SKILLED','OTHER']
+                        const siterate = (response.data || []).filter(item => item.SiteDetails?.name === props.site);
+                        cat.forEach(c=>{
+                          const filtered = siterate.filter(item => item.category === c);
+                          if (filtered.length) {
+                            category[c] = {
+                              basic: filtered[0]?.basic ?? 0,
+                              da: filtered[0]?.da ?? 0
+                            }
+                          }
+                        })
+                        setRateData(category);
+                      }
                 
                           getrate();
-                          setRateData(category);
                       } 
                     
             
            
                
                    
-          console.log("rate data",rateData,rateData['UN-SKILLED']?.basic) 
+         console.log("rate data",rateData,rateData['UN-SKILLED']?.basic) 
            
         }, [props.site]);
   return (
@@ -76,17 +69,17 @@ function MinimumRate(props) {
             <tbody>
             <tr>
                 <td className='border border-black p-1 font-semibold'>Minimum Basic</td>
-                <td className='border border-black p-1 text-center'> {rateData['HIGH-SKILLED']?.basic}</td>
-                <td className='border border-black p-1 text-center'>{rateData['SKILLED']?.basic }</td>
-                <td className='border border-black p-1 text-center'>{rateData['SEMI-SKILLED']?.basic }</td>
-                <td className='border border-black p-1 text-center'>{rateData['UN-SKILLED']?.basic }</td>
+                <td className='border border-black p-1 text-center'> {formatNumber(rateData['HIGH-SKILLED']?.basic)}</td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['SKILLED']?.basic)}</td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['SEMI-SKILLED']?.basic)}</td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['UN-SKILLED']?.basic)}</td>
             </tr>
             <tr>
                 <td className='border border-black p-1 font-semibold'>DA</td>
-                <td className='border border-black p-1 text-center'></td>
-                <td className='border border-black p-1 text-center'></td>
-                <td className='border border-black p-1 text-center'></td>
-                <td className='border border-black p-1 text-center'></td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['HIGH-SKILLED']?.da)}</td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['SKILLED']?.da)}</td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['SEMI-SKILLED']?.da)}</td>
+                <td className='border border-black p-1 text-center'>{formatNumber(rateData['UN-SKILLED']?.da)}</td>
             </tr>
             <tr>
                 <td className='border border-black p-1 font-semibold'>Over Time</td>
