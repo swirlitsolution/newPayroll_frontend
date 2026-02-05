@@ -98,7 +98,10 @@ function EmployeeCardJoda(props) {
                                                 4. Wages Rate (With Particular of Unit in case of Piece Work)
                                             </div>
                                             <div className='w-1/2 p-2 uppercase'>
-                                                {emp.rateOfWages || '0.00'}
+                                                {(
+                                                    parseFloat(emp?.rate_basic ?? emp?.rate?.basic ?? emp?.basicrate ?? 0) +
+                                                    parseFloat(emp?.rate_da ?? emp?.rate?.da ?? emp?.darate ?? 0)
+                                                ).toFixed(2)}
                                             </div>
                                         </div>
 

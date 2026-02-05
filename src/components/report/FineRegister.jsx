@@ -57,6 +57,7 @@ function FineRegister(props) {
         
             const tableRows = [];
         
+            if(props.employee && Array.isArray(props.employee)){
             props.employee.forEach((emp, index) => {
               const row = [
                 (index + 1).toString().padStart(2, '0'),
@@ -74,6 +75,7 @@ function FineRegister(props) {
               ];
               tableRows.push(row);
             });
+          }
         
             doc.autoTable({
               head: [tableColumn],

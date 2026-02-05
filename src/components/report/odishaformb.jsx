@@ -25,6 +25,11 @@ function OdishaFormB(props) {
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
 
+  const calculatePPF = (emp) => {
+    const value = Math.round(Number(emp.pf)) - Math.round(Number(emp.epfaplamt) * 0.0833);
+    return isNaN(value) ? '0.00' : Math.round(value);
+  }
+
 
   return (
     <div>
@@ -141,7 +146,7 @@ function OdishaFormB(props) {
                             <td className='border border-black p-1 text-right font-bold'>{emp.deduction || '0.00'}</td>
 
                             <td className='border border-black p-1 text-right font-bold'>{emp.mrpnetamt || '0.00'}</td>
-                            <td className='border border-black p-1 text-right'>{emp.employerShare || '0.00'}</td>
+                            <td className='border border-black p-1 text-right'>{calculatePPF(emp)}</td>
                             <td className='border border-black p-1 text-center'></td>
                             <td className='border border-black p-1 text-center'></td>
                             <td className='border border-black p-1 text-center'></td>

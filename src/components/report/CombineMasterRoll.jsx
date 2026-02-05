@@ -59,6 +59,7 @@ function CombineMasterRoll({attendanceData,month,year}) {
       tcl:tcl,
       tel:tel,
       tfl:tfl,
+      tnh:tnh,
       tpresent:tpresent,
       tpayable:tpayable,
       attAllowance:totalAttnAllow.toFixed(2),
@@ -238,7 +239,14 @@ Impression (19)</div> </th>
                   <td className="border border-black px-1">{emp.day29}</td>
                   <td className="border border-black px-1">{emp.day30}</td>
                   <td className="border border-black px-1">{emp.day31}</td>
-                  <td className="border border-black px-1">{emp.tpresent}<pre>FL : {emp.tfl}</pre><pre>{emp.tpayable}</pre></td>
+                  <td className="border border-black px-1">
+                    {emp.tpresent}
+                    <pre>CL : {emp.tcl || 0}</pre>
+                    <pre>FL : {emp.tfl || 0}</pre>
+                    <pre>EL : {emp.tel || 0}</pre>
+                    <pre>NH : {emp.tnh || 0}</pre>
+                    <pre>{emp.tpayable}</pre>
+                  </td>
                   <td className="border border-black px-1">{emp.bdarate}</td>
                   <td className="border border-black px-1">{emp.basic}</td>
                   <td className="border border-black px-1">{emp.da}</td>
@@ -285,7 +293,13 @@ Impression (19)</div> </th>
               <td colSpan={4}>Total PT</td>
               <td colSpan={2}>{payroll.prftax}</td>
               <td rowSpan="7"  colSpan={29}>
-                <img src="https://backend.stcassociates.co.in/static/img/stamp.png" className=" float-right mr-10" width="200" height="200" alt="Stamp" />
+                 <div className="flex flex-col items-end mr-10 mt-10">
+                  <img src="https://backend.stcassociates.co.in/static/img/stamp.png" width="100" height="100" alt="Stamp" />
+                  <div className='text-center font-bold text-xs'>
+                    <p>Signature of the Contractor </p>
+                  
+                  </div>
+                 </div>
               </td>
             </tr>
              <tr>
@@ -312,7 +326,7 @@ Impression (19)</div> </th>
               <td colSpan={10}></td>
               <td colSpan={3}></td>
               <td colSpan={6}>CL Day</td>
-              <td colSpan={3}>0</td>
+              <td colSpan={3}>{payroll.tcl}</td>
               <td colSpan={4}></td>
               <td colSpan={2}></td>
             </tr>
@@ -326,7 +340,7 @@ Impression (19)</div> </th>
               <td colSpan={10}></td>
               <td colSpan={3}></td>
               <td colSpan={6}>EL Day</td>
-              <td colSpan={3}>0</td>
+              <td colSpan={3}>{payroll.tel}</td>
               <td colSpan={4}></td>
               <td colSpan={2}></td>
             </tr>
@@ -340,7 +354,7 @@ Impression (19)</div> </th>
               <td colSpan={10}></td>
               <td colSpan={3}></td>
               <td colSpan={6}>FL Day</td>
-              <td colSpan={3}>0</td>
+              <td colSpan={3}>{payroll.tfl}</td>
               <td colSpan={4}></td>
               <td colSpan={2}></td>
             </tr>
@@ -354,7 +368,7 @@ Impression (19)</div> </th>
               <td colSpan={10}></td>
               <td colSpan={3}></td>
               <td colSpan={6}>Total NH Day</td>
-              <td colSpan={3}>0</td>
+              <td colSpan={3}>{payroll.tnh}</td>
               <td colSpan={4}></td>
               <td colSpan={2}></td>
             </tr>

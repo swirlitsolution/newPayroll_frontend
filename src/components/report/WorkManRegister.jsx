@@ -58,15 +58,15 @@ function WorkManRegister(props) {
             // Table Rows
             const tableRows = [];
         
-            props.employee.forEach((emp, index) => {
+            props.employee?.forEach((emp, index) => {
               const row = [
                 index + 1,
                 emp?.Name,
                 emp.Gender || '.',
-                emp.Father || '.',
+                emp.Father || emp.FatherName || '.',
                 emp?.DesignationDetails?.name || '.',
-                emp?.Address || '.',
-                emp?.Address || '.',
+                emp.PermanentAddress || emp?.Address || '.',
+                emp.Address || emp.LocalAddress || emp.PresentAddress || '.',
                 `${emp?.Doj?.split("-").reverse().join("/")}` || '.',
                 '.',
                '.',

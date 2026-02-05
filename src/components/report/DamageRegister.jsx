@@ -62,6 +62,7 @@ function DamageRegister(props) {
     
         // Table Rows (sample data based on your image)
         const rows = [];
+        if(props.employee && Array.isArray(props.employee)){
         props.employee.forEach((emp,index)=>{
             const row = [
             index + 1,
@@ -80,6 +81,7 @@ function DamageRegister(props) {
             ]
             rows.push(row)
         })
+      }
 
         // Add the Table
         doc.autoTable({

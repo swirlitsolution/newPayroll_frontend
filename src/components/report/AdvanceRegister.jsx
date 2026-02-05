@@ -7,12 +7,39 @@ import { set } from 'date-fns';
 
 function AdvanceRegister(props) {
   const [showPreview, setShowPreview] = React.useState(false);
+  const [pdfUrl, setPdfUrl] = React.useState(null);
+  const [stampImg, setStampImg] = React.useState(null);
+
+  React.useEffect(() => {
+    const getBase64ImageFromURL = (url) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.setAttribute("crossOrigin", "anonymous");
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          const dataURL = canvas.toDataURL("image/png");
+          resolve(dataURL);
+        };
+        img.onerror = error => reject(error);
+        img.src = url;
+      });
+    };
+
+    getBase64ImageFromURL("https://backend.stcassociates.co.in/static/img/stamp.png")
+      .then(base64 => setStampImg(base64))
+      .catch(err => console.error("Error loading stamp image:", err));
+  }, []);
+
     const GeneratePDF = ()=>{
       if(props?.format == "odishaformat"){
         setShowPreview(true);
       }
       else{
-        return generateAdvancePDF()
+        generateAdvancePDF()
       }
     }
    
@@ -65,14 +92,14 @@ function AdvanceRegister(props) {
              const row = [ 
               index + 1,
               emp?.Name,
-              emp.Father || '.',
-              emp?.DesignationDetails?.name || '.',
-              '- - -',
-              '- - -',
-              '- - -',
-              '- - -',
-              '- - -',
-              '- - -',
+              emp.Father || 'NIL',
+              emp?.DesignationDetails?.name || 'NIL',
+              'NIL',
+              'NIL',
+              'NIL',
+              'NIL',
+              'NIL',
+              'NIL',
               'NIL'
              ]
               rows.push(row)
@@ -97,8 +124,44 @@ function AdvanceRegister(props) {
               },
               theme: 'grid',
             });
+
+            // Add Stamp and Signature
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            let finalY = doc.lastAutoTable.finalY || 150;
+            
+            // Calculate Signature Position to align with Remarks column (Table Right Edge)
+            doc.setFontSize(10);
+            const signText = "Stamp & Signature of the Contractor";
+            const textWidth = doc.getTextWidth(signText);
+            const tableMarginRight = 15; // Reduced margin to move signature more to the right
+            const tableEndX = pageWidth - tableMarginRight;
+            
+            // Start X for the signature block so it ends exactly at tableEndX
+            const signatureX = tableEndX - textWidth;
+            
+            // Check if we have space on current page
+            // Signature block needs approx 80-100pt height
+            if (finalY + 100 > pageHeight - 20) {
+              doc.addPage();
+              finalY = 40; // Top margin on new page
+            }
+
+            // Position signature starting just below the table (plus padding)
+            const signatureStartY = finalY + 30;
+
+            if (stampImg) {
+              // Image width 100, Text width ~175. Center image over text.
+              const imgWidth = 100;
+              const imgX = signatureX + (textWidth - imgWidth) / 2;
+              doc.addImage(stampImg, 'PNG', imgX, signatureStartY, imgWidth, 60);
+            }
+            // Text below image
+            doc.text(signText, signatureX, signatureStartY + 75);
         
-            doc.save('register_of_advance.pdf');
+            const url = doc.output('bloburl');
+            setPdfUrl(url);
+            setShowPreview(true);
           };
   return (
     <div>
@@ -106,8 +169,12 @@ function AdvanceRegister(props) {
       showPreview &&(
         <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
             {/* Ye poora component ab nayi window mein dikhega */}
-          <div className="p-5 w-full">
-              <OdishAdvanceRegister company={props.company} employee={props.employee} month={props.month} /> 
+          <div className="p-5 w-full h-screen">
+              {props?.format === "odishaformat" ? (
+                <OdishAdvanceRegister company={props.company} employee={props.employee} month={props.month} /> 
+              ) : (
+                <iframe src={pdfUrl} className="w-full h-full" title="Advance Register Preview"></iframe>
+              )}
           </div>
           </NewWindowPortal>
       )

@@ -13,6 +13,7 @@ function ServiceCertificate(props) {
             const cardHeight = pageHeight / 2 - 20; // Adjust 20px margin
             const cardWidth = pageWidth - 40; // 20px margin on each side
         
+            if(props.employee && Array.isArray(props.employee)){
             props.employee.forEach((emp, index) => {
               if (index !== 0 && index % 2 === 0) {
                 doc.addPage();
@@ -95,7 +96,8 @@ function ServiceCertificate(props) {
             doc.setFont('times', 'normal');
             doc.addImage("https://backend.stcassociates.co.in/static/img/stamp.png", "PNG",  doc.internal.pageSize.getWidth() - 150, startY + 50, 100, 50);
             doc.text('Signature of Contractor', doc.internal.pageSize.getWidth() - 150, startY + 110);
-          });
+            });
+          }
             doc.save('service_certificate.pdf');
           };
   return (

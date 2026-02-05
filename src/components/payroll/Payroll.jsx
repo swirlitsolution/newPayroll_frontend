@@ -24,7 +24,8 @@ import MinimumRate from '../report/MinimumRate';
     {field:'employeeData_SiteDetails_name',headerName:'Site'},
     {field:'day',headerName:'Worked',width:'90px',renderCell:(params)=>{
         return (
-            <tr>
+            <table className='w-full'>
+                <tbody>
                 <tr className='border-b-2'>
                     <td>P</td>
                     <td>{params.tpresent}</td>
@@ -42,12 +43,14 @@ import MinimumRate from '../report/MinimumRate';
                     <td>Total</td>
                     <td>{params.tpayable}</td>
                 </tr>
-            </tr>
+                </tbody>
+            </table>
         )
     }},
     {field:'rate',headerName:'Rate',renderCell:(params)=>{
         return (
-            <tr>
+            <table className='w-full'>
+                <tbody>
                 <tr className='border-b-2'>
                  <td>B</td>
                     <td>{params.basicrate}</td>
@@ -60,7 +63,8 @@ import MinimumRate from '../report/MinimumRate';
                  <td>Total</td>
                     <td>{parseFloat(params.basicrate) + parseFloat(params.darate)}</td>
                 </tr>
-            </tr>
+                </tbody>
+            </table>
         )}},
     {field:'basic',headerName:'Basic'},
     {field:'da',headerName:'DA'},
@@ -158,6 +162,7 @@ function Payroll() {
     const dispatch = useDispatch()
     const {company} = useSelector((state)=>state.Company)
     const { companyData, isLoading } = useCompanyQuery();
+   
     console.log("payroll data", rowdata)
     const slipcolumns = [
                             {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
