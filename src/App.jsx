@@ -41,7 +41,7 @@ import NewSiteConfig from './components/settings/NewSiteConfig';
 import Mis from './components/report/Mis';
 import PayrollSummery from './components/report/PayrollSummery';
 import Misc from './components/report/Misc';
-import Company from './components/settings/company';
+import Company from './components/settings/Company';
 import Companies from './components/settings/Companies';
 import ShortCutModal from './components/settings/ShortCutModal';
 import { Provider } from 'react-redux';
@@ -49,8 +49,8 @@ import store from './Redux/Store';
 
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = 'https://backend.vivekconstruction.org';
-// axios.defaults.baseURL = 'https://backend.swirlapps.in';
-axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
+ axios.defaults.baseURL = 'https://backend.swirlapps.in';
+//axios.defaults.baseURL = 'https://backend.stcassociates.co.in';
 // Create a client
 
 function App() {

@@ -89,7 +89,7 @@ const columns = [
 function Employeelist() {
   const [importFile, setImportFile] = useState(false);
   const [rateImport, setRateImport] = useState(false);
-  // const navigate = useNavigate();
+   const navigate = useNavigate();
   
   const dispatch = useDispatch()
   // Define the columns you want to show on the UI
@@ -161,9 +161,9 @@ function Employeelist() {
   const handleRowClicked = (params) => {
     if(params.field == "Name"){
       console.log("params", params.row)
-    // navigate(`/employee/${params.id}`, { id: params.id });
-    dispatch(setSelectedEmployee(params.row))
-    dispatch(setShow(true))
+    navigate(`/employee/${params.id}`, { id: params.id });
+    // dispatch(setSelectedEmployee(params.row))
+    // dispatch(setShow(true))
     }
     
   };

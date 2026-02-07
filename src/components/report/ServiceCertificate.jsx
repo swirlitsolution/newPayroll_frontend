@@ -13,6 +13,7 @@ function ServiceCertificate(props) {
             const cardHeight = pageHeight / 2 - 20; // Adjust 20px margin
             const cardWidth = pageWidth - 40; // 20px margin on each side
         
+            if(props.employee && Array.isArray(props.employee)){
             props.employee.forEach((emp, index) => {
               if (index !== 0 && index % 2 === 0) {
                 doc.addPage();
@@ -43,7 +44,7 @@ function ServiceCertificate(props) {
               ['Nature and Location of Work', emp?.SiteDetails?.name || ''],
               ['Name and address of Principal Employer', 'VOLTAS LIMITED'],
               ['Name and Address of the Workman', emp.Name],
-              ['Age or Date of Birth', emp?.Dob.split("-").reverse().join("/") || '.'],
+              ['Age or Date of Birth', emp?.Dob?.split("-").reverse().join("/") || '.'],
               ['Identification Marks', '.'],
               ['Father\'s / Husband\'s Name', emp.Father || '.'],
             ];
@@ -68,7 +69,7 @@ function ServiceCertificate(props) {
             ];
             
             const tableRows = [
-              ["01", emp?.Doj.split("-").reverse().join("-"), emp?.DesignationDetails?.name,emp?.rate?.arate, ""],
+              ["01", emp?.Doj?.split("-").reverse().join("-"), emp?.DesignationDetails?.name,emp?.rate?.arate, ""],
             ];
         
             doc.autoTable({
@@ -95,7 +96,8 @@ function ServiceCertificate(props) {
             doc.setFont('times', 'normal');
             doc.addImage("https://backend.stcassociates.co.in/static/img/stamp.png", "PNG",  doc.internal.pageSize.getWidth() - 150, startY + 50, 100, 50);
             doc.text('Signature of Contractor', doc.internal.pageSize.getWidth() - 150, startY + 110);
-          });
+            });
+          }
             doc.save('service_certificate.pdf');
           };
   return (

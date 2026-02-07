@@ -1,16 +1,14 @@
-
 {
-    "files": [],
-    "references": [
-      {
-        "path": "./jsconfig.app.json"
-      }
-    ],
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["./src/*"]
-      }
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
     }
-  }
-  
+  },
+  "include": ["src/**/*", "src/**/*.jsx"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -46,7 +46,7 @@ function OdishaOverTimeRegister(props) {
                   <p className='text-left text-xs'>Rule 130(1)(c) of Orissa Building and other Construction Workers</p>
                   <p className='text-left text-xs'>(Regulation of Employment & Condition of Service) Rules, 2002 <span className='float-right text-xs'>Month & Year      {monthdata[props.month?.split("-")[1]]}     {props.month?.split("-")[0]}</span></p>
 
-                  <div className='grid grid-cols-2 gap-4 mt-4'>
+                  {/* <div className='grid grid-cols-2 gap-4 mt-4'>
                       <div>
                           <p className='text-left text-sm font-semibold'>Name of Workman / Father / Husband's Name</p>
                           <p className='text-left text-sm'>Sex</p>
@@ -57,22 +57,26 @@ function OdishaOverTimeRegister(props) {
                           <p className='text-right text-xs'>contract is carried on: {props.company?.contractEstablishment || 'N/A'}</p>
                           <p className='text-right text-xs'>Name & Address of Principal Employer: {props.company?.principleEmployer || 'N/A'}</p>
                       </div>
-                  </div>
+                  </div> */}
 
                   <table className='w-full border-collapse border border-black text-xs mt-6'>
                     <thead>
                       <tr className='bg-gray-100'>
-                        <th className='border border-black p-2 text-left font-semibold'>Sl.No.</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Name of<br/>Workman / Father /<br/>Husband's Name</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Sex</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Desig-<br/>nation</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Emp No. / Sl.No.<br/>in Register of<br/>Employee</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Particulars of O.T.<br/>Worked<br/>Date      Hours</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Normal Rate<br/>of Wages per<br/>Day / Hours</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Over time<br/>Rate of Wages<br/>per Day / Hours</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Total Over<br/>Time Wages</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Signature<br/>of the<br/>Employees</th>
-                        <th className='border border-black p-2 text-left font-semibold'>Signature<br/>of the<br/>Period Authority</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Sl.No.</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Name of<br/>Workman / Father /<br/>Husband's Name</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Sex</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Desig-<br/>nation</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Emp No. / Sl.No.<br/>in Register of<br/>Employee</th>
+                        <th colSpan="2" className='border border-black p-2 text-center font-semibold'>Particulars of O.T. Worked</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Normal Rate<br/>of Wages per<br/>Day / Hours</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Over time<br/>Rate of Wages<br/>per Day / Hours</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Total Over<br/>Time Wages</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Signature<br/>of the<br/>Employees</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Signature<br/>of the<br/>Payment Authority</th>
+                      </tr>
+                      <tr className='bg-gray-100'>
+                        <th className='border border-black p-2 text-left font-semibold'>Date</th>
+                        <th className='border border-black p-2 text-left font-semibold'>Hours</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -83,6 +87,7 @@ function OdishaOverTimeRegister(props) {
                             <td className='border border-black p-2'>{emp.Name}</td>
                             <td className='border border-black p-2 text-center'>{emp.Gender || 'NIL'}</td>
                             <td className='border border-black p-2'>{emp.DesignationDetails?.name || 'NIL'}</td>
+                            <td className='border border-black p-2'>{emp.workman || ''}</td>
                             <td className='border border-black p-2'>NIL</td>
                             <td className='border border-black p-2'>NIL</td>
                             <td className='border border-black p-2'>NIL</td>
@@ -94,7 +99,7 @@ function OdishaOverTimeRegister(props) {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan='11' className='border border-black p-2 text-center'>No employees selected</td>
+                          <td colSpan='12' className='border border-black p-2 text-center'>No employees selected</td>
                         </tr>
                       )}
                     </tbody>
@@ -103,7 +108,7 @@ function OdishaOverTimeRegister(props) {
                   <div className='flex justify-between items-end mt-8'>
                       <div></div>
                       <div className='flex flex-col items-center gap-2'>
-                          <div className='w-32 h-24 border border-gray-300 rounded-md flex items-center justify-center'>
+                          <div className='w-32 h-24 flex items-center justify-center'>
                               <img 
                                   src="https://backend.stcassociates.co.in/static/img/stamp.png" 
                                   alt="Stamp"

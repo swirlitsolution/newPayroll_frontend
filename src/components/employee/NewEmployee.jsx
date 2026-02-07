@@ -184,6 +184,8 @@ function NewEmployee(props) {
                             </div>
                         </div>
                         <div className='grid grid-cols-6 gap-x-2 gap-y-2 mt-4 items-center'>
+                        <Label htmlFor='workmanno' className=' text-left'>WorkMan No<span className='text-red-500 text-lg'>*</span></Label>
+                            <Input type='text' {...register("workmanno")} className='bg-white' id='workmanno' />
                             <Label htmlFor='name' className=' text-left'>Name<span className='text-red-500 text-lg'>*</span></Label>
                             <Input type='text' {...register("Name")} className='bg-white' id='name' />
                             <Label htmlFor='father' className='text-left'>Father</Label>

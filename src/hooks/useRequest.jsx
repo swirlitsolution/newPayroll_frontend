@@ -300,7 +300,7 @@ const useRequest = (url) => {
         const cookies = new Cookies();
         const token = cookies.get('access');
        // const source = axios.CancelToken.source(); // Create a cancel token
-
+        setLoading(true);
         const fetchData = async () => {
  
           try {
@@ -313,6 +313,7 @@ const useRequest = (url) => {
             });
           
             setData(response.data); // Axios automatically parses the response as JSON
+            setLoading(false);
           } catch (err) {
             if (axios.isCancel(err)) {
               console.log('Fetch aborted');

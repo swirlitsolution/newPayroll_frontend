@@ -53,6 +53,7 @@ function Master(props) {
         </Label>
         <div className='flex gap-2 items-center justify-center'>
             <Select className=" w-10"
+                defaultValue={props?.value} // Set the default value to the prop value
                 disabled={props.disabled} // Disable the select if the prop is true
                 onValueChange={props.onValueChange} // Use onChange directly
                 value={props.value} // Set the value prop to the selected value
@@ -73,7 +74,7 @@ function Master(props) {
             }
             {
                 edit?
-                    <EditItem heading={props.name} value={props.value} handNewItem={updatemaster} loading={loading} showMaster={showMaster}  />
+                    <EditItem heading={props?.name} value={props?.value} handNewItem={updatemaster} loading={loading} showMaster={showMaster}  />
                 :""
             }
             {
