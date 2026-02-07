@@ -241,10 +241,10 @@ Impression (19)</div> </th>
                   <td className="border border-black px-1">{emp.day31}</td>
                   <td className="border border-black px-1">
                     {emp.tpresent}
-                    <pre>CL : {emp.tcl || 0}</pre>
-                    <pre>FL : {emp.tfl || 0}</pre>
-                    <pre>EL : {emp.tel || 0}</pre>
-                    <pre>NH : {emp.tnh || 0}</pre>
+                    {emp.tcl>0?<pre>CL : {emp.tcl}</pre>:""}
+                    {emp.tfl>0?<pre>FL : {emp.tfl}</pre>:""}
+                    {emp.tel>0?<pre>EL : {emp.tel}</pre>:""}
+                    {emp.tnh>0?<pre>NH : {emp.tnh}</pre>:""}
                     <pre>{emp.tpayable}</pre>
                   </td>
                   <td className="border border-black px-1">{emp.bdarate}</td>

@@ -44,7 +44,7 @@ function ServiceCertificate(props) {
               ['Nature and Location of Work', emp?.SiteDetails?.name || ''],
               ['Name and address of Principal Employer', 'VOLTAS LIMITED'],
               ['Name and Address of the Workman', emp.Name],
-              ['Age or Date of Birth', emp?.Dob.split("-").reverse().join("/") || '.'],
+              ['Age or Date of Birth', emp?.Dob?.split("-").reverse().join("/") || '.'],
               ['Identification Marks', '.'],
               ['Father\'s / Husband\'s Name', emp.Father || '.'],
             ];
@@ -69,7 +69,7 @@ function ServiceCertificate(props) {
             ];
             
             const tableRows = [
-              ["01", emp?.Doj.split("-").reverse().join("-"), emp?.DesignationDetails?.name,emp?.rate?.arate, ""],
+              ["01", emp?.Doj?.split("-").reverse().join("-"), emp?.DesignationDetails?.name,emp?.rate?.arate, ""],
             ];
         
             doc.autoTable({

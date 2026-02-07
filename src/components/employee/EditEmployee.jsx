@@ -36,7 +36,7 @@ function EditEmployee(props) {
     const [auto, setAuto] = useState(false)
     const { id } = useParams()
     const { data, error, loading, putRequest } = useRequest(`/master/employee/${id}/`)
-
+    console.log("loading", loading)
     const cookies = new Cookies()
     const token = cookies.get('access')
 
@@ -101,6 +101,7 @@ function EditEmployee(props) {
     useEffect(() => {
         console.log("employee data is ", data)
         setValue("Site", data?.SiteDetails?.name)
+        setValue("workman",data?.workman)
         setValue("EmpId", data?.EmpId)
         setValue("Name", data?.Name)
         setValue("Father", data?.Father)
@@ -142,6 +143,17 @@ function EditEmployee(props) {
         setValue("MrOtAppl", data?.MrOtAppl)
 
     }, [data])
+
+    if(loading) {
+        return (
+        <div className='flex items-center justify-center h-64'>
+            <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+            </Box>
+        </div>
+    ) 
+    }
+        
     return (
         <div className="flex flex-col overflow-x-hidden overflow-y-auto gap-2">
             <div className="bg-white rounded-lg shadow p-2 border-2">
@@ -187,6 +199,8 @@ function EditEmployee(props) {
                             </div>
                         </div>
                         <div className='grid grid-cols-6 gap-x-2 gap-y-2 mt-4 items-center'>
+                            <Label htmlFor='workmanno' className=' text-left'>WorkMan No<span className='text-red-500 text-lg'>*</span></Label>
+                            <Input type='text' {...register("workmanno")} className='bg-white' id='workmanno' />
                             <Label htmlFor='name' className=' text-left'>Name<span className='text-red-500 text-lg'>*</span></Label>
                             <Input type='text' {...register("Name")} className='bg-white' id='name' />
                             <Label htmlFor='father' className='text-left'>Father</Label>

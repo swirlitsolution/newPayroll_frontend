@@ -148,7 +148,9 @@ function EmployeeCardJoda(props) {
                                                     className='w-28 h-20 object-contain'
                                                 />
                                             </div>
-                                            <span className='font-bold text-xs'>Signature of Contractor</span>
+                                            <span className='font-bold text-xs'>Signature of the Employer/Principal Employer
+
+Authorized signatory</span>
                                         </div>
                                     </div>
 

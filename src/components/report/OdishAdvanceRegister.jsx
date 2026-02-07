@@ -73,8 +73,8 @@ function OdishAdvanceRegister(props) {
                       props.employee.map((emp, index) => (
                         <tr key={index}>
                           <td className='border border-black p-2 text-center'>{index + 1}</td>
-                          <td className='border border-black p-2'>{emp.Name}<br/>{emp.Father || 'NIL'}</td>
-                          <td className='border border-black p-2'>{emp.DesignationDetails?.name || 'NIL'}<br/>NIL</td>
+                          <td className='border border-black p-2'>{emp.Name}<br/>{emp.Father || ''}</td>
+                          <td className='border border-black p-2'>{emp.DesignationDetails?.name || ''}<br/>{emp.workman || ""}</td>
                           <td className='border border-black p-2'>NIL</td>
                           <td className='border border-black p-2'>NIL</td>
                           <td className='border border-black p-2'>NIL</td>
