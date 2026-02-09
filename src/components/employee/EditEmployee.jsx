@@ -35,14 +35,17 @@ function EditEmployee(props) {
     const [iloading, setILoading] = useState(false)
     const [auto, setAuto] = useState(false)
     const { id } = useParams()
-    const { data, error, loading, putRequest } = useRequest(`/master/employee/${id}/`)
+    const { data, error, loading, putRequest ,getRequest} = useRequest(`/master/employee/${id}/`)
     console.log("loading", loading)
     const cookies = new Cookies()
     const token = cookies.get('access')
 
-    const onSubmit = (empdata) => {
+    const onSubmit = async (empdata) => {
         console.log(empdata)
-        putRequest(empdata)
+        const response = await putRequest(empdata)
+        if(response.status === 200){
+            getRequest()
+        }
     }
     const handleIfsc = async () => {
 
@@ -175,7 +178,7 @@ function EditEmployee(props) {
                             <div>
                                 <Controller
                                     name="Site"
-                                    defaultValue="" // Initial value can be set here
+                                    defaultValue={data?.SiteDetails?.name} // Initial value can be set here
                                     control={control}
                                     render={({ field, fieldState: { error } }) => {
                                         const { onChange, value, ref } = field;
@@ -199,8 +202,8 @@ function EditEmployee(props) {
                             </div>
                         </div>
                         <div className='grid grid-cols-6 gap-x-2 gap-y-2 mt-4 items-center'>
-                            <Label htmlFor='workmanno' className=' text-left'>WorkMan No<span className='text-red-500 text-lg'>*</span></Label>
-                            <Input type='text' {...register("workmanno")} className='bg-white' id='workmanno' />
+                            <Label htmlFor='workman' className=' text-left'>WorkMan No<span className='text-red-500 text-lg'>*</span></Label>
+                            <Input type='text' {...register("workman")} className='bg-white' id='workman' />
                             <Label htmlFor='name' className=' text-left'>Name<span className='text-red-500 text-lg'>*</span></Label>
                             <Input type='text' {...register("Name")} className='bg-white' id='name' />
                             <Label htmlFor='father' className='text-left'>Father</Label>
@@ -269,7 +272,7 @@ function EditEmployee(props) {
                             <div className='col-span-2'>
                                 <Controller
                                     name="Department"
-                                    defaultValue="" // Initial value can be set here
+                                    defaultValue={data?.DepartmentDetails?.name} // Initial value can be set here
                                     control={control}
                                     render={({ field, fieldState: { error } }) => {
                                         const { onChange, value, ref } = field;
@@ -286,7 +289,7 @@ function EditEmployee(props) {
                             <div className='col-span-2'>
                                 <Controller
                                     name="Designation"
-                                    defaultValue="" // Initial value can be set here
+                                    defaultValue={data?.DesignationDetails?.name} // Initial value can be set here
                                     control={control}
                                     render={({ field, fieldState: { error } }) => {
                                         const { onChange, value, ref } = field;
@@ -303,7 +306,7 @@ function EditEmployee(props) {
                             <div className='col-span-2'>
                                 <Controller
                                     name="Gang"
-                                    defaultValue="" // Initial value can be set here
+                                    defaultValue={data?.GangDetails?.name} // Initial value can be set here
                                     control={control}
                                     render={({ field, fieldState: { error } }) => {
                                         const { onChange, value, ref } = field;
