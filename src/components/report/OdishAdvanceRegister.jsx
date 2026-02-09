@@ -55,17 +55,21 @@ function OdishAdvanceRegister(props) {
                 <table className='w-full border-collapse border border-black text-xs mt-6'>
                   <thead>
                     <tr className='bg-gray-100'>
-                      <th className='border border-black p-2 text-left font-semibold'>Sl.No</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Name of the Employee<br/>Father / Husband's Name</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Designation<br/>Emp No., Sl.No. in<br/>Register of Employee</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Name & Date of<br/>Office for which<br/>Fine imposed</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Date of Partic-<br/>ulars of Damage<br/>Fine Load</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Amount of Fine<br/>imposed /Dedu-<br/>ction made</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Amount of Adv-<br/>ance made &<br/>Purpose thereof</th>
-                      <th className='border border-black p-2 text-left font-semibold'>No. of Installmem<br/>Granted for repayment<br/>of Fine/Ded. Advances</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Wages Period<br/>and rate of<br/>Wages payable</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Date of Recovery of<br/>Fine/Deduction/Adv.<br/>First last</th>
-                      <th className='border border-black p-2 text-left font-semibold'>Remarks</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Sl.No</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Name of the Employee<br/>Father / Husband's Name</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Designation<br/>Emp No., Sl.No. in<br/>Register of Employee</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Name & Date of<br/>Offense for which<br/>Fine imposed</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Date of Partic-<br/>ulars of Damage<br/>Fine Load</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Amount of Fine<br/>imposed /Dedu-<br/>ction made</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Amount of Adv-<br/>ance made &<br/>Purpose thereof</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>No. of Installmem<br/>Granted for repayment<br/>of Fine/Ded. Advances</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Wages Period<br/>and rate of<br/>Wages payable</th>
+                      <th colSpan="2" className='border border-black p-2 text-center font-semibold'>Date of Recovery of<br/>Fine/Deduction/Adv.</th>
+                      <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Remarks</th>
+                    </tr>
+                    <tr className='bg-gray-100'>
+                      <th className='border border-black p-2 text-center font-semibold'>First Inst</th>
+                      <th className='border border-black p-2 text-center font-semibold'>Last Inst</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -74,7 +78,8 @@ function OdishAdvanceRegister(props) {
                         <tr key={index}>
                           <td className='border border-black p-2 text-center'>{index + 1}</td>
                           <td className='border border-black p-2'>{emp.Name}<br/>{emp.Father || ''}</td>
-                          <td className='border border-black p-2'>{emp.DesignationDetails?.name || ''}<br/>{emp.workman || ""}</td>
+                          <td className='border border-black p-2'>{emp.Skill || ''}<br/>{emp.workman || ""}</td>
+                          <td className='border border-black p-2'>NIL</td>
                           <td className='border border-black p-2'>NIL</td>
                           <td className='border border-black p-2'>NIL</td>
                           <td className='border border-black p-2'>NIL</td>
@@ -87,7 +92,7 @@ function OdishAdvanceRegister(props) {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan='11' className='border border-black p-2 text-center'>No employees selected</td>
+                        <td colSpan='12' className='border border-black p-2 text-center'>No employees selected</td>
                       </tr>
                     )}
                   </tbody>

@@ -69,7 +69,7 @@ function OdishaOverTimeRegister(props) {
                         <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Emp No. / Sl.No.<br/>in Register of<br/>Employee</th>
                         <th colSpan="2" className='border border-black p-2 text-center font-semibold'>Particulars of O.T. Worked</th>
                         <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Normal Rate<br/>of Wages per<br/>Day / Hours</th>
-                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Over time<br/>Rate of Wages<br/>per Day / Hours</th>
+                        <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Over time<br/>Rate of Wages<br/>per Hours</th>
                         <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Total Over<br/>Time Wages</th>
                         <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Signature<br/>of the<br/>Employees</th>
                         <th rowSpan="2" className='border border-black p-2 text-left font-semibold'>Signature<br/>of the<br/>Payment Authority</th>

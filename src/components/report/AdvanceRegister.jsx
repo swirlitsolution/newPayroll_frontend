@@ -93,7 +93,7 @@ function AdvanceRegister(props) {
               index + 1,
               emp?.Name,
               emp.Father || 'NIL',
-              emp?.DesignationDetails?.name || 'NIL',
+              emp?.Skill || 'NIL',
               'NIL',
               'NIL',
               'NIL',
