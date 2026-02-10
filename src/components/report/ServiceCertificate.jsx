@@ -53,10 +53,19 @@ function ServiceCertificate(props) {
         
             details.forEach(([label, value]) => {
               doc.setFont('times', 'normal');
-              doc.text(label, 30, startY);
+              // Wrap text for labels and values
+              const wrappedLabel = doc.splitTextToSize(label, 300);
+              const wrappedValue = doc.splitTextToSize(value, 200);
+              
+              const maxLines = Math.max(wrappedLabel.length, wrappedValue.length);
+              const lineHeight = 12;
+              const rowHeight = maxLines * lineHeight;
+
+              doc.text(wrappedLabel, 30, startY);
               doc.setFont('times', 'bold');
-              doc.text(value, 350, startY);
-              startY += (value.includes('\n') ? 30 : 20);
+              doc.text(wrappedValue, 350, startY);
+              
+              startY += rowHeight + 10;
             });
         
             // Table Data
@@ -69,7 +78,7 @@ function ServiceCertificate(props) {
             ];
             
             const tableRows = [
-              ["01", emp?.Doj?.split("-").reverse().join("-"), emp?.DesignationDetails?.name,emp?.rate?.arate, ""],
+              ["01", emp?.Doj?.split("-").reverse().join("-"), emp?.Skill,emp?.rate?.arate, ""],
             ];
         
             doc.autoTable({

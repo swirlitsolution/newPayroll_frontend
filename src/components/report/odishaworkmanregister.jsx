@@ -102,7 +102,7 @@ function OdishaWorkmanRegister(props) {
                                                 <td className='border border-black p-1 uppercase'>{emp.Name}</td>
                                                 <td className='border border-black p-1 text-center uppercase'>{emp.Gender || 'Male'}</td>
                                                 <td className='border border-black p-1 uppercase'>{emp.Father || emp.FatherName || ''}</td>
-                                                <td className='border border-black p-1 text-center uppercase'>{emp.DesignationDetails?.name || emp.Designation || ''}</td>
+                                                <td className='border border-black p-1 text-center uppercase'>{emp.Skill || ''}</td>
                                                 <td className='border border-black p-1 uppercase'>{emp.PermanentAddress || ''}</td>
                                                 <td className='border border-black p-1 uppercase'>{emp.Address || emp.LocalAddress || emp.PresentAddress || ''}</td>
                                                 <td className='border border-black p-1 text-center'>{`${emp.Doj}`.split('-').reverse().join('-') || ''}</td>

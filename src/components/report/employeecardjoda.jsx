@@ -16,27 +16,27 @@ function EmployeeCardJoda(props) {
             <div className="p-5 w-full h-full overflow-auto bg-white">
 
                 <div className='w-full flex flex-col'>
-                    <div ref={contentRef} className='p-4'>
+                    <div ref={contentRef} className='p-4 flex flex-wrap gap-4'>
                         {props.employee?.length > 0 ? (
                             props.employee.map((emp, index) => (
-                                <div key={index} className='mb-8 border-2 border-black break-inside-avoid page-break-after-always'>
+                                <div key={index} className={`w-[48%] mb-4 border-2 border-black break-inside-avoid ${index % 2 === 1 ? 'page-break-after-always' : ''}`}>
 
                                     {/* Header */}
-                                    <div className='text-center border-b-2 border-black p-1'>
-                                        <h1 className='font-bold text-sm uppercase'>FOR XIV</h1>
-                                        <h2 className='font-bold text-xs'>[ See Rule 75 ]</h2>
+                                    <div className='text-center border-b-2 border-black p-0.5'>
+                                        <h1 className='font-bold text-sm uppercase'>FORM X</h1>
+                                        <h2 className='font-bold text-[10px]'>[ See Rule 75 ]</h2>
                                         <h2 className='font-bold text-sm'>Employment Card</h2>
                                     </div>
 
                                     {/* Content Table */}
-                                    <div className='w-full text-xs font-semibold'>
+                                    <div className='w-full text-[10px] font-semibold'>
 
                                         {/* Contractor Name */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 Name & Address of Contractor :
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {props.company?.name}<br />
                                                 {props.company?.address}
                                             </div>
@@ -44,60 +44,60 @@ function EmployeeCardJoda(props) {
 
                                         {/* Establishment Name */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 Name & Address of the Establishment in under which contract is carried on
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {props.company?.principleEmployer || 'TSL-Hospital & Township RMP-Joda'}
                                             </div>
                                         </div>
 
                                         {/* Nature of Work */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 Nature of Work & Location of Work
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 HVAC PROJECT
                                             </div>
                                         </div>
 
                                         {/* 1. Name */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 1. Name of the Work Man
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {emp.Name}
                                             </div>
                                         </div>
 
                                         {/* 2. Sl No */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 2. Sl. No. of Register of Work Man Employed
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {index + 1}
                                             </div>
                                         </div>
 
                                         {/* 3. Designation */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 3. Nature of Employment / Designation
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
-                                                {emp.DesignationDetails?.name || emp.Designation}
+                                            <div className='w-1/2 p-0.5 uppercase'>
+                                                {emp.Skill || ''}
                                             </div>
                                         </div>
 
                                         {/* 4. Wages */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 4. Wages Rate (With Particular of Unit in case of Piece Work)
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {(
                                                     parseFloat(emp?.rate_basic ?? emp?.rate?.basic ?? emp?.basicrate ?? 0) +
                                                     parseFloat(emp?.rate_da ?? emp?.rate?.da ?? emp?.darate ?? 0)
@@ -107,30 +107,30 @@ function EmployeeCardJoda(props) {
 
                                         {/* 5. Wages Period */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 5. Wages Period
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 Monthly
                                             </div>
                                         </div>
 
                                         {/* 6. Tenure */}
                                         <div className='flex border-b border-black'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 6. Tanure Employment
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {emp.Doj || ''}
                                             </div>
                                         </div>
 
                                         {/* 7. Remarks */}
                                         <div className='flex border-black border-b'>
-                                            <div className='w-1/2 p-2 border-r border-black'>
+                                            <div className='w-1/2 p-0.5 border-r border-black'>
                                                 7. Remarks
                                             </div>
-                                            <div className='w-1/2 p-2 uppercase'>
+                                            <div className='w-1/2 p-0.5 uppercase'>
                                                 {emp.Remarks || ''}
                                             </div>
                                         </div>
@@ -138,19 +138,19 @@ function EmployeeCardJoda(props) {
                                     </div>
 
                                     {/* Footer Signature */}
-                                    <div className='flex justify-end p-4 mt-8'>
-                                        <div className='flex flex-col items-center gap-2'>
+                                    <div className='flex justify-end p-1 mt-1'>
+                                        <div className='flex flex-col items-center gap-1'>
                                             {/* Stamp Image */}
-                                            <div className='w-32 h-24 flex items-center justify-center'>
+                                            <div className='w-20 h-14 flex items-center justify-center'>
                                                 <img
                                                     src="https://backend.stcassociates.co.in/static/img/stamp.png"
                                                     alt="Stamp"
-                                                    className='w-28 h-20 object-contain'
+                                                    className='w-16 h-12 object-contain'
                                                 />
                                             </div>
-                                            <span className='font-bold text-xs'>Signature of the Employer/Principal Employer
-
-Authorized signatory</span>
+                                            <span className='font-bold text-[10px]'>Signature of the Employer/Principal Employer
+                                                <br/>
+                                                Authorized signatory</span>
                                         </div>
                                     </div>
 

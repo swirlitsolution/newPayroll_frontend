@@ -86,15 +86,15 @@ function OdishaOverTimeRegister(props) {
                             <td className='border border-black p-2 text-center'>{index + 1}</td>
                             <td className='border border-black p-2'>{emp.Name}</td>
                             <td className='border border-black p-2 text-center'>{emp.Gender || 'NIL'}</td>
-                            <td className='border border-black p-2'>{emp.DesignationDetails?.name || 'NIL'}</td>
+                            <td className='border border-black p-2'>{emp.Skill || 'NIL'}</td>
                             <td className='border border-black p-2'>{emp.workman || ''}</td>
                             <td className='border border-black p-2'>NIL</td>
                             <td className='border border-black p-2'>NIL</td>
                             <td className='border border-black p-2'>NIL</td>
                             <td className='border border-black p-2'>NIL</td>
                             <td className='border border-black p-2'>NIL</td>
-                            <td className='border border-black p-2'>NIL</td>
-                            <td className='border border-black p-2'>NIL</td>
+                            <td className='border border-black p-2'></td>
+                            <td className='border border-black p-2'></td>
                           </tr>
                         ))
                       ) : (

@@ -107,7 +107,7 @@ function OvertimeRegister(props) {
                 emp.Name,
                 emp?.Father || '.',
                 emp?.Gender || '.',
-                emp?.DesignationDetails?.name || '.',
+                emp?.Skill || '.',
                 '- - -',
                 '- - -',
                 '- - -',

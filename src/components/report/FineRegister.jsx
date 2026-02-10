@@ -63,7 +63,7 @@ function FineRegister(props) {
                 (index + 1).toString().padStart(2, '0'),
                 emp.Name,
                 emp?.Father || '---',
-                emp?.DesignationDetails?.name,
+                emp?.Skill,
                 '---',
                 '---',
                 '---',

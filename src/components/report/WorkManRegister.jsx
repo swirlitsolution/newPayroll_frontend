@@ -64,7 +64,7 @@ function WorkManRegister(props) {
                 emp?.Name,
                 emp.Gender || '.',
                 emp.Father || emp.FatherName || '.',
-                emp?.DesignationDetails?.name || '.',
+                emp?.Skill || '.',
                 emp.PermanentAddress || emp?.Address || '.',
                 emp.Address || emp.LocalAddress || emp.PresentAddress || '.',
                 `${emp?.Doj?.split("-").reverse().join("/")}` || '.',

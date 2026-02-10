@@ -68,7 +68,7 @@ function DamageRegister(props) {
             index + 1,
             emp.Name,
             emp.Father || '.',
-            emp?.DesignationDetails?.name || '.',
+            emp?.Skill || '.',
             '- - -',
             '- - -',
                 '- - -',
