@@ -1,9 +1,10 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const getCompany = async () => {
+export const getCompany = async (site) => {
+  
         try {
-          const response = await axios.get("api/select/company/");
+          const response = await axios.get(`api/companyworkmap/get/${site}/`);
     
           if(response.status === 404){
             toast.warning("Requested source not found !")

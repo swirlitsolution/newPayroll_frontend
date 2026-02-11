@@ -154,7 +154,7 @@ function Employeelist() {
 
   const { data, isLoading, error } = useEmployee()
   console.log("employees",data)
-  if (isLoading) return 'Loading...'
+ 
 
   if (error) return 'An error has occurred: ' + error.message
 
@@ -227,14 +227,20 @@ function Employeelist() {
       )}
 
       <EmpModel />
-      <NewDataGrid
+
+     {isLoading? <div className="w-full text-center p-4">
+     {/* create spinner loader  */}
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+
+        <p>Loading...</p>
+     </div>: <NewDataGrid
         data={data}
         columns={columns}
         columnVisibilityModel={columnVisibilityModel}
         handleRowClicked={handleRowClicked}
 
 
-      />
+      />}
     </div>
   );
 }
