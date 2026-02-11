@@ -51,7 +51,7 @@ function OdishaFormD(props) {
                                         </div>
                                         <div className='flex gap-2'>
                                             <span>Name of Owner</span>
-                                            <span className='uppercase'>{props.company?.principleEmployer || 'VOLTAS LIMITED'}</span>
+                                            <span className='uppercase'>{props.company?.principledata?.name || props.company?.principleEmployer || 'VOLTAS LIMITED'}</span>
                                         </div>
                                         <div className='flex gap-2 ml-auto'>
                                             <span>LIN</span>

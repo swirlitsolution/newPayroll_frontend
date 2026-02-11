@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import NewWindowPortal from './NewWindowPortal';
 
 function EmployeeCardJoda(props) {
-   
+
     const contentRef = useRef();
     const reactToPrintFn = useReactToPrint({ contentRef });
 
@@ -48,7 +48,7 @@ function EmployeeCardJoda(props) {
                                                 Name & Address of the Establishment in under which contract is carried on
                                             </div>
                                             <div className='w-1/2 p-0.5 uppercase'>
-                                                {props.company?.principleEmployer || 'TSL-Hospital & Township RMP-Joda'}
+                                                {props.company?.contractdata?.name || props.company?.principleEmployer || 'TSL-Hospital & Township RMP-Joda'}
                                             </div>
                                         </div>
 
@@ -58,7 +58,7 @@ function EmployeeCardJoda(props) {
                                                 Nature of Work & Location of Work
                                             </div>
                                             <div className='w-1/2 p-0.5 uppercase'>
-                                                HVAC PROJECT
+                                                {props.company?.worknaturedata?.name || 'HVAC PROJECT'}
                                             </div>
                                         </div>
 
@@ -149,7 +149,7 @@ function EmployeeCardJoda(props) {
                                                 />
                                             </div>
                                             <span className='font-bold text-[10px]'>Signature of the Employer/Principal Employer
-                                                <br/>
+                                                <br />
                                                 Authorized signatory</span>
                                         </div>
                                     </div>
@@ -162,7 +162,7 @@ function EmployeeCardJoda(props) {
                     </div>
                 </div>
             </div>
-          
+
         </div>
     )
 }

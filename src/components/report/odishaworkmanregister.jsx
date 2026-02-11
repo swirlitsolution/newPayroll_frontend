@@ -10,11 +10,11 @@ function OdishaWorkmanRegister(props) {
     console.log(props)
     return (
         <div>
-        
+
             <div className="p-5 w-full h-full overflow-auto bg-white">
                 {props.company && (
                     <button onClick={reactToPrintFn} className='mb-4 float-end px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'>
-                        Print 
+                        Print
                     </button>
                 )}
                 {props.company && (
@@ -40,21 +40,21 @@ function OdishaWorkmanRegister(props) {
 
                                 <div className='flex gap-2'>
                                     <span className='min-w-[150px]'>Nature and location of work :</span>
-                                    <span className='uppercase'>HVAC PROJECT</span>
+                                    <span className='uppercase'>{props.company?.worknaturedata?.name || 'HVAC PROJECT'}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                 </div>
 
                                 <div className='flex gap-2'>
                                     <span className='min-w-[150px]'>Name and address of establishment in/ under which contract is carried on :</span>
-                                    <span className='uppercase'>{props.company?.name || 'GLOBAL AC SYSTEM JSR PVT LTD'}</span>
+                                    <span className='uppercase'>{props.company?.contractdata?.name || props.company?.name || 'GLOBAL AC SYSTEM JSR PVT LTD'}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                 </div>
 
                                 <div className='flex gap-2'>
                                     <span className='min-w-[150px]'>Name and address of principal employer :</span>
-                                    <span className='uppercase'>{props.company?.principleEmployer || 'NEELACHAL ISPAT'}</span>
+                                    <span className='uppercase'>{props.company?.principledata?.name || props.company?.principleEmployer || 'NEELACHAL ISPAT'}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                 </div>
@@ -136,7 +136,7 @@ function OdishaWorkmanRegister(props) {
                     </div>
                 )}
             </div>
-          
+
         </div>
     )
 }
