@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {  setCompany } from '../../Redux/Slices/CompanySlice';
+import { setCompany } from '../../Redux/Slices/CompanySlice';
 import { useCompanyQuery } from '../../hooks/useCompanyQuery';
 import { Controller, useForm } from 'react-hook-form';
 import HeaderMaster from '../master/HeaderMaster';
