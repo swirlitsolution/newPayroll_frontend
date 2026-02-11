@@ -56,8 +56,8 @@ function OvertimeRegister(props) {
 
     // Contractor & Establishment Details
     const leftDetails = [
-      ['Name & Address of Contractor', `${props.company?.name}\n${props.company?.address}`],
-      ['Name & Location of Work', ''],
+      ['Name & Address of Contractor', `${props.company?.companydata?.name}\n${props.company?.companydata?.address}`],
+      ['Name & Location of Work', `${props.company?.worknaturedata?.name || props.company?.workNature || 'N/A'}`],
     ];
     const rightDetails = [
       ['Name & Address of the Establishment', `${props.company?.contractdata?.name || props.company?.contractEstablishment || 'N/A'}`],

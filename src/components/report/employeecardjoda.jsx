@@ -37,8 +37,8 @@ function EmployeeCardJoda(props) {
                                                 Name & Address of Contractor :
                                             </div>
                                             <div className='w-1/2 p-0.5 uppercase'>
-                                                {props.company?.name}<br />
-                                                {props.company?.address}
+                                                {props.company?.companydata?.name}<br />
+                                                {props.company?.companydata.address}
                                             </div>
                                         </div>
 

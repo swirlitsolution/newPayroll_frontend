@@ -50,9 +50,9 @@ function EmployeeMentCard(props) {
       doc.setFont('times', 'normal');
       doc.text('Name & Address of Contractor:', 30, positionY + 40);
       doc.setFont('times', 'bold');
-      doc.text(`${props.company?.name}`, 30, positionY + 60);
+      doc.text(`${props.company?.companydata?.name}`, 30, positionY + 60);
       doc.setFont('times', 'normal');
-      doc.text(`${props.company?.address}`, 30, positionY + 80);
+      doc.text(`${props.company?.companydata.address}`, 30, positionY + 80);
       // doc.text('Azadnagar Mango Jsr-832110', 30, positionY + 100);
 
       // Employer Details

@@ -39,7 +39,7 @@ function ServiceCertificate(props) {
 
         // Contractor and Employee Details
         const details = [
-          ['Name and Address of Contractor', `${props.company?.name}\n ${props.company?.address}`],
+          ['Name and Address of Contractor', `${props.company?.companydata?.name}\n ${props.company?.companydata?.address}`],
           ['Name and Address of Establishment in/under which contract is carried on', `${props.company?.contractdata?.name || props.company?.contractEstablishment || 'N/A'}`],
           ['Nature and Location of Work', emp?.SiteDetails?.name || ''],
           ['Name and address of Principal Employer', 'VOLTAS LIMITED'],

@@ -31,8 +31,8 @@ function DamageRegister(props) {
     // Contractor and Employer Information
     doc.setFontSize(10);
     doc.text('Name & Address of Contractor:', 20, 30);
-    doc.text(`${props.company?.name}`, 20, 45);
-    doc.text(`${props.company?.address}`, 20, 60);
+    doc.text(`${props.company?.companydata?.name}`, 20, 45);
+    doc.text(`${props.company?.companydata?.address}`, 20, 60);
 
     doc.text('Name & Address of the Establishment ', 650, 30);
     doc.text('Under which Contract is carried on:', 650, 40);

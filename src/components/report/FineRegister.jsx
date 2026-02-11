@@ -13,9 +13,9 @@ function FineRegister(props) {
     // Left Header
     doc.text('Name & Address of Contractor:', 20, 30);
     doc.setFont('times', 'bold');
-    doc.text(`${props.company?.name}`, 20, 45);
+    doc.text(`${props.company?.companydata?.name}`, 20, 45);
     doc.setFont('times', 'normal');
-    doc.text(`${props.company?.address}`, 20, 60);
+    doc.text(`${props.company?.companydata.address}`, 20, 60);
     // doc.text('Azadnagar Mango Jsr-832110', 20, 75);
     doc.text('Name & Location of Work', 20, 90);
     doc.text(`${props.company?.worknaturedata?.name || props.company?.workNature || 'N/A'}`, 20, 105);
