@@ -172,10 +172,9 @@ function HeaderMaster(props) {
             }
             {
                 edit?
-                    <EditItem heading={props?.name} value={props?.value} handNewItem={updatemaster} loading={loading} showMaster={showMaster}  />
+                    <EditItem heading={props?.name} value={props?.value} handNewItem={updatemaster} loading={loading} showMaster={showEditMaster}  />
                 :""
-            }
-            {
+            }            {
                 props.add?
                 <div className='w-[50px] flex justify-around gap-x-2'>
                     <div onClick={()=>showMaster(true)} className='hover:text-green-600 text-xs'>    
