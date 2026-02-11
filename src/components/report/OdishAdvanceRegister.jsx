@@ -40,8 +40,8 @@ function OdishAdvanceRegister(props) {
                 <div className='grid grid-cols-2 gap-4 mt-4'>
                     <div>
                         <p className='text-left text-sm'>Name & Address of Contractor</p>
-                        <p className='text-left text-sm font-semibold'>{props.company?.name}</p>
-                        <p className='text-left text-sm'>{props.company?.address}</p>
+                        <p className='text-left text-sm font-semibold'>{props?.company?.companydata?.name}</p>
+                        <p className='text-left text-sm'>{props.company?.companydata?.address}</p>
                         <p className='text-left text-sm mt-2'>Nature & Location of Work</p>
                         <p className='text-left text-sm font-semibold'>{props.company?.workNature || 'N/A'}</p>
                     </div>

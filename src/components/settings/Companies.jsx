@@ -17,7 +17,7 @@ const columns = [
 ]
 
 function Companies() {
-    const {data, error, loading, getRequest } = useRequest("api/company/details/list/")
+    const {data, error, loading, getRequest } = useRequest("api/company/details/")
     console.log("company data",data)
     const navigate = useNavigate();
     const handleRowClicked = (params)=>{

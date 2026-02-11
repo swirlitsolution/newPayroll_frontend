@@ -156,7 +156,7 @@ function usePost(url) {
           if(response.status===200){
       
             toast.success(response.data.Saved)
-          setData(response.data);
+            setData(response.data);
       
           return response
           }

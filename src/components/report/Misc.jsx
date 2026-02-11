@@ -10,7 +10,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { set } from 'date-fns';
 import { useEmployee } from '../../hooks/useEmployee';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AdvanceRegister from './AdvanceRegister';
 import DamageRegister from './DamageRegister';
 import WorkManRegister from './WorkManRegister';
@@ -24,6 +24,7 @@ import OdishaFormB from './odishaformb';
 import OdishaFormD from './OdishaFormD';
 import OdishaWorkmanRegister from './odishaworkmanregister';
 import EmployeeCardJoda from './employeecardjoda';
+import { setSite } from '@/Redux/Slices/SiteSlice';
 
 function Misc() {
   const { control, watch, register, handleSubmit, formState: { errors } } = useForm()
@@ -36,8 +37,10 @@ function Misc() {
   const { data, isLoading, error } = useEmployee()
   const [employees, setEmployees] = useState(null)
   const { company } = useSelector(state => state.Company);
-  const [formdata, setFormData] = useState(null)
-
+  const [formdata, setFormData] = useState({
+    sitewise:null
+  })
+  const dispatch = useDispatch();
   const handleCard = () => {
     setClose(!close)
   }
@@ -144,10 +147,13 @@ function Misc() {
     // postRequest(formattedData)
   }
   const handleChange = (event) => {
+    console.log(event.target)
     setFormData({
       ...formdata,
       [event.target.name]: event.target.value
     })
+    
+
   }
   const SelectEmployee = ({ heading, showMaster }) => {
     const handleOnChange = () => {
@@ -222,6 +228,11 @@ function Misc() {
   }
   useEffect(() => {
     console.log("formdata changed", formdata, selectedEmployee)
+    if(formdata?.type === "sitewise"){
+      console.log("selected site is ", formdata?.Site)
+      // user redux to set site value
+      dispatch(setSite(formdata?.Site))
+    }
     const filteremp = () => {
       let emp = null
       if (formdata?.month) {
@@ -253,7 +264,8 @@ function Misc() {
   }, [formdata])
   return (
     <div>
-      <ReportHeader />
+
+      {formdata?.Site?<ReportHeader site={formdata?.Site} />:""}
       {close ? <SelectEmployee heading="Misc" showMaster={handleCard} /> : ""}
       <div className='w-full flex flex-col justify-between'>
         <div className='w-full flex justify-center mt-2'>
