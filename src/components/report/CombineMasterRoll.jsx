@@ -102,15 +102,16 @@ function CombineMasterRoll({ attendanceData, month, year }) {
                 <span></span>
                 <span></span>
                 <span></span>
-                <span>Name & Address of Factory Establishment</span>
-                <span>{company.name}</span>
-                <span></span>
+                <span className='col-span-2'>Name & Address of Factory Establishment</span>
+                <span>{company.companydata.name}</span>
+            
                 <span>Name & Address of Contractor  </span>
                 <span>Name & Address of Principle Employer</span>
                 <span></span>
-                <span>{company.address}</span>
-                <span>{company.address}</span>
+                <span></span>
+                <span >{company.companydata.address}</span>
                 <span>{company?.contractdata?.name || company?.contractEstablishment || 'N/A'}</span>
+               
                 <span>{company?.principledata?.name || company?.principleEmployer || 'N/A'}</span>
                 <span>Nature & Location of Work</span>
                 <span>{company?.worknaturedata?.name || company?.workNature || 'N/A'}</span>
