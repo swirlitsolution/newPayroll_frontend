@@ -27,7 +27,7 @@ import EmployeeCardJoda from './employeecardjoda';
 import { setSite } from '@/Redux/Slices/SiteSlice';
 
 function Misc() {
-  const { control, watch, register, handleSubmit, formState: { errors } } = useForm()
+  const { control} = useForm()
   // const { data, error, loading,postRequest,getRequest } = usePost('/leave/')
   const [disabled, setDisabled] = useState(false)
   const [close, setClose] = useState(false)

@@ -16,6 +16,7 @@ import { setCompany } from '../../Redux/Slices/CompanySlice';
 import { useCompanyQuery } from '../../hooks/useCompanyQuery';
 import OdishaFormB from '../report/odishaformb';
 import MinimumRate from '../report/MinimumRate';
+import { setSite } from '@/Redux/Slices/SiteSlice';
 
 
  const payrollcolumns = [
@@ -156,14 +157,12 @@ function Payroll() {
     const [download,setDownload] = useState(false)
     const [rowdata,setRowdata] = useState(null)
     const [odisha,setOdisha] = useState(false)
-    const [site,setSite] = useState('')
     const { flattenObject } = useFlattendObject()
     const [leave,setLeave] = useState(null)
     const dispatch = useDispatch()
     const {company} = useSelector((state)=>state.Company)
     const { companyData, isLoading } = useCompanyQuery();
    
-    console.log("payroll data", rowdata)
     const slipcolumns = [
                             {field:'EmpId',headerName:'EmpId',width:'80px',renderCell:(params)=>params.employeeData_EmpId},
                              {field:'Name',headerName:'Name',renderCell:(params)=>params.employeeData_Name},
@@ -222,8 +221,8 @@ function Payroll() {
                 })
         }
         else if(data.Site && data.month !== ""){
-            setSite(data.Site)
-            getRequest(`/getattendancereport/${month}/${year}/${data.Site}/${data.all}/`).then((response)=>{
+           
+            getRequest(`/getattendancereport/${month}/${year}/${watch('Site')}/${data.all}/`).then((response)=>{
               
                      if(response?.data?.attendance){
                         setDownload(true)
@@ -277,6 +276,12 @@ function Payroll() {
         dispatch(setCompany(companyData));
     }
     },[])
+    useEffect(()=>{
+        if(watch('Site')){
+            dispatch(setSite(watch('Site')))
+        }
+    },[watch('Site')])
+
     if (isLoading) return  <p>Loading ....</p>
   return (
     <div>
@@ -317,7 +322,7 @@ function Payroll() {
                                 <a href={'https://backend.stcassociates.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
                             </Button>
                             <OdishaFormB company={company}
-                            employee={rowdata} month={watch('month')} site={site} wait={loading} />
+                            employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
                         </div>
                
                     </div>
@@ -327,7 +332,7 @@ function Payroll() {
             </div>
         </form>
         <div>
-        <ReportHeader />
+       {watch("Site")? <ReportHeader />:""}
         </div>
         <div className='w-full mt-2'>
         <Tabs defaultValue="payroll" className="w-full">

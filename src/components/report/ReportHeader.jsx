@@ -10,9 +10,9 @@ function ReportHeader() {
     const { data, error, loading, putapiRequest } = usePost("")
     const { control, register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm()
     const dispatch = useDispatch();
-    const { company } = useSelector(state => state.Company);
-    const { site } = useSelector(state => state.Site);
+    const {company} = useSelector(state => state.Company);
 
+    
     const { companyData, isLoading } = useCompanyQuery(); // get current selected company data
     const onSubmit = (data) => {
 

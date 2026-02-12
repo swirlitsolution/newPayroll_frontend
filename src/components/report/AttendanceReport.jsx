@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import ReportHeader from './ReportHeader';
 import NewWindowPortal from './NewWindowPortal';
 import CombineMasterRoll from './CombineMasterRoll';
+import { useDispatch } from 'react-redux';
+import { setSite } from '@/Redux/Slices/SiteSlice';
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name', renderCell:(params)=>params.employeeData.Name},
@@ -90,12 +92,14 @@ function AttendanceReport(props) {
     const [attendance,setAttendance] = useState([])
     const [month,setMonth] = useState("")
     const [year,setYear] = useState("")
+    const dispatch = useDispatch()
     const handleRowClicked = (params)=>{
         console.log(params)
 
       }
     const onSubmit = (data)=>{
         console.log("attendance data",data)
+       
         const splited_date = data.month.split("-")
         const year = splited_date[0]
         const month = splited_date[1]
@@ -132,6 +136,12 @@ function AttendanceReport(props) {
             setDownload(false)
         }
     },[data])
+
+    useEffect(()=>{
+        if(watch('Site')){
+            dispatch(setSite(watch('Site')))
+        }
+    },[watch('Site')])
     return (
       <div className="flex flex-col overflow-x-hidden overflow-y-auto gap-2 mt-2">
           <div className="bg-white rounded-lg shadow p-2 border-2">
@@ -146,39 +156,39 @@ function AttendanceReport(props) {
           </div>
          
           <div className='flex flex-col gap-2 w-full items-center'>
-            
+         { watch('Site')? <ReportHeader />:""}
             <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-4">
                 <Label>All </Label>
                 <Input type="checkbox" id="all"  {...register("all")}  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
                                 
                 <Controller
-                        name="Site"
-                        defaultValue="" // Initial value can be set here
-                        control={control}
-                        
-                        render={({ field, fieldState: { error } }) => {
-                            const { onChange, value, ref } = field;
-                        return (
-                            <Master 
-                            api = "/master/site/"
-                            onValueChange={(newValue) => {onChange(newValue || null)
-                      
-                            }} 
-                            value={value} name='Site' />
-                        );
-                        }}
-                    />
+                    name="Site"
+                    defaultValue="" // Initial value can be set here
+                    control={control}
+                    
+                    render={({ field, fieldState: { error } }) => {
+                        const { onChange, value, ref } = field;
+                    return (
+                        <Master 
+                        api = "/master/site/"
+                        onValueChange={(newValue) => {onChange(newValue || null)
+                    
+                        }} 
+                        value={value} name='Site' />
+                    );
+                    }}
+                />
                 <input type="month"  id="month" {...register("month")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         
                 <Button type='submit' >Ok</Button>
             </form>
-            <ReportHeader />
+            
                {
                     download?
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
-                            <a href={'https://backend.stcassociates.co.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
+                            <a href={'https://backend.swirlapps.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
                             {/* <a href={'https://backend.stcassociates.co.in/attendance/combine/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a> */}
                             <button 
                                     onClick={() => setShowPreview(true)}
