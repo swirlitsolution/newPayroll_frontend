@@ -17,8 +17,8 @@ function FineRegister(props) {
     doc.setFont('times', 'normal');
     doc.text(`${props.company?.companydata.address}`, 20, 60);
     // doc.text('Azadnagar Mango Jsr-832110', 20, 75);
-    doc.text('Name & Location of Work', 20, 90);
-    doc.text(`${props.company?.worknaturedata?.name || props.company?.workNature || 'N/A'}`, 20, 105);
+    doc.text('Name & Location of Work', 20, 75);
+    doc.text(`${props.company?.worknaturedata?.name || props.company?.workNature || 'N/A'}`, 20, 90);
     // Center Header
     doc.setFont('times', 'bold');
     doc.setFontSize(12);
