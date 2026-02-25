@@ -1,6 +1,5 @@
 import React from "react";
 import { jsPDF } from "jspdf";
-import useRequest from "../../hooks/useRequest";
 
 const WageSlipPDF = ({ employees,odisha,data }) => {
     const monthname = {
@@ -17,6 +16,13 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
     11: "Nov",
     12: "Dec",
     }
+  const headerData = {
+    contractorName: data?.companydata?.name || data?.name || "N/A",
+    contractorAddress: data?.companydata?.address || data?.address || "N/A",
+    establishmentName: data?.contractdata?.name || data?.contractEstablishment || "N/A",
+    principalEmployer: data?.principledata?.name || data?.principleEmployer || "N/A",
+    workNature: data?.worknaturedata?.name || data?.workNature || "N/A",
+  };
   const generatePDF = () => {
     const doc = new jsPDF("p", "pt", "a4");
 
@@ -52,6 +58,7 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
   };
 
   const drawJharkhandSlip = (doc, emp, y,) => {
+    const monthLabel = monthname[Number(emp?.month)] || monthname[emp?.month] || "";
     doc.setFont("helvetica", "normal");
     const boxWidth = 555;
     const headerHeight = 50;
@@ -65,14 +72,14 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
     doc.text("WAGES SLIP", 250, y + 20);
     doc.text("[See Rule 78(2)(B)]", 230, y + 35);
     doc.text("For the Month", 420, y + 35);
-    doc.text(monthname[emp.month] + " - " || "", 510, y + 35);
-    doc.text(emp.year || "",540,y + 35)
+    doc.text(monthLabel, 510, y + 35);
+    doc.text(`${emp?.year || ""}`, 540, y + 35)
 
     // Contractor Row
     doc.rect(20, y + 50, boxWidth, 25);
     doc.setFontSize(11).setFont("helvetica", "bold");
     doc.text("Name & Address of Contractor", 30, y + 67);
-    doc.text(data?.name|| "GLOBAL AC SYSTEM", 250, y + 67);
+    doc.text(headerData.contractorName, 250, y + 67);
 
     // Leave Box Section
     doc.setFontSize(10).setFont("helvetica", "normal");
@@ -82,9 +89,9 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
     doc.rect(205, y + 75, 185, 40);
     doc.rect(390, y + 75, 185, 40);
 
-    doc.text(`EARNED CL ${emp?.leavedetails[0]?.cl}`, 30, y + 95);
-    doc.text(`TAKEN CL ${emp?.leavedetails[0]?.cltaken}`, 215, y + 95);
-    doc.text(`BAL CL ${emp?.leavedetails[0]?.clbalance}`, 400, y + 95);
+    doc.text(`EARNED CL ${emp?.leavedetails?.[0]?.cl || 0}`, 30, y + 95);
+    doc.text(`TAKEN CL ${emp?.leavedetails?.[0]?.cltaken || 0}`, 215, y + 95);
+    doc.text(`BAL CL ${emp?.leavedetails?.[0]?.clbalance || 0}`, 400, y + 95);
 
     // Row 2
     doc.rect(20, y + 115, 185, 40);
@@ -140,6 +147,7 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
 
   // Draw slip
   const drawOdishaSlip = (doc, emp, y) => {
+    const monthLabel = monthname[Number(emp?.month)] || monthname[emp?.month] || "";
     doc.rect(20, y, 555, 360);
 
     doc.setFontSize(12).setFont("helvetica", "bold");
@@ -150,18 +158,18 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
     doc.setFontSize(10).setFont("helvetica", "normal");
 
     doc.text("Name & Address of Contractor", 30, y + 45);
-    doc.text(`${data?.name}`, 30, y + 60);
-    doc.text(`${data?.address || ""}`, 30, y + 75);
+    doc.text(headerData.contractorName, 30, y + 60);
+    doc.text(headerData.contractorAddress, 30, y + 75);
 
     doc.text("Name and Address of Establishment in/under which", 330, y + 45);
     doc.text("Contract is Carried On", 330, y + 58);
-    doc.text(`${data?.contractEstablishment}`, 330, y + 73);
+    doc.text(headerData.establishmentName, 330, y + 73);
     doc.text("Name & Address of the Principal Employer", 330, y + 88);
-    doc.text(`${data?.principleEmployer}`, 330, y + 103);
+    doc.text(headerData.principalEmployer, 330, y + 103);
 
     let lineY = y + 135;
 
-    doc.text(`Nature & Location of Work: `, 30, lineY);
+    doc.text(`Nature & Location of Work: ${headerData.workNature}`, 30, lineY);
     lineY += 15;
     doc.text(`Name of the work man:`, 30, lineY);
     doc.text(`${emp?.employeeData_Name}`,180,lineY)
@@ -176,7 +184,7 @@ const WageSlipPDF = ({ employees,odisha,data }) => {
 
     lineY += 15;
     doc.text(`Payment Month:`, 30, lineY);
-    doc.text(`${monthname[emp.month]} - ${emp.year}`,180,lineY)
+    doc.text(`${monthLabel} - ${emp?.year || ""}`,180,lineY)
     doc.text(`A/C No.:`, 330, lineY);
     doc.text(` ${emp.employeeData_Ac}`,380,lineY)
 

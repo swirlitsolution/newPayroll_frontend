@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,7 +35,8 @@ function CombineMasterRoll({ attendanceData, month, year }) {
   const attendance = attendanceData || [];
   const dispatch = useDispatch();
   const { company } = useSelector(state => state.Company);
-  const { companyData, isLoading } = useCompanyQuery(); // get current selected company data
+  const { companyData } = useCompanyQuery(); // get current selected company data
+  const displayCompany = useMemo(() => company || companyData || {}, [company, companyData]);
   const calPayroll = () => {
     const tpayable = attendance.reduce((sum, emp) => sum + parseFloat(emp.tpayable || 0), 0);
     const tcl = attendance.reduce((sum, emp) => sum + parseFloat(emp.tcl || 0), 0);
@@ -76,19 +77,20 @@ function CombineMasterRoll({ attendanceData, month, year }) {
 
   useEffect(() => {
     calPayroll()
-    dispatch(setCompany(companyData));
+  }, [attendanceData])
 
-  }, [companyData])
+  useEffect(() => {
+    if (companyData) {
+      dispatch(setCompany(companyData));
+    }
+  }, [companyData, dispatch])
   // check if attendance data is not available than return No data available else render the table
   if (attendance.length === 0) {
     return <div>No data available</div>;
   }
-  if (isLoading) return <p>Loading ....</p>
   return (
     <div className='w-full'>
-      {
-        company && (
-          <div className='w-full flex flex-col'>
+      <div className='w-full flex flex-col'>
             <button className=' mr-5 bg-black p-2 self-end w-24 text-white' onClick={reactToPrintFn}>Print</button>
             <div ref={contentRef}>
               <div className='w-full grid grid-cols-5 text-sm'>
@@ -102,19 +104,18 @@ function CombineMasterRoll({ attendanceData, month, year }) {
                 <span></span>
                 <span></span>
                 <span></span>
-                <span className='col-span-2'>Name & Address of Factory Establishment</span>
-                <span>{company.companydata.name}</span>
-            
+                <span>Name & Address of Factory Establishment</span>
+                <span>{displayCompany?.name || "N/A"}</span>
+                <span></span>
                 <span>Name & Address of Contractor  </span>
                 <span>Name & Address of Principle Employer</span>
                 <span></span>
-                <span></span>
-                <span >{company.companydata.address}</span>
-                <span>{company?.contractdata?.name || company?.contractEstablishment || 'N/A'}</span>
-               
-                <span>{company?.principledata?.name || company?.principleEmployer || 'N/A'}</span>
+                <span>{displayCompany?.address || "N/A"}</span>
+                <span>{displayCompany?.address || "N/A"}</span>
+                <span>{displayCompany?.contractdata?.name || displayCompany?.contractEstablishment || 'N/A'}</span>
+                <span>{displayCompany?.principledata?.name || displayCompany?.principleEmployer || 'N/A'}</span>
                 <span>Nature & Location of Work</span>
-                <span>{company?.worknaturedata?.name || company?.workNature || 'N/A'}</span>
+                <span>{displayCompany?.worknaturedata?.name || displayCompany?.workNature || 'N/A'}</span>
                 <span></span>
                 <span></span>
                 <span></span>
@@ -278,8 +279,6 @@ function CombineMasterRoll({ attendanceData, month, year }) {
                       </tr>
                     ))
                   }
-                </tbody>
-                <tfoot>
                   <tr>
                     <td colSpan={2}>Total Basic</td>
                     <td colSpan={2}>{payroll.basic}</td>
@@ -387,12 +386,10 @@ function CombineMasterRoll({ attendanceData, month, year }) {
                     <td colSpan={4}></td>
                     <td colSpan={2}></td>
                   </tr>
-                </tfoot>
+                </tbody>
               </table>
             </div>
           </div>
-        )
-      }
     </div>
   )
 }

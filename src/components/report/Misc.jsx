@@ -6,10 +6,7 @@ import { Input } from '../ui/input';
 import Master from '../master/Master';
 import { X } from 'lucide-react';
 import { toast } from 'react-toastify';
-import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { set } from 'date-fns';
-import { useEmployee } from '../../hooks/useEmployee';
 import { useDispatch, useSelector } from 'react-redux';
 import AdvanceRegister from './AdvanceRegister';
 import DamageRegister from './DamageRegister';
@@ -27,125 +24,58 @@ import EmployeeCardJoda from './employeecardjoda';
 import { setSite } from '@/Redux/Slices/SiteSlice';
 
 function Misc() {
-  const { control} = useForm()
-  // const { data, error, loading,postRequest,getRequest } = usePost('/leave/')
+  const { control } = useForm()
+  const { data: attendanceReportData, loading, getRequest } = usePost("/markattendance/")
   const [disabled, setDisabled] = useState(false)
   const [close, setClose] = useState(false)
-  const [afterFilter, setAfterFilter] = useState([])
+  const [attendanceEmployees, setAttendanceEmployees] = useState([])
   const [selectedEmployee, setSelectedEmployee] = useState([])
-  const [wait, setwait] = useState(false)
-  const { data, isLoading, error } = useEmployee()
-  const [employees, setEmployees] = useState(null)
+  const [employees, setEmployees] = useState([])
   const { company } = useSelector(state => state.Company);
   const [formdata, setFormData] = useState({
-    sitewise:null
+    sitewise: null
   })
   const dispatch = useDispatch();
+
+  const normalizeAttendanceEmployees = (attendance = []) => {
+    const map = new Map();
+    attendance.forEach((item, index) => {
+      const employee = item?.employeeData || {};
+      const empId = employee?.EmpId || item?.EmpId || `row-${index}`;
+      if (!map.has(empId)) {
+        map.set(empId, {
+          ...employee,
+          id: employee?.id || item?.id || empId,
+        });
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => (a?.Name || "").localeCompare(b?.Name || ""));
+  };
+
+  const fetchAttendanceEmployees = async (monthValue, type, site) => {
+    if (!monthValue || !type) {
+      setAttendanceEmployees([]);
+      return;
+    }
+    const [year, month] = monthValue.split("-");
+    let endpoint = "";
+    if (type === "all" || type === "selected") {
+      endpoint = `/getattendancereport/${month}/${year}/none/true/`;
+    } else if (type === "sitewise" && site) {
+      endpoint = `/getattendancereport/${month}/${year}/${site}/false/`;
+    } else {
+      setAttendanceEmployees([]);
+      return;
+    }
+    const response = await getRequest(endpoint);
+    const attendance = response?.data?.attendance || [];
+    setAttendanceEmployees(normalizeAttendanceEmployees(attendance));
+  };
+
   const handleCard = () => {
     setClose(!close)
   }
-  const filterEmployee = (formdata) => {
-    setwait(true)
-    toast.info("Preparing data for your Report...")
-    if (formdata.month) {
-      const filtermonth = formdata.month.split("-")[1]
-      const filteryear = formdata.month.split("-")[0]
 
-      if (formdata.type === 'all') {
-        setAfterFilter(data?.filter((emp) => {
-          const dojmonth = emp?.Doj?.split("-")[1]
-          const doyear = emp?.Doj?.split("-")[0]
-          // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
-          return (filtermonth === dojmonth && filteryear === doyear)
-
-        })
-        )
-        setwait(false)
-      }
-      else if (formdata.type === 'sitewise') {
-        setAfterFilter(
-          data?.filter((emp) => {
-            const dojmonth = emp?.Doj?.split("-")[1]
-            const doyear = emp?.Doj?.split("-")[0]
-            // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
-            return (emp.SiteDetails.name === data.Site && filtermonth === dojmonth && filteryear === doyear)
-
-          })
-        )
-        setwait(false)
-      }
-      else if (formdata.type === 'selected') {
-        console.log("selected employee = ", afterFilter)
-        setAfterFilter(
-          afterFilter?.filter((emp) => {
-            const dojmonth = emp?.Doj?.split("-")[1]
-            const doyear = emp?.Doj?.split("-")[0]
-            // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
-
-            return (filtermonth === dojmonth && filteryear === doyear)
-          })
-        )
-        setwait(false)
-      }
-    }
-    else {
-      if (formdata.type === 'all') {
-        setAfterFilter(data)
-        setwait(false)
-      }
-      else if (formdata.type === 'sitewise') {
-        setAfterFilter(
-          data?.filter((emp) => {
-
-            // console.log("filteryear",filteryear,"dojyear",doyear,"filtermonth",filtermonth,"dojmonth",dojmonth,filteryear === doyear && filtermonth === dojmonth)
-            return emp.SiteDetails.name === data.Site
-
-          })
-        )
-        setwait(false)
-      }
-      else {
-        console.log("selected employee = ", afterFilter, afterFilter.length)
-      }
-    }
-  }
-  const onSubmit = (formdata) => {
-    console.log("data is ", formdata)
-    filterEmployee(formdata)
-    const site = formdata.site;
-    const month = formdata.month.split('-')[1]
-    const year = formdata.month.split('-')[0]
-
-
-    // if(formdata.register === "advanceRegister"){
-    //     generateAdvancePDF()
-    // }
-    // else if(formdata.register === "damageRegister"){
-    //     generateDamagePDF()
-    // }
-    // else if(formdata.register === "employeementCard"){
-    //     generateEmployeementCardPDF(month)
-    // }
-    // else if(formdata.register === "workmanregister"){
-    //     generateWorkManRegister()
-    // }
-    // else if(formdata.register === "fineRegister"){
-    //     generateFineRegister()
-    // }
-    // else if(formdata.register === "serviceCertificate"){
-    //   generateServiceCertificate()
-    // }
-    // else if(formdata.register === "overTimeRegister"){
-    //   generateOverTimePDF()
-    // }
-    // else {
-    //   toast.warning("Please select any register to generate")
-    // }
-
-    // getRequest(`/getattendancereport/${month}/${year}/`)
-
-    // postRequest(formattedData)
-  }
   const handleChange = (event) => {
     console.log(event.target)
     setFormData({
@@ -171,7 +101,6 @@ function Misc() {
           selectedId.push(empId)
         }
       })
-      setAfterFilter(data?.filter(emp => selectedId.includes(emp.EmpId)))
       setSelectedEmployee(selected)
       showMaster()
     }
@@ -195,7 +124,7 @@ function Misc() {
                 </tr>
               </thead>
               <tbody className='h-[350px]' >
-                {data?.length > 0 ? data.map((item) => (
+                {attendanceEmployees?.length > 0 ? attendanceEmployees.map((item) => (
                   <tr key={item.id} className="bg-white border-b hover:bg-gray-50">
                     <td><Input type="checkbox" id={item.id} /></td>
                     <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.EmpId}</td>
@@ -226,42 +155,26 @@ function Misc() {
       </div>
     </div>
   }
+
   useEffect(() => {
-    console.log("formdata changed", formdata, selectedEmployee)
-    if(formdata?.type === "sitewise"){
-      console.log("selected site is ", formdata?.Site)
-      // user redux to set site value
+    fetchAttendanceEmployees(formdata?.month, formdata?.type, formdata?.Site);
+  }, [formdata?.month, formdata?.type, formdata?.Site])
+
+  useEffect(() => {
+    if (formdata?.type === "sitewise" && formdata?.Site) {
       dispatch(setSite(formdata?.Site))
     }
-    const filteremp = () => {
-      let emp = null
-      if (formdata?.month) {
-        const filtermonth = formdata.month.split("-")[1]
-        const filteryear = formdata.month.split("-")[0]
-        emp = data?.filter((item) => {
-          const dojmonth = item?.Doj?.split("-")[1]
-          const doyear = item?.Doj?.split("-")[0]
-          return (filtermonth === dojmonth && filteryear === doyear)
-        })
-        setEmployees(emp)
-      }
-      if (formdata?.type === 'sitewise' && formdata?.Site) {
-        setSelectedEmployee([])
-        let emp = data?.filter((item) => item?.SiteDetails?.name == formdata.Site)
-        setEmployees(emp)
-      }
-      if (formdata?.type === 'all') {
-        setEmployees(data)
-      }
-      if (formdata?.type === 'selected') {
-        emp = data?.filter((item) => selectedEmployee.findIndex(sel => sel.empId == item.EmpId) !== -1)
-        setEmployees(emp)
-      }
+  }, [formdata?.type, formdata?.Site, dispatch])
 
-
+  useEffect(() => {
+    if (formdata?.type === "selected") {
+      const selectedIds = selectedEmployee.map((item) => item.empId);
+      setEmployees(attendanceEmployees.filter((item) => selectedIds.includes(item.EmpId)));
+      return;
     }
-    filteremp()
-  }, [formdata])
+    setEmployees(attendanceEmployees);
+  }, [attendanceEmployees, selectedEmployee, formdata?.type])
+
   return (
     <div>
 
@@ -329,26 +242,26 @@ function Misc() {
                 employee={employees}
                 format={formdata?.format}
                 month={formdata?.month}
-                wait={wait}
+                wait={loading}
               />
               <DamageRegister company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               <WorkManRegister company={company} format={formdata?.format}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               <EmployeeMentCard company={company}  format={formdata?.format}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               <FineRegister company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               <ServiceCertificate company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               <OvertimeRegister company={company} format={formdata?.format}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               {/* <FormB company={company}
                 employee={employees} month={formdata?.month} wait={wait} /> */}
               {/* <OdishaFormB company={company}
                 employee={employees} month={formdata?.month} wait={wait} /> */}
               <OdishaFormD company={company}
-                employee={employees} month={formdata?.month} wait={wait} />
+                employee={employees} month={formdata?.month} wait={loading} />
               {/* <OdishaWorkmanRegister company={company}
                 employee={employees} month={formdata?.month} wait={wait} /> */}
               {/* <EmployeeCardJoda company={company}
