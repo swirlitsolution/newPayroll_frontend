@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect,  } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompany } from '../../Redux/Slices/CompanySlice';
 import { useCompanyQuery } from '../../hooks/useCompanyQuery';
@@ -6,17 +6,28 @@ import { Controller, useForm } from 'react-hook-form';
 import HeaderMaster from '../master/HeaderMaster';
 import { Button } from '../ui/button';
 import usePost from '@/hooks/usePost';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 function ReportHeader() {
-    const { data, error, loading, putapiRequest } = usePost("")
-    const { control, register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm()
+    const {  putapiRequest } = usePost("")
+    const { control,  handleSubmit, setValue } = useForm()
     const dispatch = useDispatch();
     const {company} = useSelector(state => state.Company);
 
-    
+    const queryClient = useQueryClient();
     const { companyData, isLoading } = useCompanyQuery(); // get current selected company data
+       const updateheader = useMutation({
+            mutationFn: (data) => putapiRequest(`api/companyworkmap/update/${company?.id}/`, data),
+            onSuccess: () => {
+                toast.success("Report header updated successfully")
+                queryClient.invalidateQueries(['company'])
+            },
+            
+        })
     const onSubmit = (data) => {
-
-        putapiRequest(`api/companyworkmap/update/${company?.id}/`, data) // update company details for report header
+        updateheader.mutate(data)
+        // putapiRequest(`api/companyworkmap/update/${company?.id}/`, data) // update company details for report header
+     
 
     }
     console.log("company", company, "companydata", companyData)
@@ -49,8 +60,8 @@ function ReportHeader() {
                                         name="company"
                                         defaultValue={company?.companydata?.name} // Initial value can be set here
                                         control={control}
-                                        render={({ field, fieldState: { error } }) => {
-                                            const { onChange, value, ref } = field;
+                                        render={({ field }) => {
+                                            const { onChange, value } = field;
                                             return (
                                                 <HeaderMaster
                                                     api="api/company/details/"
@@ -71,8 +82,8 @@ function ReportHeader() {
                                         name="contractestablishment"
                                         defaultValue={company?.contractdata?.name} // Initial value can be set here
                                         control={control}
-                                        render={({ field, fieldState: { error } }) => {
-                                            const { onChange, value, ref } = field;
+                                        render={({ field }) => {
+                                            const { onChange, value} = field;
                                             return (
                                                 <HeaderMaster
                                                     api="api/contractestablishment/"
@@ -94,8 +105,8 @@ function ReportHeader() {
                                         name="worknature"
                                         defaultValue={company?.worknaturedata?.name} // Initial value can be set here
                                         control={control}
-                                        render={({ field, fieldState: { error } }) => {
-                                            const { onChange, value, ref } = field;
+                                        render={({ field }) => {
+                                            const { onChange, value} = field;
                                             return (
                                                 <HeaderMaster
                                                     api="api/worknature/"
@@ -114,8 +125,8 @@ function ReportHeader() {
                                         name="principleemployer"
                                         defaultValue={company?.principledata?.name} // Initial value can be set here
                                         control={control}
-                                        render={({ field, fieldState: { error } }) => {
-                                            const { onChange, value, ref } = field;
+                                        render={({ field }) => {
+                                            const { onChange, value} = field;
                                             return (
                                                 <HeaderMaster
                                                     api="api/principleemployer/"

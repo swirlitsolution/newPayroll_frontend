@@ -37,6 +37,7 @@ function CombineMasterRoll({ attendanceData, month, year }) {
   const { company } = useSelector(state => state.Company);
   const { companyData } = useCompanyQuery(); // get current selected company data
   const displayCompany = useMemo(() => company || companyData || {}, [company, companyData]);
+  
   const calPayroll = () => {
     const tpayable = attendance.reduce((sum, emp) => sum + parseFloat(emp.tpayable || 0), 0);
     const tcl = attendance.reduce((sum, emp) => sum + parseFloat(emp.tcl || 0), 0);
@@ -94,35 +95,37 @@ function CombineMasterRoll({ attendanceData, month, year }) {
             <button className=' mr-5 bg-black p-2 self-end w-24 text-white' onClick={reactToPrintFn}>Print</button>
             <div ref={contentRef}>
               <div className='w-full grid grid-cols-5 text-sm'>
-                <span>FORM 29</span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span className='col-span-2'>COMBINED MASTER ROLL - CUM-REGISTER OF WAGES</span>
+                <span className=" ">FORM 29</span>
+                <span className=" "></span>
+                <span className=" "></span>
+                <span className=" "></span>
+                <span className=" "></span>
+                <span className=' col-span-2'>COMBINED MASTER ROLL - CUM-REGISTER OF WAGES</span>
 
-                <span></span>
-                <span></span>
-                <span></span>
-                <span>Name & Address of Factory Establishment</span>
-                <span>{displayCompany?.name || "N/A"}</span>
-                <span></span>
-                <span>Name & Address of Contractor  </span>
-                <span>Name & Address of Principle Employer</span>
-                <span></span>
-                <span>{displayCompany?.address || "N/A"}</span>
-                <span>{displayCompany?.address || "N/A"}</span>
-                <span>{displayCompany?.contractdata?.name || displayCompany?.contractEstablishment || 'N/A'}</span>
-                <span>{displayCompany?.principledata?.name || displayCompany?.principleEmployer || 'N/A'}</span>
-                <span>Nature & Location of Work</span>
-                <span>{displayCompany?.worknaturedata?.name || displayCompany?.workNature || 'N/A'}</span>
-                <span></span>
-                <span></span>
-                <span></span>
+                <span className=" "></span>
+                <span className=" "></span>
+                <span className=" "></span>
+                <span className=" ">Name & Address of Factory Establishment</span>
+                <span className="  pl-5">{displayCompany?.companydata?.name || "N/A"}</span>
+                <span className=" "></span>
+                <span className=" ">Name & Address of Contractor  </span>
+                <span className=" ">Name & Address of Principle Employer</span>
+                <span className=" "></span>
+               
+                <span className="pl-5">{displayCompany?.companydata?.address || "N/A"}</span>
+                 <span className=" "></span>
+                {/* <span className=" ">{displayCompany?.companydata?.address || "N/A"}</span> */}
+                <span className=" ">{displayCompany?.contractdata?.name || displayCompany?.contractEstablishment?.name || 'N/A'}</span>
+                <span className=" ">{displayCompany?.principledata?.name || displayCompany?.principledata?.name || 'N/A'}</span>
+                <span className=" ">Nature & Location of Work</span>
+                <span className=" ">{displayCompany?.worknaturedata?.name || displayCompany?.worknaturedata?.name || 'N/A'}</span>
+                <span className=" "></span>
+                <span className=" "></span>
+                <span className=" "></span>
 
                 <span className=' col-span-2'><pre>Wages Period - Monthly   {monthdata[month]} {year}</pre></span>
-                <span></span>
-                <span></span>
+                <span className=" "></span>
+                <span className=" "></span>
               </div>
               <table className="w-full border-collapse border border-black text-[10px]">
                 <thead className="bg-gray-100">
