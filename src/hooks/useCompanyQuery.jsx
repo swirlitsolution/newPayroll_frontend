@@ -9,7 +9,8 @@ export const useCompanyQuery = () => {
     queryFn: async () => {
       const res = await getCompany(site); // get selected company data
       return res.data;
-    },           // ⬅ only fetch if redux is empty
+    },
+    enabled: !!site,                  // Only execute query if site has a value
     staleTime: 1000 * 60 * 5,         // never refetch automatically
   });
   const companyData = data

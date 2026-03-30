@@ -4,7 +4,9 @@ import { useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompany } from '../../Redux/Slices/CompanySlice';
 import { useCompanyQuery } from '../../hooks/useCompanyQuery';
+import NewWindowPortal from './NewWindowPortal';
 function CombineMasterRoll({ attendanceData, month, year }) {
+  const [showPreview, setShowPreview] = useState(false);
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
   const [payroll, setPayroll] = useState({
@@ -86,6 +88,15 @@ function CombineMasterRoll({ attendanceData, month, year }) {
   if (isLoading) return <p>Loading ....</p>
   return (
     <div className='w-full'>
+    <button 
+        onClick={() => setShowPreview(true)}
+        className="bg-black hover:bg-slate-300 hover:text-black text-white p-3 rounded"
+    >
+        Combine
+    </button>
+     {showPreview && (
+        <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
+            
       {
         company && (
           <div className='w-full flex flex-col'>
@@ -393,6 +404,8 @@ function CombineMasterRoll({ attendanceData, month, year }) {
           </div>
         )
       }
+      </NewWindowPortal>
+      )}
     </div>
   )
 }

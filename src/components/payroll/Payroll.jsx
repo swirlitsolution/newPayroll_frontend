@@ -17,6 +17,9 @@ import { useCompanyQuery } from '../../hooks/useCompanyQuery';
 import OdishaFormB from '../report/odishaformb';
 import MinimumRate from '../report/MinimumRate';
 import { setSite } from '@/Redux/Slices/SiteSlice';
+import TataCummins from '../report/tatacummins';
+import Wage from '../report/Wage';
+import Summary from '../report/summary';
 
 
  const payrollcolumns = [
@@ -97,7 +100,7 @@ const summarycolumns = [
     {field:'restothr',headerName:'OT Hrs'},
     {field:'restotamt',headerName:'OT Amt'},
     { field: 'allownetamt', headerName: 'Allowance' },
-    { field: 'othergrosstotal', headerName: 'Total' },
+    { field: 'othergrosstotal', headerName: 'Total',renderCell: (params) => Number(params.othergrosstotal)},
 ]
 
 const pfcolumns = [
@@ -281,7 +284,7 @@ function Payroll() {
             dispatch(setSite(watch('Site')))
         }
     },[watch('Site')])
-
+    console.log(rowdata)
     if (isLoading) return  <p>Loading ....</p>
   return (
     <div>
@@ -314,14 +317,20 @@ function Payroll() {
                     download?
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
-                        <div className='flex gap-4 px-2 py-2'>
-                            <Button asChild className="bg-black text-white hover:bg-gray-800">
+                        <div className='grid grid-cols-2 gap-4 px-2 py-2'>
+                            {/* <Button asChild className="bg-black text-white hover:bg-gray-800">
                                 <a href={'https://backend.stcassociates.co.in/wages/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Wages</a>
-                            </Button>
-                            <Button asChild className="bg-black text-white hover:bg-gray-800">
+                            </Button> */}
+                            <Wage company={company}
+                            employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
+                            {/* <Button asChild className="bg-black text-white hover:bg-gray-800">
                                 <a href={'https://backend.stcassociates.co.in/summary/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'>Summary</a>
-                            </Button>
+                            </Button> */}
+                            <Summary company={company}
+                            employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
                             <OdishaFormB company={company}
+                            employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
+                            <TataCummins company={company}
                             employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
                         </div>
                
@@ -332,7 +341,7 @@ function Payroll() {
             </div>
         </form>
         <div>
-       {watch("Site")? <ReportHeader />:""}
+       {watch("Site")? <ReportHeader />:"Select Site"}
         </div>
         <div className='w-full mt-2'>
         <Tabs defaultValue="payroll" className="w-full">

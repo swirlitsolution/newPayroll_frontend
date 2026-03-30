@@ -19,7 +19,7 @@ function ReportHeader() {
         putapiRequest(`api/companyworkmap/update/${company?.id}/`,data) // update company details for report header
     
     }
-    console.log("company",company,"companydata",companyData)
+
     useEffect(()=>{
         
         dispatch(setCompany(companyData));

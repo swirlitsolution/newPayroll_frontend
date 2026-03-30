@@ -167,7 +167,7 @@ function OdishaFormB(props) {
       )}
       <Button
         onClick={() => setShowPreview(true)}
-        className='bg-black text-white hover:bg-gray-800'
+        className='bg-black text-white hover:bg-slate-200 hover:text-black'
         disabled={props?.wait}
       >
         {props?.wait ? "wait ..." : "Odisha Form B"}
