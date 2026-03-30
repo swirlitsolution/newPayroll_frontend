@@ -12,6 +12,7 @@ import NewWindowPortal from './NewWindowPortal';
 import CombineMasterRoll from './CombineMasterRoll';
 import { useDispatch } from 'react-redux';
 import { setSite } from '@/Redux/Slices/SiteSlice';
+import Attendance from './Attendance';
 const columns = [
     {field:'EmpId',headerName:'EmpId',width:'80px', renderCell:(params)=>params.employeeData.EmpId},
     {field:'Name',headerName:'Name', renderCell:(params)=>params.employeeData.Name},
@@ -188,27 +189,20 @@ function AttendanceReport(props) {
                     <div className='border-2 rounded-md'>
                         <h3 className=' bg-slate-200 font-bold'>Download</h3>
                         <div className='flex gap-2 px-2'>
-                            <a href={'https://backend.stcassociates.co.in/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a>
+                            {/* <a href={'http://127.0.0.1:8000/attendance/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Attendance</a> */}
                             {/* <a href={'https://backend.stcassociates.co.in/attendance/combine/'+watch('Site')+'/'+watch('month')+"/download"} target='_blank'> Combine</a> */}
-                            <button 
-                                    onClick={() => setShowPreview(true)}
-                                    className="bg-green-600 text-white p-3 rounded"
-                                >
-                                    Combine
-                                </button>
+                            {/* Ye poora component ab nayi window mein dikhega */}
+                             <Attendance attendanceData={attendance} month={month} year={year}/>   
+                            <CombineMasterRoll attendanceData={attendance} month={month} year={year}/> 
+                               
                         </div>
                
                     </div>
                     :""
                    }
-                {showPreview && (
-                    <NewWindowPortal closeWindowPortal={() => setShowPreview(false)}>
-                    {/* Ye poora component ab nayi window mein dikhega */}
-                    <div className="p-5 w-full">
-                        <CombineMasterRoll attendanceData={attendance} month={month} year={year}/> 
-                    </div>
-                    </NewWindowPortal>
-                )}
+              
+                   
+             
               <div className="  w-[100%] ">
                 {loading?"Loading......": data?.attendance?.length? 
                 ( <DataGrid 

@@ -30,9 +30,9 @@ function ReportHeader() {
      
 
     }
-    console.log("company", company, "companydata", companyData)
-    useEffect(() => {
 
+    useEffect(()=>{
+        
         dispatch(setCompany(companyData));
 
 

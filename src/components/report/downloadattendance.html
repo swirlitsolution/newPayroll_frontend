@@ -1,0 +1,177 @@
+
+<title>attendance</title>
+<head>
+
+    <style>
+        @page {
+            size: a4 landscape;
+            @frame header_frame {           /* Static Frame */
+                -pdf-frame-content: header_content;
+                left: 10pt; width: 800pt; top: 20pt; height: 110pt;
+                -pdf-frame-border: 1; 
+            }
+            @frame content_frame { 
+                -pdf-fram-content:body_content;  
+                padding-top: 5px;
+                    /* Content Frame */
+                left: 10pt; width: 800pt; top: 130pt; height:455pt;
+                -pdf-frame-border: 1; 
+            }
+            @frame footer_frame {           /* Another static Frame */
+                -pdf-frame-content: footer_content;
+                padding-left: 10px;   
+                padding-right:10px;
+                left: 10pt; width: 800pt; top: 550pt; height: 80pt;
+               ; 
+            }
+        }
+    </style>
+    </head>
+    
+    <body>
+        <!-- Content for Static Frame 'header_frame' -->
+        <div id="header_content">
+            <table style="padding: 5px;">
+                <tr>
+                    <td>Name and address of Contractor</td>
+                    <td>{{company.company.name}}
+                        {{company.company.address}}</td>
+                        <td><strong style="font-size: 15px;">FORM XVII</strong><br>
+                            [See Rule 78(2)(B)]<br>
+                            Register For Wages</td>
+                    <td>Name and Address of Establishment
+                        In/Under which contract is carried on</td>
+                    <td>{{company.contractestablishment.name}}</td>
+                    
+                </tr>
+                <tr>
+                    <td>Nature of Work
+                        Work Order No</td>
+                    <td>{{company.worknature.name}}</td>
+                    <td>Month : {{month|upper}} Year: {{year}}</td>
+                    <td>Name and address of principle Employer</td>
+                    <td>{{company.principleemployer.name}}</td>
+                </tr>
+            </table>
+            <table>
+                <tr style="white-space:no-wrap;">
+                    <th style="border:2px solid gray;padding:2px;">Sl</th>
+                    <th style="border:2px solid gray;padding:2px;width:40px">EmpId</th>
+                    <th style="border:2px solid gray;padding:2px; width: 100px;">Employee</th>
+                    <th style="border:2px solid gray;padding:2px; width: 100px;">Father</th>
+                    <th style="border:2px solid gray;padding:2px;">1</th>
+                    <th style="border:2px solid gray;padding:2px;">2</th>
+                    <th style="border:2px solid gray;padding:2px;">3</th>
+                    <th style="border:2px solid gray;padding:2px;">4</th>
+                    <th style="border:2px solid gray;padding:2px;">5</th>
+                    <th style="border:2px solid gray;padding:2px;">6</th>
+                    <th style="border:2px solid gray;padding:2px;">7</th>
+                    <th style="border:2px solid gray;padding:2px;">8</th>
+                    <th style="border:2px solid gray;padding:2px;">9</th>
+                    <th style="border:2px solid gray;padding:2px;">10</th>
+                    <th style="border:2px solid gray;padding:2px;">11</th>
+                    <th style="border:2px solid gray;padding:2px;">12</th>
+                    <th style="border:2px solid gray;padding:2px;">13</th>
+                    <th style="border:2px solid gray;padding:2px;">14</th>
+                    <th style="border:2px solid gray;padding:2px;">15</th>
+                    <th style="border:2px solid gray;padding:2px;">16</th>
+                    <th style="border:2px solid gray;padding:2px;">17</th>
+                    <th style="border:2px solid gray;padding:2px;">18</th>
+                    <th style="border:2px solid gray;padding:2px;">19</th>
+                    <th style="border:2px solid gray;padding:2px;">20</th>
+                    <th style="border:2px solid gray;padding:2px;">21</th>
+                    <th style="border:2px solid gray;padding:2px;">22</th>
+                    <th style="border:2px solid gray;padding:2px;">23</th>
+                    <th style="border:2px solid gray;padding:2px;">24</th>
+                    <th style="border:2px solid gray;padding:2px;">25</th>
+                    <th style="border:2px solid gray;padding:2px;">26</th>
+                    <th style="border:2px solid gray;padding:2px;">27</th>
+                    <th style="border:2px solid gray;padding:2px;">28</th>
+                    <th style="border:2px solid gray;padding:2px;">29</th>
+                    <th style="border:2px solid gray;padding:2px;">30</th>
+                    <th style="border:2px solid gray;padding:2px;">31</th>
+                    <th style="border:2px solid gray;padding:2px;width: 80px;">Total Attend</th>
+                    <th style="border:2px solid gray;padding:2px;width: 80px;">Remarks</th>
+                    
+                </tr>
+            </table>
+            
+        </div>
+    
+      
+    
+        <!-- HTML Content -->
+        <div id="body_content">
+            <div class="employee">
+                <table >
+                    
+              
+                
+                    {% for emp in wagesregister %}
+                    <tr>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{forloop.counter}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;width:40px">{{emp.employee__EmpId}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px; width: 100px;">{{emp.employee__Name}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px; width: 100px;">{{emp.employee__Father}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day1}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day2}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day3}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day4}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day5}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day6}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day7}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day8}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day9}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day10}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day11}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day12}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day13}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day14}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day15}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day16}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day17}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day18}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day19}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day20}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day21}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day22}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day23}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day24}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day25}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day26}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day27}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day28}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day29}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day30}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;">{{emp.day31}}</td>
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;width: 80px;">P: {{emp.tpresent}}, EL :{{emp.tel}}, CL :{{emp.tcl}}, FL : {{emp.tfl}} Total: {{emp.tpayable}}</td>
+                      
+                        <td style="overflow:hidden; font-size:10px; border: 2px solid gray; padding: 2px;width: 80px;"></td>
+            
+                    </tr>
+                
+                    {% endfor %}
+            
+                </table>
+    
+            <hr>
+            <table>
+                <tr>
+                    <td>Basic : {{tpayroll.tbasic}}</td>
+                    <td>Da : {{tpayroll.tda}}</td>
+                    <td>Total Attn : {{tpayroll.topayable}} </td>
+                    <td>Gross : {{tpayroll.tgross}}</td>
+                    <td>PF : {{tpayroll.tpf}}</td>
+                    <td>ESIC : {{tpayroll.tesic}}</td>
+                    <td>Net Payment : {{tpayroll.tnetamt}}</td>
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">
+        
+    </div>  
+    </body>
+    </html>
