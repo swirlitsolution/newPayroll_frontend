@@ -74,12 +74,12 @@ function Attendance({ attendanceData, month, year }) {
                         {/* Header Section */}
                         <div className="w-full grid grid-cols-5 gap-2 text-sm border border-black p-2">
                             <span className="font-bold">Name and address of Contractor</span>
-                            <span>{company.companydata.name || ''}<br></br>{company.companydata.address || ''}</span>
-                            <span className=' text-center font-bold'>FORM XVII <br></br>[See Rule 78(2)(B)]<br></br> Register For Wages</span>
+                            <span>{company.contractdata?.name || ''}<br></br>{company.contractdata?.address || ''}</span>
+                            <span className=' text-center font-bold'>FORM XVII <br></br>[See Rule 78(2)(B)]<br></br> MASTER ROLL</span>
                             <span className="font-bold">Name and Address of Establishment<br></br> In/Under which contract is carried on</span>
-                            <span>{company.companydata.contractestablishment?.name || company.companydata.name || ''}</span>
+                            <span>{company.contractdata?.contractestablishment?.name || company.contractdata?.name || ''}</span>
                             <span className="font-bold">Nature of Work / Work Order No</span>
-                            <span>{company?.worknature?.name || ''}</span>
+                            <span>{company?.worknaturedata?.name || ''}</span>
                             <span className=' text-center font-bold'>Month: <span className='uppercase'>{month || ''}</span> Year: <span>{year || ''}</span></span>
                             <span className="font-bold">Name and address of Principle Employer</span>
                             <span>{company?.principleEmployer?.name || company?.principledata?.name || ''}</span>
@@ -88,49 +88,48 @@ function Attendance({ attendanceData, month, year }) {
                          
 
                             {/* Table Header */}
-                            <table style={{width: '100%', marginTop: '10px'}} className='border-collapse'>
+                            <table className="w-full border-collapse border border-gray-400 text-[10px]">
                                 <thead>
                                     <tr style={{whiteSpace: 'nowrap'}}>
-                                        <th style={{border: '2px solid gray', padding: '2px'}}>Sl</th>
-                                        <th style={{border: '2px solid gray', padding: '2px', width: '40px'}}>EmpId</th>
-                                        <th style={{border: '2px solid gray', padding: '2px', width: '100px'}}>Employee</th>
-                                        <th style={{border: '2px solid gray', padding: '2px', width: '100px'}}>Father</th>
+                                        <th className="border border-gray-400 p-1 text-wrap w-10">Sl</th>
+                                        <th className="border border-gray-400 p-1 text-wrap w-10">EmpId</th>
+                                        <th className="border border-gray-400 p-1 text-wrap w-10">Employee</th>
+                                        <th className="border border-gray-400 p-1  w-10">Father Name</th>
                                         {[...Array(31)].map((_, i) => (
-                                            <th key={i} style={{border: '2px solid gray', padding: '2px'}}>{i + 1}</th>
+                                            <th key={i} className="border border-gray-400 p-1 text-wrap w-10">{i + 1}</th>
                                         ))}
-                                        <th style={{border: '2px solid gray', padding: '2px', width: '80px'}}>Total Attend</th>
-                                        <th style={{border: '2px solid gray', padding: '2px', width: '80px'}}>Remarks</th>
+                                        <th className="border border-gray-400 p-1 text-wrap w-10">Total Attend</th>
+                                        <th className="border border-gray-400 p-1 text-wrap w-10">Remarks</th>
                                     </tr>
                                 </thead>
-                            </table>
-                        </div>
+                         
+                    
 
-                        {/* Body Content */}
-                        <div className='employee'>
-                            <table style={{width: '100%'}} className='border-collapse'>
+                                {/* Body Content */}
+                 
                                 <tbody>
                                     {attendance && attendance.length > 0 ? (
                                         attendance.map((emp, index) => (
                                             <tr key={index}>
-                                                <td style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px'}}>{index + 1}</td>
-                                                <td style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px', width: '40px'}}>{emp?.employeeData?.EmpId || ''}</td>
-                                                <td style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px', width: '100px'}}>{emp?.employeeData?.Name || ''}</td>
-                                                <td style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px', width: '100px'}}>{emp?.employeeData?.Father || ''}</td>
-                                                
+                                                <td className="border border-gray-400 p-1 text-wrap w-10">{index + 1}</td>
+                                                <td className="border border-gray-400 p-1 text-wrap w-10">{emp?.employeeData?.EmpId || ''}</td>
+                                                <td className="border border-gray-400 p-1 text-nowrap w-10">{emp?.employeeData?.Name || ''}</td>
+                                                <td className="border border-gray-400 p-1 text-nowrap w-10">{emp?.employeeData?.Father || ''}</td>
+
                                                 {/* Days 1-31 */}
                                                 {[...Array(31)].map((_, dayIndex) => (
-                                                    <td key={dayIndex} style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px'}}>
+                                                    <td key={dayIndex} className="border border-gray-400 p-1 text-wrap w-10">
                                                         {emp[`day${dayIndex + 1}`] || emp[`tday${dayIndex + 1}`] || ''}
                                                     </td>
                                                 ))}
                                                 
                                                 {/* Total Attendance */}
-                                                <td style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px', width: '80px'}}>
-                                                    P: {emp?.tpresent || '0'}, EL: {emp?.tel || '0'}, CL: {emp?.tcl || '0'}, FL: {emp?.tfl || '0'} Total: {emp?.tpayable || '0'}
+                                                <td className="border border-gray-400 p-1 text-nowrap w-10">
+                                                    {emp?.tpresent? `P: ${emp?.tpresent || '0'} ,` : ''}{emp?.tel? `EL: ${emp?.tel || '0'} , ` : ''} {emp?.tcl? `CL: ${emp?.tcl || '0'} , ` : ''} {emp?.tfl? `FL: ${emp?.tfl || '0'} , ` : ''} Total: {emp?.tpayable || '0'}
                                                 </td>
                                                 
                                                 {/* Remarks */}
-                                                <td style={{overflow: 'hidden', fontSize: '10px', border: '2px solid gray', padding: '2px', width: '80px'}}></td>
+                                                <td className="border border-gray-400 p-1 text-wrap w-10"></td>
                                             </tr>
                                         ))
                                     ) : (

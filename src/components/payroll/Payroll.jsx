@@ -20,6 +20,7 @@ import { setSite } from '@/Redux/Slices/SiteSlice';
 import TataCummins from '../report/tatacummins';
 import Wage from '../report/Wage';
 import Summary from '../report/summary';
+import FormD from './FormD';
 
 
  const payrollcolumns = [
@@ -329,6 +330,8 @@ function Payroll() {
                             <Summary company={company}
                             employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
                             <OdishaFormB company={company}
+                            employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
+                            <FormD company={company}
                             employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
                             <TataCummins company={company}
                             employee={rowdata} month={watch('month')} site={watch('Site')} wait={loading} />
